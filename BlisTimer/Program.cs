@@ -1,7 +1,13 @@
+using BlisTimer.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<TimerDbContext>(
+        x => x.UseNpgsql(builder.Configuration.GetConnectionString("TimerDb"))
+        );
 
 var app = builder.Build();
 
