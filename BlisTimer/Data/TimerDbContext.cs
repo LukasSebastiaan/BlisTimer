@@ -15,6 +15,21 @@ namespace BlisTimer.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.UseSerialColumns();
+
+            modelBuilder.Entity<Activity>()
+                .HasOne(x => x.Project)
+                .WithMany(x => x.Activities);
+            modelBuilder.Entity<TimeLog>()
+                .HasOne(x => x.Activity)
+                .WithMany()
+                .HasForeignKey(x => x.ActivityId);
+            modelBuilder.Entity<TimeLog>()
+                .HasOne(x => x.Project)
+                .WithMany()
+                .HasForeignKey(x => x.ProjectId);
+
+
+
         }
 
     }
