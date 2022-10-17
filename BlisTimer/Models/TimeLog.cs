@@ -1,7 +1,12 @@
 ﻿namespace BlisTimer.Data
 {
-    public record TimeLog(string Id, string UserId, string ProjectId, string ActivityId, int AmountOfTimeSpentInSeconds)
+    public class TimeLog
     {
+        public string Id { get; set; } = null!;
+        public string UserId { get; set; } = null!;
+        public string ProjectId { get; set; } = null!;
+        public string ActivityId { get; set; } = null!;
+        public int AmountOfTimeSpentInSeconds { get; set; }
         public Project Project { get; set; } = null!;
         public Activity Activity { get; set; } = null!;
     }

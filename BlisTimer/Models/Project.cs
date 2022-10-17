@@ -1,7 +1,10 @@
 ﻿namespace BlisTimer.Data
 {
-    public record Project(string Id, string Name)
+    public class Project
     {
+        public string Id { get; set; } = null!;
+        string Name { get; set; } = null!;
         public List<Activity> Activities { get; set; } = null!;
+
     }
 }
