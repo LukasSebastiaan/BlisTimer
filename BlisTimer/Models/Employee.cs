@@ -6,5 +6,6 @@ namespace BlisTimer.Data
         public string Name { get; set; } = null!;
         public string LastName { get; set; } = null!;
         public int Role;
+        public List<Project> Projects { get; set; } = null!;
     }
 }

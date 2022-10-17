@@ -27,7 +27,9 @@ namespace BlisTimer.Data
                 .HasOne(x => x.Project)
                 .WithMany()
                 .HasForeignKey(x => x.ProjectId);
-
+            modelBuilder.Entity<Project>()
+                .HasMany(x => x.Employees)
+                .WithMany(x => x.Projects);
 
 
         }
