@@ -7,7 +7,7 @@
         public string ProjectId { get; set; } = null!;
         public string ActivityId { get; set; } = null!;
         public int AmountOfTimeSpentInSeconds { get; set; }
-        public Project Project { get; set; } = null!;
-        public Activity Activity { get; set; } = null!;
+        public Project Project { get; set; }
+        public Activity Activity { get; set; }
     }
 }

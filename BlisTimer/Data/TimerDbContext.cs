@@ -16,22 +16,30 @@ namespace BlisTimer.Data
         {
             modelBuilder.UseSerialColumns();
 
+            modelBuilder.Entity<Employee>()
+                .HasMany(x => x.Projects)
+                .WithMany(x => x.Employees);
+                
+
             modelBuilder.Entity<Activity>()
                 .HasOne(x => x.Project)
-                .WithMany(x => x.Activities);
+                .WithMany(x => x.Activities)
+                .HasForeignKey(x => x.ProjectId)
+                .OnDelete(DeleteBehavior.SetNull);
+
             modelBuilder.Entity<TimeLog>()
                 .HasOne(x => x.Activity)
                 .WithMany()
-                .HasForeignKey(x => x.ActivityId);
+                .HasForeignKey(x => x.ActivityId)
+                .OnDelete(DeleteBehavior.SetNull);
+
             modelBuilder.Entity<TimeLog>()
                 .HasOne(x => x.Project)
                 .WithMany()
-                .HasForeignKey(x => x.ProjectId);
-            modelBuilder.Entity<Project>()
-                .HasMany(x => x.Employees)
-                .WithMany(x => x.Projects);
+                .HasForeignKey(x => x.ProjectId)
+                .OnDelete(DeleteBehavior.SetNull);
 
-
+            
         }
 
     }
