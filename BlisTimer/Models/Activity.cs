@@ -1,4 +1,4 @@
-﻿namespace BlisTimer.Data
+﻿namespace BlisTimer.Models
 {
     public class Activity
     {
