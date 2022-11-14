@@ -8,7 +8,7 @@ namespace BlisTimer.Data
         
         public TimerDbContext(DbContextOptions<TimerDbContext> options) : base(options){ }
 
-        public DbSet<Activity> Activities { get; set; } = null!;
+        public DbSet<WorkActivity> WorkActivities { get; set; } = null!;
         public DbSet<Project> Projects { get; set; } = null!;
         public DbSet<TimeLog> TimeLogs { get; set; } = null!;
         public DbSet<Employee> Employees { get; set; } = null!;
@@ -22,8 +22,7 @@ namespace BlisTimer.Data
                 .HasMany(x => x.Projects)
                 .WithMany(x => x.Employees);
                 
-
-            modelBuilder.Entity<Activity>()
+            modelBuilder.Entity<WorkActivity>()
                 .HasOne(x => x.Project)
                 .WithMany(x => x.Activities)
                 .HasForeignKey(x => x.ProjectId)

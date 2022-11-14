@@ -25,15 +25,21 @@ namespace BlisTimer.Controllers
         } 
         [HttpPost]
         public async Task<IActionResult> Add(ProjectAdd addProjectRequest){
+            var d = Guid.NewGuid().ToString();
             var project = new Project(){
-                Id = Guid.NewGuid().ToString(),
+                Id = d,
                 Name = addProjectRequest.Name
             };
-
-            
+            var activ = new WorkActivity(){Id = Guid.NewGuid().ToString(), Name = "Frontend dev", ProjectId = d};
+            // project.Activities.Add();
+            // project.Activities.Add(new Models.Activity(){Id = Guid.NewGuid().ToString(), Name = "Backend dev", ProjectId = d});
+            // project.Activities.Add(new Models.Activity(){Id = Guid.NewGuid().ToString(), Name = "Testing", ProjectId = d});
             await _context.Projects.AddAsync(project);
+            await _context.WorkActivities.AddAsync(activ);
+
             await _context.SaveChangesAsync();
 
+            await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         } 
     }

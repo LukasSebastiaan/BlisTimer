@@ -1,6 +1,6 @@
 ﻿namespace BlisTimer.Models
 {
-    public class Activity
+    public class WorkActivity
     {
         public string Id { get; set; } = null!;
         public string Name { get; set; } = null!; 
