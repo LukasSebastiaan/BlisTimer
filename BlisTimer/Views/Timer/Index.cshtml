@@ -1,0 +1,171 @@
+﻿@{
+    ViewData["Title"] = "Stopwatch Page";
+}
+
+@section scripts {
+    <script type="text/javascript">
+    // Globals
+    const time_el = document.querySelector('.watch .time');
+    const startButton = document.getElementById("start");
+    const stopButton = document.getElementById("stop");
+
+    let seconds = 0;
+    let interval = null;
+
+    // Event Listeners
+    startButton.addEventListener('click', start);
+    stopButton.addEventListener('click', stop);
+
+    // Timer updates
+    function timer() {
+      seconds++;
+
+      //Fomart the time  
+      let hrs = Math.floor(seconds / 3600);
+      let mins = Math.floor((seconds - (hrs * 3600)) / 60);
+      let secs = seconds % 60;
+
+      if (secs < 10) secs = "0" + secs;
+      if (mins < 10) mins = "0" + mins;
+      if (hrs < 10) hrs = "0" + hrs;
+
+      time_el.innerText = `${hrs}:${mins}:${secs}`;	
+    }
+
+    function start() {
+      if (interval) {
+        return;
+      }
+
+      interval = setInterval(timer, 1000);
+    }
+
+    function stop() {
+      if(seconds > 0){
+        clearInterval(interval);
+        interval = null;
+    
+        if(confirm("Are you sure you want to stop the timer?\n" +
+        "You've been working on Project > Current task for " + time_el.innerText)){
+          seconds = 0;
+          time_el.innerText = "00:00:00";
+        } else {
+          start();
+        }
+      }
+    }
+    </script>
+}
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Timer</title>
+</head>
+
+<style>
+:root {
+  --darkblue: #2d2e3b;
+  --yellow: #ffe500;
+  --darkerblue: #20222E;
+  --white: #fff;
+}
+
+* {
+  font-family: 'Fira sans', sans-serif;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+body {
+  background: var(--darkblue);
+  color: var(--white);
+}
+
+.watch {
+  text-align: center;
+  background-color: var(--darkerblue);
+  width: 100%;
+  max-width: 720px;
+  margin: 4rem auto;
+  padding: 4rem 8rem;
+  border-radius: 2rem;
+}
+
+.task {
+  background-color: var(--darkblue);
+  font-size: 2rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  margin: 0 0.8rem;
+  border-radius: 0.4rem;
+}
+
+.time {
+  font-size: 5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.controls button {
+  appearance: none;
+  background: none;
+  border: none;
+  outline: none;
+  user-select: none;
+  cursor: pointer;
+
+  color: var(--darkblue);
+  font-size: 1.8rem;
+  background-color: var(--yellow);
+  margin: 0 0.8rem;
+  padding: 0 2.5rem;
+  border-radius: 0.4rem;
+
+  transition: 0.4s;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+button:active {
+  opacity: 0.3;
+}
+</style>
+
+
+
+
+<body>
+  
+  <div class="watch">
+    <div class="task">
+      Project >
+      Current Task
+    </div>
+
+    <div class="time">
+      00:00:00
+    </div>
+
+    <div class="controls">
+      <button id="start">Start</button>
+      <button id="stop">Stop</button>
+    </div>
+
+  </div>
+</body>
+</html>
+
