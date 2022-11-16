@@ -1,9 +1,10 @@
-﻿namespace BlisTimer.Data
+﻿namespace BlisTimer.Models
 {
-    public class Activity
+    public class WorkActivity
     {
-        public string ActivityId { get; set; }
-        public string ActivityName { get; set; }
-        public string ProjectId { get; set; }
+        public string Id { get; set; } = null!;
+        public string Name { get; set; } = null!; 
+        public string ProjectId { get; set; } = null!;
+        public Project Project { get; set; } = null!;
     }
 }
