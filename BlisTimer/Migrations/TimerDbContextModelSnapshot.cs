@@ -42,6 +42,21 @@ namespace BlisTimer.Migrations
                     b.ToTable("Employees");
                 });
 
+            modelBuilder.Entity("BlisTimer.Models.EmployeeProjects", b =>
+                {
+                    b.Property<string>("EmployeeId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProjectId")
+                        .HasColumnType("text");
+
+                    b.HasKey("EmployeeId", "ProjectId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("EmployeeProjects");
+                });
+
             modelBuilder.Entity("BlisTimer.Models.Project", b =>
                 {
                     b.Property<string>("Id")
@@ -114,6 +129,25 @@ namespace BlisTimer.Migrations
                     b.HasIndex("ProjectsId");
 
                     b.ToTable("EmployeeProject");
+                });
+
+            modelBuilder.Entity("BlisTimer.Models.EmployeeProjects", b =>
+                {
+                    b.HasOne("BlisTimer.Models.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BlisTimer.Models.Project", "Project")
+                        .WithMany()
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+
+                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("BlisTimer.Models.TimeLog", b =>

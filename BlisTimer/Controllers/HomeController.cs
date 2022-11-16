@@ -8,10 +8,12 @@ namespace BlisTimer.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly TimerDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, TimerDbContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
         public IActionResult Index()
@@ -22,10 +24,6 @@ namespace BlisTimer.Controllers
         public IActionResult Privacy()
         {
             return View();
-            
-            
-
-
 
         }
 

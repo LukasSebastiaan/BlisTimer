@@ -13,28 +13,27 @@ namespace BlisTimer.Controllers
         {
             _context = context;
         }
+        public async Task<IActionResult> Index(){
+            var employees = await _context.Employees.Include(_ => _.Projects).ToListAsync();
+            return View(employees);
+        }
 
-        // public async Task<IActionResult> Index(){
-        //     var projects = await _context.Projects.ToListAsync();
-        //     return View(projects);
-        // }
-
-        // [HttpGet]
-        // public IActionResult Add(){
-        //     return View();
-        // } 
-        // [HttpPost]
-        // public async Task<IActionResult> Add(ProjectAdd addProjectRequest){
-        //     var project = new Project(){
-        //         Id = Guid.NewGuid().ToString(),
-        //         Name = addProjectRequest.Name
-        //     };
-
+        [HttpGet]
+        public IActionResult Add(){
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Add(EmployeeAdd addEmployee){
+            var d = Guid.NewGuid().ToString();
+            var employee = new Employee(){
+                Id = d,
+                Name = addEmployee.Name,
+                LastName = addEmployee.LastName
+            };
             
-        //     await _context.Projects.AddAsync(project);
-        //     await _context.SaveChangesAsync();
-
-        //     return RedirectToAction("Index");
-        //} 
+            await _context.AddAsync(employee);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index");
+        } 
     }
 }

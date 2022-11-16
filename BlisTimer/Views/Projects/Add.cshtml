@@ -1,13 +1,24 @@
 @model BlisTimer.Models.ProjectAdd
 
 @{
-
+ Layout = "Empty_Layout";
 }
 
-<form method="post" action="Add">
-  <div class="mb-3">
-    <label for="" class="form-label">Name</label>
-    <input type="text" class="form-control" asp-for="Name">
+@section Scripts{
+  <script src="https://kit.fontawesome.com/25b6802032.js" crossorigin="anonymous"></script>
+}
+<div class="main">
+  <div class="side-bar">
+      <div class="menu">
+        <div class="item"> <a href="#">Dashboard</a></div>
+        <div class="item"> 
+          <a class="sub-btn">Table</a>
+        </div>
+          <div class="item"> 
+            <a class="sub-btn">Forms</a>
+          </div>
+        <div class="item"> <a href="#">Settings</a></div>
+        <div class="item"> <a href="#">About</a></div>
+      </div>
   </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+</div>
