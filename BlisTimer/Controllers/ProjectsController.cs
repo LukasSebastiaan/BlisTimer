@@ -9,11 +9,11 @@ namespace BlisTimer.Controllers
     public class ProjectsController : Controller
     {
         private TimerDbContext _context;
-        public ProjectsController(TimerDbContext context)
-        {
+        public ProjectsController(TimerDbContext context) =>
             _context = context;
-        }
+        
 
+        /*
         public async Task<IActionResult> Index(){
             var projects = await _context.Projects.Include(_ => _.Activities).ToListAsync();
             return View(projects);
@@ -44,5 +44,6 @@ namespace BlisTimer.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         } 
+    */
     }
 }

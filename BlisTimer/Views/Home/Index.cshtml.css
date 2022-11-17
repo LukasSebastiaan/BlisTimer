@@ -1,0 +1,13 @@
+div.topbar {
+    background-color: var(--purple-darker);
+    height: 20px;
+    width: 100vw;
+}
+
+text {
+    display: block;
+    font-size: 60px;
+    font-family: "TT Commons";
+    color: var(--white);
+    text-align: center;
+}
