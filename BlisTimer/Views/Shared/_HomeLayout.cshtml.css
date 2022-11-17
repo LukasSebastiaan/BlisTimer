@@ -109,6 +109,19 @@ nav:hover ~ #hide-button {
 }
 
 @media (max-width: 800px) {
+    #hide-button {
+        display: none;
+    }
+    
+    #nav-menu-wrapper {
+        position: fixed;
+        height: auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-flow: column;
+    }
+    
     nav {
         margin: 0;
         left: 0;
