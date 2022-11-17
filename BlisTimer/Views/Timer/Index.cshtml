@@ -20,7 +20,7 @@
     function timer() {
       seconds++;
 
-      //Fomart the time  
+      //Format the time 
       let hrs = Math.floor(seconds / 3600);
       let mins = Math.floor((seconds - (hrs * 3600)) / 60);
       let secs = seconds % 60;
@@ -31,7 +31,8 @@
 
       time_el.innerText = `${hrs}:${mins}:${secs}`;	
     }
-
+    
+    //start button
     function start() {
       if (interval) {
         return;
@@ -40,20 +41,41 @@
       interval = setInterval(timer, 1000);
     }
 
+    //stop button
     function stop() {
       if(seconds > 0){
         clearInterval(interval);
         interval = null;
     
-        if(confirm("Are you sure you want to stop the timer?\n" +
-        "You've been working on Project > Current task for " + time_el.innerText)){
-          seconds = 0;
-          time_el.innerText = "00:00:00";
-        } else {
-          start();
-        }
+        openPopup();
       }
     }
+
+    //confirm button
+    function confirm() {
+      closePopup();
+      seconds = 0;
+      time_el.innerText = "00:00:00";
+    }
+
+    //cancel button
+    function cancel() {
+      closePopup();
+      start();
+    }
+
+
+    //Popup message
+    let popup = document.getElementById("popup");
+
+    function openPopup() {
+      popup.classList.add("open-popup");
+    }
+
+    function closePopup() {
+      popup.classList.remove("open-popup");
+    }
+
     </script>
 }
 
@@ -143,11 +165,68 @@ button:hover {
 button:active {
   opacity: 0.3;
 }
+
+
+
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.popup {
+  width: 100%;
+  max-width: 720px;
+  margin: 4rem auto;
+  background: var(--darkerblue);
+  border-radius: 2rem;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.1);
+  text-align: center;
+  padding: 4rem 8rem;
+  color: var(--white);
+  outline-style: solid;
+  outline-color: var(--yellow);
+  visibility: hidden;
+  transition: transform 0.4s, top 0.4s;
+}
+
+.open-popup {
+  visibility: visible;
+  top: 20%;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.popup h2 {
+  background: var(--darkblue);
+  font-size: 50px;
+  font-weight: 500;
+  margin-top: 30px 0 10px;
+  border-radius: 0.4rem;
+}
+
+.popup p {
+  font-size: 30px;
+  font-weight: 400;
+  margin: 10px 0 30px;
+}
+
+.btn{
+  padding: 10px 60px;
+  background: var(--yellow);
+  color: var(--darkblue);
+  border: 0;
+  outline: none;
+  cursor: pointer;
+  font-size: 22px;
+  font-weight: 500;
+  border-radius: 30px;
+}
+
 </style>
-
-
-
-
 <body>
   
   <div class="watch">
@@ -162,10 +241,19 @@ button:active {
 
     <div class="controls">
       <button id="start">Start</button>
-      <button id="stop">Stop</button>
+      <button id="stop" type="submit" onclick="openPopup()">Stop</button>
     </div>
 
+    <div class="container"></div>
+      <div class="popup" id="popup">
+        <h2>Project > Current Task</h2>
+        <p>Please confirm you have worked (Time) on this task.</p>
+        <button type="button" class="btn" onclick="confirm()">Confirm</button>
+        <button type="button" class="btn" onclick="cancel()">Cancel</button>
+      </div>
   </div>
+
+
+  <script src="main.js"></script>
 </body>
 </html>
-
