@@ -42,6 +42,7 @@ nav ul li a span {
     position: absolute;
     background-color: var(--white);
     padding: 2px 15px;
+    left: 10px;
     border-radius: 30px;
     margin-left: 10px;
     font-weight: 500;
@@ -58,7 +59,7 @@ nav ul li a:hover {
 nav ul li a:hover span {
     visibility: visible;
     opacity: 1;
-    margin-left: 130px;
+    left: 45px;
 }
 
 nav.active ul li a span {
@@ -74,6 +75,49 @@ nav.active ul li a:hover span {
 
 nav.active ul li a:hover span {
     margin-left: 0;
+}
+
+
+@media (max-width: 800px) {
+    nav {
+        margin: 0;
+        left: 0;
+        top: calc(100vh - 50px);
+        bottom: 0;
+        border-radius: 0;
+        border-top: var(--purple-dark) 2px solid;
+        height: 50px;
+        width: 100vw;
+    }
+    
+    nav ul {
+        flex-flow: row;
+        justify-content: space-around;
+    }
+    
+    /*
+    nav ul li:nth-child(1) {
+        position: absolute;
+        background: var(--purple-dark);
+        translate: 0 7px;
+        border: 2px solid var(--purple-darker);
+        border-radius: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 90px;
+        width: 90px;
+    }
+    
+    nav ul li:nth-child(1) a {
+        translate: 0 -6px;
+        color: var(--purple-darker);
+    }
+    */
+    
+    nav ul li a span {
+        display: none;
+    }
 }
 
 main {
