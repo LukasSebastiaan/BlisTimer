@@ -1,24 +1,47 @@
 @model BlisTimer.Models.ProjectAdd
 
 @{
- Layout = "Empty_Layout";
+  Layout = "Empty_Layout";
 }
 
 @section Scripts{
-  <script src="https://kit.fontawesome.com/25b6802032.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/25b6802032.js" crossorigin="anonymous"></script>
 }
-<div class="main">
-  <div class="side-bar">
-      <div class="menu">
-        <div class="item"> <a href="#">Dashboard</a></div>
-        <div class="item"> 
-          <a class="sub-btn">Table</a>
+@section head{
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
+}
+  <div class="main">
+    <div class="side-bar">
+        <div class="menu">
+            <div class="item"> <a href="#">Dashboard</a></div>
+            <div class="item"> 
+                <a class="sub-btn">Table <i class="fa-solid fa-angle-right"></i> </a>
+                <div class="sub-menu">
+                    <a href="#" class="sub-item"> sub 1</a>
+                    <a href="#" class="sub-item"> sub 2</a>
+                    <a href="#" class="sub-item"> sub 3</a>
+                </div>
+            </div>
+            <div class="item"> 
+                <a class="sub-btn">Forms <i class="fa-solid fa-angle-right"></i> </a>
+                <div class="sub-menu">
+                    <a href="#" class="sub-item"> sub 1</a>
+                    <a href="#" class="sub-item"> sub 2</a>
+                    <a href="#" class="sub-item"> sub 3</a>
+                </div>
+            </div>
+            <div class="item"> <a href="#">Settings</a></div>
+            <div class="item"> <a href="#">About</a></div>
         </div>
-          <div class="item"> 
-            <a class="sub-btn">Forms</a>
-          </div>
-        <div class="item"> <a href="#">Settings</a></div>
-        <div class="item"> <a href="#">About</a></div>
-      </div>
-  </div>
+    </div>
 </div>
+
+<script type="text/javascript">
+    console.log("hello");
+    $(document).ready(function (){
+        $('.sub-btn').click(function(){
+        $(this).next('.sub-menu').slideToggle();
+        $(this).find('.fa-solid').toggleClass('rotate');
+        });
+    });
+</script>

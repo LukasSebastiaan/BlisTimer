@@ -7,22 +7,12 @@
 
 .main{
     min-height: 100vh;
-    background-color: rgb(9, 9, 97);
+    background-color: #2d2e3b;
     display: flex;
     align-items: center;
     justify-content: center;
 }
-.arrow{
-    border: solid black;
-    border-width: 0 0px 3px 0;
-    
-    display: inline-block;
-    padding: 3px;
-}
-.right{
-    transform: rotate(-45deg);
-    -webkit-transform: rotate(-45deg);
-}
+
 .side-bar{
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(15px);
@@ -30,7 +20,8 @@
     overflow:hidden;
     border-radius: 10px;
     position: fixed;
-    width:33em
+    overflow-y: auto;
+    width:520px;
 }
 .side-bar .menu{
     width: 100%;
@@ -38,34 +29,46 @@
     margin-bottom: 20px;
 }
 .side-bar .menu .item{
-    position:relative;
-    display: flex;
-    justify-content: center;
+    position: relative;
     cursor: pointer;
 }
 .side-bar .menu .item a{
     color: rgb(255, 255, 255);
+    margin: 20px;
     font-size: 25px;
     font-weight:400;
     display: block;
     text-decoration: none;
 }
 .side-bar .menu .item a:hover{
-    color: rgb(0, 0, 0);
-    background-color: yellow;
+    color: yellow;
     font-size: 25px;
     display: block;
     text-decoration: none;
-    padding-left: 50%;
-    padding-right: 50%;
-    
+
 }
-.side-bar .menu .item .sub-btn::after{
+
+.side-bar .menu .item a .fa-solid{
     position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-family: "FontAwesome";
-    content: "\f105";
-    font-size: 16px;
+    right: 0;
+    margin: 10px;
+    padding-right: 20px;
+    font-size: 20px;
+    transition: 0.3s ease;
 }
+.side-bar .menu .item .sub-menu{
+    background: rgba(255, 255, 255, 0.1);
+    display: none;
+    padding: 1px;
+}
+.side-bar .menu .item .sub-menu a{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.rotate{
+    transform: rotate(90deg);
+}
+
+
