@@ -1,0 +1,193 @@
+﻿#nav-menu-wrapper{
+    position: fixed;
+    display: flex;
+    align-items: center;
+    transition: 0.5s all ease;
+    height: 100vh;
+}
+
+#nav-menu-wrapper.hide {
+    translate: -70px 0;
+}
+
+nav {
+    position: relative;
+    height: 350px;
+    left: 20px;
+    top: 0;
+    bottom: 0;
+    margin: auto 0;
+    background-color: #fefefe;
+    padding: 20px 10px;
+    border-radius: 30px;
+    z-index: 10;
+}
+
+#hide-button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    left: -30px;
+    height: 50px;
+    width: 50px;
+    translate: 0 -150px;
+    border-radius: 100%;
+    z-index: 9;
+    cursor: pointer;
+    transition: 0.5s all ease;
+    background-color: var(--purple-dark);
+}
+
+#hide-button svg {
+    transition: all 0.5s ease;
+    filter: invert(100%);
+    width: 100px;
+    left: 10px;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-flow: column;
+    height: 100%;
+    padding: 0;
+}
+
+nav ul li {
+    width: 100%;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: var(--purple-darker);
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+    width: 100%;
+}
+
+nav ul li a svg {
+    width: 30px;
+    height: 30px;
+}
+
+nav ul li a span {
+    position: absolute;
+    background-color: var(--white);
+    padding: 2px 15px;
+    left: 10px;
+    border-radius: 30px;
+    margin-left: 10px;
+    font-weight: 500;
+    font-size: 15px;
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.2s all ease;
+}
+
+nav ul li a:hover {
+    color: var(--purple-darker);
+}
+
+nav ul li a:hover span {
+    visibility: visible;
+    opacity: 1;
+    left: 45px;
+}
+
+#hide-button:not(:is(#hide-button.hide)):hover,
+nav:hover ~ #hide-button:not(:is(#hide-button.hide)) {
+    height: 90px;
+    border-radius: 30px;
+    translate: 0 -170px;
+}
+
+#hide-button:not(:is(#hide-button.hide)):hover svg,
+nav:hover ~ #hide-button:not(:is(#hide-button.hide)) svg {
+    translate: 0 -19px;
+}
+
+#hide-button.hide:hover {
+    height: 50px;
+    border-radius: 100%;
+    translate: 0;
+}
+
+
+
+#hide-button.hide {
+    left: -7px;
+    translate: 0 0;
+}
+
+main {
+    background-color: var(--purple);
+}
+
+
+@media (max-width: 800px) {
+    #nav-menu-wrapper.hide {
+        translate: 0 0;
+    }
+    
+    #hide-button {
+        display: none;
+    }
+    
+    #nav-menu-wrapper {
+        transition: 0s all;
+        position: fixed;
+        height: auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-flow: column;
+    }
+    
+    nav {
+        margin: 0;
+        left: 0;
+        top: calc(100vh - 50px);
+        bottom: 0;
+        border-radius: 0;
+        border-top: var(--purple-dark) 2px solid;
+        height: 50px;
+        width: 100vw;
+    }
+    
+    nav ul {
+        flex-flow: row;
+        justify-content: space-around;
+    }
+    
+    /*
+    nav ul li:nth-child(1) {
+        position: absolute;
+        background: var(--purple-dark);
+        translate: 0 7px;
+        border: 2px solid var(--purple-darker);
+        border-radius: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 90px;
+        width: 90px;
+    }
+    
+    nav ul li:nth-child(1) a {
+        translate: 0 -6px;
+        color: var(--purple-darker);
+    }
+    */
+    
+    nav ul li a span {
+        display: none;
+    }
+    
+    main {
+        max-height: calc(100vh - 50px);
+    }
+}

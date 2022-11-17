@@ -1,0 +1,7 @@
+text {
+    display: block;
+    font-size: 60px;
+    font-family: "TT Commons";
+    color: var(--white);
+    text-align: center;
+}
