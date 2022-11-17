@@ -28,11 +28,10 @@ nav {
     display: flex;
     align-items: center;
     justify-content: center;
-    top: 0;
-    bottom: 0;
     left: -30px;
     height: 50px;
     width: 50px;
+    translate: 0 -150px;
     border-radius: 100%;
     z-index: 9;
     cursor: pointer;
@@ -41,6 +40,7 @@ nav {
 }
 
 #hide-button svg {
+    transition: all 0.5s ease;
     filter: invert(100%);
     width: 100px;
     left: 10px;
@@ -98,22 +98,47 @@ nav ul li a:hover span {
     left: 45px;
 }
 
-
-#hide-button:hover,
-nav:hover ~ #hide-button {
-    left: -7px;
+#hide-button:not(:is(#hide-button.hide)):hover,
+nav:hover ~ #hide-button:not(:is(#hide-button.hide)) {
+    height: 90px;
+    border-radius: 30px;
+    translate: 0 -170px;
 }
+
+#hide-button:not(:is(#hide-button.hide)):hover svg,
+nav:hover ~ #hide-button:not(:is(#hide-button.hide)) svg {
+    translate: 0 -19px;
+}
+
+#hide-button.hide:hover {
+    height: 50px;
+    border-radius: 100%;
+    translate: 0;
+}
+
+
 
 #hide-button.hide {
     left: -7px;
+    translate: 0 0;
 }
 
+main {
+    background-color: var(--purple);
+}
+
+
 @media (max-width: 800px) {
+    #nav-menu-wrapper.hide {
+        translate: 0 0;
+    }
+    
     #hide-button {
         display: none;
     }
     
     #nav-menu-wrapper {
+        transition: 0s all;
         position: fixed;
         height: auto;
         display: flex;
@@ -161,8 +186,8 @@ nav:hover ~ #hide-button {
     nav ul li a span {
         display: none;
     }
-}
-
-main {
-    background-color: var(--purple);
+    
+    main {
+        max-height: calc(100vh - 50px);
+    }
 }
