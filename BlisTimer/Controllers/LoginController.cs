@@ -23,20 +23,6 @@ namespace BlisTimer.Controllers
             return View();
         }
 
-        //[HttpPost]
-        /*public IActionResult Index(TimeInfo T)
-        {
-            return View();
-        }*/
-
-        /*public IActionResult Index()
-        {
-            TimeInfo C = new TimeInfo();
-            C.End = "End time";
-            C.Start = "Start Time";
-            return View(C);
-        }*/
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
