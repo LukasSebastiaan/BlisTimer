@@ -1,9 +1,3 @@
-div.topbar {
-    background-color: var(--purple-darker);
-    height: 20px;
-    width: 100vw;
-}
-
 text {
     display: block;
     font-size: 60px;
