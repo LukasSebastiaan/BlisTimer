@@ -1,5 +1,17 @@
-﻿nav {
+﻿#nav-menu-wrapper{
     position: fixed;
+    display: flex;
+    align-items: center;
+    transition: 0.5s all ease;
+    height: 100vh;
+}
+
+#nav-menu-wrapper.hide {
+    translate: -70px 0;
+}
+
+nav {
+    position: relative;
     height: 350px;
     left: 20px;
     top: 0;
@@ -8,6 +20,30 @@
     background-color: #fefefe;
     padding: 20px 10px;
     border-radius: 30px;
+    z-index: 10;
+}
+
+#hide-button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    bottom: 0;
+    left: -30px;
+    height: 50px;
+    width: 50px;
+    border-radius: 100%;
+    z-index: 9;
+    cursor: pointer;
+    transition: 0.5s all ease;
+    background-color: var(--purple-dark);
+}
+
+#hide-button svg {
+    filter: invert(100%);
+    width: 100px;
+    left: 10px;
 }
 
 nav ul {
@@ -53,7 +89,7 @@ nav ul li a span {
 }
 
 nav ul li a:hover {
-    color: var(--yellow);
+    color: var(--purple-darker);
 }
 
 nav ul li a:hover span {
@@ -62,21 +98,15 @@ nav ul li a:hover span {
     left: 45px;
 }
 
-nav.active ul li a span {
-    position: relative;
-    opacity: 1;
-    visibility: visible;
-    margin-left: 0;
+
+#hide-button:hover,
+nav:hover ~ #hide-button {
+    left: -7px;
 }
 
-nav.active ul li a:hover span {
-    color: var(--yellow);
+#hide-button.hide {
+    left: -7px;
 }
-
-nav.active ul li a:hover span {
-    margin-left: 0;
-}
-
 
 @media (max-width: 800px) {
     nav {
