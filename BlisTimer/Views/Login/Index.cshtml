@@ -1,4 +1,5 @@
-﻿@{
+﻿@model BlisTimer.Models.Employee
+@{
     ViewData["Title"] = "Login";
     Layout = "_EmptyLayout";
 }
@@ -23,14 +24,14 @@
 
 <div id="box" class="mx-auto my-5 py-5 rounded shadow-lg" style="width:30em;height: 22em;">
     <h1 class="text-center pb-3 text-white">@ViewData["Title"]</h1>
-    <form class="text-center">
+    <form class="text-center" asp-action="Index" asp-controller="Login">
         <div class="form-group">
-            <label class="label mb-1">Email:</label><br>
-            <input class="input-field" type="email" name="e-mail" placeholder="John@blis.digital.nl"><br>
+            <label class="label mb-1" asp-for="Email">Email:</label><br>
+            <input class="input-field" type="email" asp-for="Email" placeholder="John@blis.digital.nl">
         </div>
         <div class="form-group">
-            <label class="label my-1">Password:</label><br>
-            <input class="input-field" type="password" name="password" placeholder="********"><br><br>
+            <label class="label my-1" asp-for="Password">Password:</label><br>
+            <input class="input-field" type="password" asp-for="Password" placeholder="********">
         </div>
         <input id="login-submit" class="rounded border-1 py-2 px-4 bg-warning" type="submit" value="Login">
     </form>
