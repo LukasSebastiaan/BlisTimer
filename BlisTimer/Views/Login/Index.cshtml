@@ -1,4 +1,4 @@
-﻿@model BlisTimer.Models.Employee
+﻿@model BlisTimer.Models.LoginForm
 @{
     ViewData["Title"] = "Login";
     Layout = "_EmptyLayout";
@@ -27,6 +27,9 @@
         </svg>
         <h1>Sign In</h1>
         <text>Please login with your simplicate credentials</text>
+        @if (@Model.Status == "BadCredentials") {
+            <p style="color: red;">Email or Password is wrong</p>
+        }
         <form asp-action="Index" asp-controller="Login">
             <input type="email" asp-for="Email" placeholder="Enter Email">
             <input type="password" asp-for="Password" placeholder="Enter Password">

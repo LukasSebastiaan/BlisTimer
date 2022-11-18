@@ -6,6 +6,9 @@ using System.Collections.Generic;
 using BlisTimer.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using BlisTimer.Data;
+using System.Net.Security;
+using SimplicateAPI.ReturnTypes;
 
 namespace BlisTimer.Controllers
 {
@@ -20,13 +23,31 @@ namespace BlisTimer.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var _ = new LoginForm();
+            return View(_);
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        [HttpPost]
+        public async Task<IActionResult> Index(LoginForm emp)
+        {
+            var loginResult = await ApiDatabaseHandler.SimplicateApiClient.Login.TryUnsafeLoginAsync(emp.Email, emp.Password);
+            if (loginResult.IsSuccess)
+            {
+                return RedirectToAction("Index","Home");
+            }
+            else if (loginResult.Status == LoginResult.LoginStatus.BadCredentials)
+            {
+                emp.Status = "BadCredentials";
+                return View(emp);
+            }
+            return View(emp);
+        }
+        
+
+        /*[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+        }*/
     }
 }
