@@ -1,11 +1,11 @@
 :root {
-  --white: #fff;
-  --yellow: #ffe500;
-  --cyan: #00c7b7;
-  --cyan-darker: #297374;
-  --purple: #2d2e3b;
-  --purple-dark: #20222e;
-  --purple-darker: #16171c;
+  --blis-white: #fff;
+  --blis-yellow: #ffe500;
+  --blis-cyan: #00c7b7;
+  --blis-cyan-darker: #297374;
+  --blis-purple: #2d2e3b;
+  --blis-purple-dark: #20222e;
+  --blis-purple-darker: #16171c;
 }
 
 body {
@@ -14,7 +14,7 @@ body {
 }
 
 html {
-  background-color: var(--purple);
+  background-color: var(--blis-purple);
   font-size: 14px;
 }
 
