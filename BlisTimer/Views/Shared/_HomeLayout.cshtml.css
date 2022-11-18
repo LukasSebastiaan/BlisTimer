@@ -124,7 +124,7 @@ nav:hover ~ #hide-button:not(:is(#hide-button.hide)) svg {
 }
 
 main {
-    background-color: var(--blis-purple);
+    background: transparent;
 }
 
 

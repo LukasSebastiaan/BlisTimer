@@ -15,7 +15,7 @@ body {
 }
 
 html {
-  background-color: var(--blis-purple-dark);
+  background: linear-gradient(to right, var(--blis-purple-darker), var(--blis-purple));
   font-size: 14px;
 }
 
