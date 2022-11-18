@@ -3,22 +3,26 @@
   --blis-yellow: #ffe500;
   --blis-cyan: #00c7b7;
   --blis-cyan-darker: #297374;
+  --blis-purple-lighter: #454654;
   --blis-purple: #2d2e3b;
   --blis-purple-dark: #20222e;
   --blis-purple-darker: #16171c;
+  
+  --login-opacity: 0;
 }
 
 body {
+  background: transparent;
   padding: 0;
   margin: 0;
-  background: transparent;
   overflow-y: auto;
 }
 
+
 html {
-  background: linear-gradient(to right, var(--blis-purple-darker), var(--blis-purple-dark));
+  background: linear-gradient(to right, var(--blis-purple-darker), var(--blis-purple));
   font-size: 14px;
-  overflow-y: auto;
+  overflow: hidden;
 }
 
 @media (min-width: 768px) {
