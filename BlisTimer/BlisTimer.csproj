@@ -47,8 +47,4 @@
     <AdditionalFiles Include="Views\TimeLog\Add.cshtml" />
     <AdditionalFiles Include="Views\TimeLog\index.cshtml" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Views\Projects\Add.cshtml.css" />
-  </ItemGroup>
 </Project>
