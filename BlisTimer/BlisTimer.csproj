@@ -31,5 +31,24 @@
     <_ContentIncludedByDefault Remove="Views\TimeLog\index.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Projects\Add.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Projects\index.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\_old\Employee\Add.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\_old\Employee\index.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\_old\TimeLog\Add.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\_old\TimeLog\index.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\_old\Projects\Add.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\_old\Projects\index.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="Views\Employee\Add.cshtml" />
+    <AdditionalFiles Include="Views\Employee\index.cshtml" />
+    <AdditionalFiles Include="Views\Projects\Add.cshtml" />
+    <AdditionalFiles Include="Views\Projects\index.cshtml" />
+    <AdditionalFiles Include="Views\TimeLog\Add.cshtml" />
+    <AdditionalFiles Include="Views\TimeLog\index.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Views\Projects\Add.cshtml.css" />
   </ItemGroup>
 </Project>

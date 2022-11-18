@@ -11,10 +11,11 @@
 body {
   padding: 0;
   margin: 0;
+  background: transparent;
 }
 
 html {
-  background-color: var(--blis-purple);
+  background-color: var(--blis-purple-dark);
   font-size: 14px;
 }
 
