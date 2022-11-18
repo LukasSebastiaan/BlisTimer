@@ -1,6 +1,10 @@
-﻿@{
+﻿@using BlisTimer.Data
+@inject UserDataHolder userDataHolder;
+
+@{
     ViewData["Title"] = "Home Page";
     Layout = "_HomeLayout";
 }
 
 <text>Welcome to our super awesome website made for <p style="color: yellow">BlisDigital</p></text>
+<p>@userDataHolder.Testing.ToString()</p>

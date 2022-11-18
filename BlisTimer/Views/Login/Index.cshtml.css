@@ -1,0 +1,46 @@
+﻿#container {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#box {
+    position: relative;
+    background: rgb(0, 0, 0, 0.5);
+    padding-top: 60px;
+    width: 450px;
+    height: 450px;
+    border-radius: 7px;
+}
+
+
+#box:before {
+    content: "";
+    position: absolute;
+    background: rgb(0, 0, 0, 0.2);
+    inset: 0;
+    padding-top: 100%;
+    z-index: -1;
+    border-radius: 7px;
+    transform: rotate(-5deg);
+    transition: 1s all ease;
+}
+
+#box:hover:before {
+    transform: rotate(1deg);
+}
+
+.label {
+    color: white;
+}
+.input-field {
+    width: 50%;
+    border: none;
+    border-radius: 2rem;
+    text-align: center;
+}
+#login-submit {
+    font-weight: 500;
+}

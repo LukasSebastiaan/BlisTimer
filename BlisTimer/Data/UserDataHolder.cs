@@ -5,5 +5,5 @@ namespace BlisTimer.Data;
 public class UserDataHolder
 {
     public Employee loggedInUser { get; set; }
-    public Guid Testing = new();
+    public Guid Testing = Guid.NewGuid();
 }

@@ -5,3 +5,8 @@ text {
     color: var(--blis-white);
     text-align: center;
 }
+
+p {
+    color: yellow;
+    font-size: 100px;
+}
