@@ -11,6 +11,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: auto;
 }
 
 .side-bar{
@@ -20,7 +21,6 @@
     overflow:hidden;
     border-radius: 10px;
     position: fixed;
-    overflow-y: auto;
     width:520px;
 }
 .side-bar .menu{

@@ -13,7 +13,7 @@ namespace BlisTimer.Controllers
             _context = context;
         
 
-        /*
+        
         public async Task<IActionResult> Index(){
             var projects = await _context.Projects.Include(_ => _.Activities).ToListAsync();
             return View(projects);
@@ -43,7 +43,6 @@ namespace BlisTimer.Controllers
             await _context.SaveChangesAsync();
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
-        } 
-    */
+        }
     }
 }

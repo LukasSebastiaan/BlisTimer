@@ -12,7 +12,7 @@ namespace BlisTimer.Controllers
         public TimeLogController(TimerDbContext context) =>
             _context = context;
         
-        /*
+        
         public async Task<IActionResult> Index(){
             var timeLogs = await _context.TimeLogs.Include(_ => _.Activity).Include(_ => _.Employee).ToListAsync();
             return View(timeLogs);
@@ -43,7 +43,6 @@ namespace BlisTimer.Controllers
 
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
-        } 
-    */
+        }
     }
 }
