@@ -4,19 +4,33 @@
     Layout = "_EmptyLayout";
 }
 
+<style>
+    input#Email,
+    input#Password {
+        border: none;
+        outline: none;
+        background: rgba(255, 255, 255, 0.2);
+        margin-bottom: 20px;
+        padding: 1rem 1.5rem 1rem calc(1rem * 3.5);
+        border-radius: 100px;
+        width: 100%;
+    }
+</style>
+
 <div id="container">
     <div id="box">
-    <h1 class="text-center pb-3 text-white">@ViewData["Title"]</h1>
-    <form class="text-center" asp-action="Index" asp-controller="Login">
-        <div class="form-group">
-            <label class="label mb-1" asp-for="Email">Email:</label><br>
-            <input class="input-field" type="email" asp-for="Email" placeholder="John@blis.digital.nl">
-        </div>
-        <div class="form-group">
-            <label class="label my-1" asp-for="Password">Password:</label><br>
-            <input class="input-field" type="password" asp-for="Password" placeholder="********">
-        </div>
-        <input id="login-submit" class="rounded border-1 py-2 px-4 bg-warning" type="submit" value="Login">
-    </form>
-</div>
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 296.228 296.228" enable-background="new 0 0 296.228 296.228">
+          <g>
+            <path d="m167.364,48.003v-23.003h10.5c6.903,0 12.5-5.597 12.5-12.5s-5.596-12.5-12.5-12.5h-59.5c-6.903,0-12.5,5.597-12.5,12.5s5.597,12.5 12.5,12.5h10.5v23.003c-59.738,9.285-105.604,61.071-105.604,123.37-3.55271e-15,68.845 56.01,124.854 124.854,124.854s124.854-56.01 124.854-124.854c0-62.299-45.866-114.085-105.604-123.37zm-19.25,223.225c-55.06,0-99.854-44.795-99.854-99.854s44.795-99.854 99.854-99.854 99.854,44.795 99.854,99.854-44.794,99.854-99.854,99.854z"/>
+            <path d="m160.614,166.18v-58.889c0-6.903-5.597-12.5-12.5-12.5s-12.5,5.597-12.5,12.5v66.1c0,2.033 0.81,3.982 2.25,5.416l34.969,34.822c4.893,4.872 12.806,4.854 17.678-0.037 4.871-4.892 4.854-12.807-0.037-17.678l-29.86-29.734z"/>
+          </g>
+        </svg>
+        <h1>Sign In</h1>
+        <text>Please login with your simplicate credentials</text>
+        <form asp-action="Index" asp-controller="Login">
+            <input type="email" asp-for="Email" placeholder="Enter Email">
+            <input type="password" asp-for="Password" placeholder="Enter Password">
+            <input id="login-submit" type="submit" value="LOGIN">
+        </form>
+    </div>
 </div>

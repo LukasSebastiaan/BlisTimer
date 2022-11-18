@@ -16,7 +16,7 @@ body {
 }
 
 html {
-  background: linear-gradient(to right, var(--blis-purple-darker), var(--blis-purple));
+  background: linear-gradient(to right, var(--blis-purple-darker), var(--blis-purple-dark));
   font-size: 14px;
   overflow-y: auto;
 }
