@@ -1,0 +1,127 @@
+﻿* {
+    font-family: 'Fira sans', sans-serif;
+    box-sizing: border-box;
+    margin: 0;
+}
+
+#screen {
+    color: var(--blis-white);
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.watch {
+    text-align: center;
+    background-color: var(--blis-purple-dark);
+    width: 100%;
+    position: relative;
+    max-width: 720px;
+    margin: 4rem auto;
+    padding: 4rem 8rem;
+    border-radius: 2rem;
+}
+
+.task {
+    background-color: var(--blis-purple-dark);
+    font-size: 2rem;
+    font-weight: 500;
+    margin: 0 0.8rem;
+    border-radius: 0.4rem;
+}
+
+.time {
+    font-size: 5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.controls button {
+    appearance: none;
+    border: none;
+    outline: none;
+    user-select: none;
+    cursor: pointer;
+    color: var(--blis-purple-dark);
+    font-size: 1.8rem;
+    background: var(--blis-yellow) none;
+    margin: 0 0.8rem 1rem;
+    padding: 0 2.5rem;
+    border-radius: 0.4rem;
+
+    transition: 0.4s;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+button:active {
+    opacity: 0.3;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.popup {
+    width: 100%;
+    max-width: 720px;
+    margin: 4rem auto;
+    background: var(--blis-purple-darker);
+    border-radius: 2rem;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translateY(50%) scale(0.1);
+    text-align: center;
+    padding: 4rem 8rem;
+    color: var(--blis-white);
+    outline-style: solid;
+    outline-color: var(--blis-yellow);
+    visibility: hidden;
+    transition: transform 0.4s, top 0.4s;
+}
+
+.open-popup {
+    visibility: visible;
+    top: -15%;
+    transform: scale(1);
+}
+
+.popup h2 {
+    background: var(--blis-purple-dark);
+    font-size: 50px;
+    font-weight: 500;
+    margin: 30px 0 10px;
+    border-radius: 0.4rem;
+}
+
+.popup p {
+    font-size: 30px;
+    font-weight: 400;
+    margin: 10px 0 30px;
+}
+
+.btn{
+    padding: 10px 60px;
+    background: var(--blis-yellow);
+    color: var(--blis-purple-dark);
+    border: 0;
+    outline: none;
+    cursor: pointer;
+    font-size: 22px;
+    font-weight: 500;
+    border-radius: 30px;
+}

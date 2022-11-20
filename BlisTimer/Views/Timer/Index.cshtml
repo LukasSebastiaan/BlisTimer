@@ -1,5 +1,6 @@
 ﻿@{
-    ViewData["Title"] = "Stopwatch Page";
+  ViewData["Title"] = "Stopwatch Page";
+  Layout = "_HomeLayout";
 }
 
 @section scripts {
@@ -84,165 +85,14 @@
     function closePopup() {
       popup.classList.remove("open-popup");
     }
-
     </script>
 }
 
-
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Timer</title>
-</head>
-
-<style>
-:root {
-  --darkblue: #2d2e3b;
-  --yellow: #ffe500;
-  --darkerblue: #20222E;
-  --white: #fff;
-}
-
-* {
-  font-family: 'Fira sans', sans-serif;
-  box-sizing: border-box;
-  margin: 0;
-}
-
-body {
-  background: var(--darkblue);
-  color: var(--white);
-}
-
-.watch {
-  text-align: center;
-  background-color: var(--darkerblue);
-  width: 100%;
-  max-width: 720px;
-  margin: 4rem auto;
-  padding: 4rem 8rem;
-  border-radius: 2rem;
-}
-
-.task {
-  background-color: var(--darkblue);
-  font-size: 2rem;
-  font-weight: 500;
-  margin-bottom: 1rem;
-  margin: 0 0.8rem;
-  border-radius: 0.4rem;
-}
-
-.time {
-  font-size: 5rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-}
-
-.controls {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.controls button {
-  appearance: none;
-  background: none;
-  border: none;
-  outline: none;
-  user-select: none;
-  cursor: pointer;
-
-  color: var(--darkblue);
-  font-size: 1.8rem;
-  background-color: var(--yellow);
-  margin: 0 0.8rem;
-  margin-bottom: 1rem;
-  padding: 0 2.5rem;
-  border-radius: 0.4rem;
-
-  transition: 0.4s;
-}
-
-button:hover {
-  opacity: 0.8;
-}
-
-button:active {
-  opacity: 0.3;
-}
-
-
-
-
-.container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.popup {
-  width: 100%;
-  max-width: 720px;
-  margin: 4rem auto;
-  background: var(--darkerblue);
-  border-radius: 2rem;
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0.1);
-  text-align: center;
-  padding: 4rem 8rem;
-  color: var(--white);
-  outline-style: solid;
-  outline-color: var(--yellow);
-  visibility: hidden;
-  transition: transform 0.4s, top 0.4s;
-}
-
-.open-popup {
-  visibility: visible;
-  top: 20%;
-  transform: translate(-50%, -50%) scale(1);
-}
-
-.popup h2 {
-  background: var(--darkblue);
-  font-size: 50px;
-  font-weight: 500;
-  margin-top: 30px 0 10px;
-  border-radius: 0.4rem;
-}
-
-.popup p {
-  font-size: 30px;
-  font-weight: 400;
-  margin: 10px 0 30px;
-}
-
-.btn{
-  padding: 10px 60px;
-  background: var(--yellow);
-  color: var(--darkblue);
-  border: 0;
-  outline: none;
-  cursor: pointer;
-  font-size: 22px;
-  font-weight: 500;
-  border-radius: 30px;
-}
-
-</style>
-<body>
-  
+<div id="screen">
   <div class="watch">
     <div class="task">
       Project
-      <br />Current Task
+      <br/>Current Task
     </div>
 
     <div class="time">
@@ -258,16 +108,11 @@ button:active {
       <button id="pause">Take a break</button>
     </div>
 
-    <div class="container"></div>
-      <div class="popup" id="popup">
-        <h2>Project > Current Task</h2>
-        <p>Please confirm you have worked (Time) on this task.</p>
-        <button type="button" class="btn" onclick="confirm()">Confirm</button>
-        <button type="button" class="btn" onclick="cancel()">Cancel</button>
-      </div>
+    <div class="popup" id="popup">
+      <h2>Project > Current Task</h2>
+      <p>Please confirm you have worked (Time) on this task.</p>
+      <button type="button" class="btn" onclick="confirm()">Confirm</button>
+      <button type="button" class="btn" onclick="cancel()">Cancel</button>
+    </div>
   </div>
-
-
-  <script src="main.js"></script>
-</body>
-</html>
+</div>
