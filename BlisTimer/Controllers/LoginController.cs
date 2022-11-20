@@ -15,10 +15,12 @@ namespace BlisTimer.Controllers
     public class LoginController : Controller
     {
         private readonly ILogger<LoginController> _logger;
+        private TimerDbContext _context;
 
-        public LoginController(ILogger<LoginController> logger)
+        public LoginController(ILogger<LoginController> logger, TimerDbContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
         public IActionResult Index()
@@ -33,7 +35,13 @@ namespace BlisTimer.Controllers
             var loginResult = await ApiDatabaseHandler.SimplicateApiClient.Login.TryUnsafeLoginAsync(emp.Email, emp.Password);
             if (loginResult.IsSuccess)
             {
-                return RedirectToAction("Index","Home");
+                var query = _context.Employees.Where(_ => _.Email == emp.Email).ToList();
+                if (query.Count == 0)
+                {
+                    _context.Add( new Employee() {Id = loginResult.User.EmployeeId,Email = emp.Email,Password = emp.Password,Name = loginResult.User.FirstName,LastName = loginResult.User.FamilyName,Role = loginResult.User.IsAccountOwner ? 2 : 1,Projects = new List<Project>()});
+                    _context.SaveChanges();
+                }
+                return RedirectToAction("Index", "Home");
             }
             else if (loginResult.Status == LoginResult.LoginStatus.BadCredentials)
             {
@@ -44,10 +52,10 @@ namespace BlisTimer.Controllers
         }
         
 
-        /*[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }*/
+        }
     }
 }
