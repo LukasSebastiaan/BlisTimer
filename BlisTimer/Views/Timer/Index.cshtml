@@ -8,6 +8,7 @@
     const time_el = document.querySelector('.watch .time');
     const startButton = document.getElementById("start");
     const stopButton = document.getElementById("stop");
+    const pauseButton = document.getElementById("pause");
 
     let seconds = 0;
     let interval = null;
@@ -15,6 +16,8 @@
     // Event Listeners
     startButton.addEventListener('click', start);
     stopButton.addEventListener('click', stop);
+    pauseButton.addEventListener('click', pause);
+
 
     // Timer updates
     function timer() {
@@ -40,6 +43,12 @@
 
       interval = setInterval(timer, 1000);
     }
+
+    //pause button
+    function pause() {
+      clearInterval(interval);
+      interval = null;
+}
 
     //stop button
     function stop() {
@@ -152,6 +161,7 @@ body {
   font-size: 1.8rem;
   background-color: var(--yellow);
   margin: 0 0.8rem;
+  margin-bottom: 1rem;
   padding: 0 2.5rem;
   border-radius: 0.4rem;
 
@@ -231,8 +241,8 @@ button:active {
   
   <div class="watch">
     <div class="task">
-      Project >
-      Current Task
+      Project
+      <br />Current Task
     </div>
 
     <div class="time">
@@ -242,6 +252,10 @@ button:active {
     <div class="controls">
       <button id="start">Start</button>
       <button id="stop">Stop</button>
+    </div>
+
+    <div class="controls">
+      <button id="pause">Take a break</button>
     </div>
 
     <div class="container"></div>
