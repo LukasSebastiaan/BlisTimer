@@ -3,30 +3,43 @@
 @{
 
 }
-<style>
-    .main{
-        background-color: white;
-    }
-</style>
+
 <div class="main">
-    <h1>Times</h1>
-    <table class="table">
-        <thead> 
-            <tr>
-                <th>Name</th>
-                <th>Activity</th>
-                <th>Time</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var TimeLog in Model)
-            {
-                <tr>
-                    <td>@TimeLog.Employee.Name</td>
-                    <td>@TimeLog.Activity.Name</td>
-                    <td>@((TimeLog.AmountOfTimeSpentInSeconds/3600) + ":" + (TimeLog.AmountOfTimeSpentInSeconds%3600)/60 + ":" + (TimeLog.AmountOfTimeSpentInSeconds%3600)%60)</td>
-                </tr>
-            }
-        </tbody>
+    <h1>Time overview</h1>
+    <hr>
+    
+    <table>
+        <tr id="header">
+            <th>Project</th>
+            <th>Activity</th>
+            <th>Time</th>
+            <th>Send off</th>
+        </tr>
+        
+        <tr>
+            <td>Website feyenoord</td>
+            <td>Frontend develoment</td>
+            <td>08:12:01</td>
+            <td>False</td>
+        </tr>
+        <tr>
+            <td>Website feyenoord</td>
+            <td>Frontend develoment</td>
+            <td>08:12:01</td>
+            <td>False</td>
+        </tr>
+        <tr>
+            <td>Website feyenoord</td>
+            <td>Frontend develoment</td>
+            <td>08:12:01</td>
+            <td>False</td>
+        </tr>
+        <tr>
+            <td>Website feyenoord</td>
+            <td>Frontend develoment</td>
+            <td>08:12:01</td>
+            <td>False</td>
+        </tr>
     </table>
 </div>
+
