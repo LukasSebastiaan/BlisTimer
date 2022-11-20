@@ -1,0 +1,12 @@
+text {
+    display: block;
+    font-size: 60px;
+    font-family: "TT Commons";
+    color: var(--blis-white);
+    text-align: center;
+}
+
+p {
+    color: yellow;
+    font-size: 100px;
+}

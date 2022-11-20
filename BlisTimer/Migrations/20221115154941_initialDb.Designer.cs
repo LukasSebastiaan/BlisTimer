@@ -2,6 +2,7 @@
 using BlisTimer.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BlisTimer.Migrations
 {
     [DbContext(typeof(TimerDbContext))]
-    partial class TimerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221115154941_initialDb")]
+    partial class initialDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,19 +28,11 @@ namespace BlisTimer.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("text");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -48,6 +42,21 @@ namespace BlisTimer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Employees");
+                });
+
+            modelBuilder.Entity("BlisTimer.Models.EmployeeProjects", b =>
+                {
+                    b.Property<string>("EmployeeId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProjectId")
+                        .HasColumnType("text");
+
+                    b.HasKey("EmployeeId", "ProjectId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("EmployeeProjects");
                 });
 
             modelBuilder.Entity("BlisTimer.Models.Project", b =>
@@ -122,6 +131,25 @@ namespace BlisTimer.Migrations
                     b.HasIndex("ProjectsId");
 
                     b.ToTable("EmployeeProject");
+                });
+
+            modelBuilder.Entity("BlisTimer.Models.EmployeeProjects", b =>
+                {
+                    b.HasOne("BlisTimer.Models.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BlisTimer.Models.Project", "Project")
+                        .WithMany()
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+
+                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("BlisTimer.Models.TimeLog", b =>

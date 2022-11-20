@@ -1,0 +1,74 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+.main{
+    min-height: 100vh;
+    background-color: #2d2e3b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+}
+
+.side-bar{
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    box-sizing: border-box;
+    overflow:hidden;
+    border-radius: 10px;
+    position: fixed;
+    width:520px;
+}
+.side-bar .menu{
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.side-bar .menu .item{
+    position: relative;
+    cursor: pointer;
+}
+.side-bar .menu .item a{
+    color: rgb(255, 255, 255);
+    margin: 20px;
+    font-size: 25px;
+    font-weight:400;
+    display: block;
+    text-decoration: none;
+}
+.side-bar .menu .item a:hover{
+    color: yellow;
+    font-size: 25px;
+    display: block;
+    text-decoration: none;
+
+}
+
+.side-bar .menu .item a .fa-solid{
+    position: absolute;
+    right: 0;
+    margin: 10px;
+    padding-right: 20px;
+    font-size: 20px;
+    transition: 0.3s ease;
+}
+.side-bar .menu .item .sub-menu{
+    background: rgba(255, 255, 255, 0.1);
+    display: none;
+    padding: 1px;
+}
+.side-bar .menu .item .sub-menu a{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.rotate{
+    transform: rotate(90deg);
+}
+
+

@@ -1,8 +1,10 @@
-﻿@{
+﻿@using BlisTimer.Data
+@inject UserDataHolder userDataHolder;
+
+@{
     ViewData["Title"] = "Home Page";
+    Layout = "_HomeLayout";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<text>Welcome to our super awesome website made for <p style="color: yellow">BlisDigital</p></text>
+<p>@userDataHolder.Testing.ToString()</p>
