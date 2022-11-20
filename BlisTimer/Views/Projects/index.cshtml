@@ -1,4 +1,4 @@
-@model BlisTimer.Models.ChooseProject
+@model List<BlisTimer.Models.Project>
 
 @{
     Layout = "_EmptyLayout";
@@ -29,8 +29,8 @@
                 }
                 
         </div>
-            </div>
     </div>
+</div>
 
 <script type="text/javascript">
     console.log("hello");
@@ -40,26 +40,4 @@
         $(this).find('.fa-solid').toggleClass('rotate');
         });
     });
-</script>
-
-<script>
- /** Change the style **/
- function outStyle(object){
-    object.style.color = 'white'; 
-    object.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
-    object.style.display = 'flex'; 
-    object.style.padding = '1px'; 
-    object.style.alignItems = 'center'; 
-    object.style.justifyContent = 'center'; 
-    object.style.textDecoration = 'none'; 
-    object.style.fontSize = '25px';
-    object.style.fontWeight = '400';
-    // Change some other properties ...
- }
-
- /** Restores the style **/
- function overStyle(object){
-    object.style.color = 'yellow';
-    // Restore the rest ...
- }
 </script>
