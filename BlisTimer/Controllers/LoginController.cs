@@ -10,6 +10,7 @@ using BlisTimer.Data;
 using System.Net.Security;
 using ConsoleApp1;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using SimplicateAPI.ReturnTypes;
 
 namespace BlisTimer.Controllers
@@ -58,9 +59,16 @@ namespace BlisTimer.Controllers
                 var query = await _context.Employees.Where(_ => _.Email == emp.Email).ToListAsync();
                 if (query.Count == 0)
                 {
-                    await _context.AddAsync( new Employee() {Id = loginResult.User.EmployeeId,Email = emp.Email,Password = hasher.Hash(emp.Password),Name = loginResult.User.FirstName,LastName = loginResult.User.FamilyName,Role = loginResult.User.IsAccountOwner ? 2 : 1,Projects = new List<Project>()});
+                    await _context.AddAsync( new Employee() {Id = loginResult.User!.EmployeeId,Email = emp.Email,Password = hasher.Hash(emp.Password),Name = loginResult.User.FirstName,LastName = loginResult.User.FamilyName,Role = loginResult.User.IsAccountOwner ? 2 : 1,Projects = new List<Project>()});
                     await _context.SaveChangesAsync();
                 }
+                
+                HttpContext.Session.SetString("Firstname", loginResult.User!.FirstName);
+                HttpContext.Session.SetString("Lastname", loginResult.User!.FamilyName);
+                HttpContext.Session.SetString("Username", loginResult.User!.Username);
+                HttpContext.Session.SetString("Email", loginResult.User!.Email);
+                HttpContext.Session.SetString("Id", loginResult.User!.EmployeeId);
+                
                 return RedirectToAction("Index", "Home");
             }
             

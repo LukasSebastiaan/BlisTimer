@@ -1,5 +1,5 @@
 ﻿@using BlisTimer.Data
-@inject UserDataHolder userDataHolder;
+@model string
 
 @{
     ViewData["Title"] = "Home Page";
@@ -7,4 +7,4 @@
 }
 
 <text>Welcome to our super awesome website made for <p style="color: yellow">BlisDigital</p></text>
-<p>@userDataHolder.Testing.ToString()</p>
+<p class="text-center">Welcome back @Model</p>

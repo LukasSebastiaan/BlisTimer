@@ -1,6 +1,7 @@
 ﻿using BlisTimer.Models;
 using BlisTimer.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using System.Diagnostics;
 
 namespace BlisTimer.Controllers
@@ -18,7 +19,8 @@ namespace BlisTimer.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var fullName = $"{HttpContext.Session.GetString("Firstname")} {HttpContext.Session.GetString("Lastname")}";
+            return View(model: fullName);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

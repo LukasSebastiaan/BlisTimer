@@ -50,8 +50,8 @@
 
 #box:hover:before {
     transform: rotate(-2deg) scale(101%);
-    transition: 2s all ease 0.5s,
-                opacity 1s ease-in 0.5s;
+    transition: 2s all ease 0.2s,
+                opacity 2s ease-in 0.2s;
     opacity: 0.8;
 }
 
