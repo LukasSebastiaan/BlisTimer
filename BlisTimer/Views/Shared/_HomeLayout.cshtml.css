@@ -78,7 +78,7 @@ nav ul li a span {
     position: absolute;
     background-color: var(--blis-white);
     padding: 2px 15px;
-    left: 10px;
+    left: 35px;
     border-radius: 30px;
     margin-left: 10px;
     font-weight: 500;
@@ -92,7 +92,7 @@ nav ul li a:hover {
     color: var(--blis-purple-darker);
 }
 
-nav ul li a:hover span {
+nav ul li a:hover span:not(:hover) {
     visibility: visible;
     opacity: 1;
     left: 45px;

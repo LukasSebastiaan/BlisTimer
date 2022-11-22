@@ -1,4 +1,5 @@
-﻿#container {
+﻿
+#container {
     width: 100%;
     min-height: 100vh;
     display: flex;
@@ -8,7 +9,7 @@
 
 #box {
     position: relative;
-    background: rgba(255, 255, 255, 0.5);
+    background: linear-gradient(-90deg, var(--blis-purple-lighter), var(--blis-purple));
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -16,25 +17,43 @@
     padding: 50px 40px;
     width: 650px;
     border-radius: 7px;
+    transition: all 0.5s ease;
+    opacity: var(--login-opacity);
 }
 
-
-#box:before {
+/*
+#box::after {
     content: "";
     position: absolute;
-    background: rgba(0, 0, 0, 0.2);
+    background: var(--blis-cyan);
     inset: 0;
     z-index: -1;
     border-radius: 7px;
-    transform: rotate(-5deg);
-    transition: 1s all ease;
+    translate: 10px -10px;
+    transition: 1s all ease, 0.5s opacity ease 0.5s;
+    opacity: var(--login-opacity);
+}
+*/
+
+#box::before {
+    content: "";
+    position: absolute;
+    background: var(--blis-cyan);
+    inset: 0;
+    z-index: -2;
+    border-radius: 7px;
+    transform: rotate(-0deg) scale(99%);
+    transition: 1s all ease 0.2s,
+                opacity 1s ease 0.2s;
+    opacity: 0;
 }
 
 #box:hover:before {
-    transform: rotate(3deg);
+    transform: rotate(-2deg) scale(101%);
+    transition: 2s all ease 0.5s,
+                opacity 1s ease-in 0.5s;
+    opacity: 0.8;
 }
-
-
 
 #login-submit {
     font-size: 20px;
@@ -49,21 +68,33 @@
 }
 
 svg {
+    display: none;
     width: 100px;
     height: 100px;
     margin-bottom: 30px;
+    filter: invert(0);
 }
 
 h1 {
     font-family: "TT Commons", sans-serif;
     font-size: 50px;
-    color: black;
-    margin-bottom: 10px;
+    color: snow;
+    margin-bottom: 80px;
 }
 
 text {
     font-family: "TT Commons", sans-serif;
     font-size: 20px;
-    color: black;
+    color: snow;
     margin-bottom: 40px;
 }
+
+img {
+    width: 100%;
+    position: fixed;
+    translate: 0 -20%;
+    filter: brightness(0.1) invert(0.3);
+    object-fit: cover;
+    z-index: -5;
+}
+

@@ -1,4 +1,4 @@
-﻿namespace BlisTimer.Models
+namespace BlisTimer.Models
 {
     public class LoginForm
     {
