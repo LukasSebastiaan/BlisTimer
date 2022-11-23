@@ -4,7 +4,7 @@ namespace BlisTimer.Controllers
 {
     public class TimerController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Index(string id)
         {
             return View();
         }
