@@ -17,15 +17,11 @@ namespace BlisTimer.Controllers
         public async Task<IActionResult> Index(){
             var projects = await _context.Projects.Include(_ => _.Activities).ToListAsync();
             ViewBag.projects = await _context.Projects.Include(_ => _.Activities).ToListAsync();
+            HttpContext.Session.SetString("ActivityId", "");
+
             return View();
         }
-        //[HttpPost]
-        // public async Task<IActionResult> Index1(string id)
-        // {
-        //     //HttpContext.Session.SetString("ProjectId", chooseProject.ActivityId);
-        //
-        //     return RedirectToAction("Index", "TimeLog");
-        // }
+        
 
         
         

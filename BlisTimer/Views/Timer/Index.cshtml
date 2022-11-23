@@ -1,4 +1,6 @@
-﻿@{
+﻿@model WorkActivity
+
+@{
   ViewData["Title"] = "Stopwatch Page";
   Layout = "_HomeLayout";
 }
@@ -91,8 +93,8 @@
 <div id="screen">
   <div class="watch">
     <div class="task">
-      Project
-      <br/>Current Task
+      @Model.Project.Name
+      <br/>@Model.Name
     </div>
 
     <div class="time">
