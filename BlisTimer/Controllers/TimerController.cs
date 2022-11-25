@@ -16,40 +16,50 @@ namespace BlisTimer.Controllers
         public IActionResult Index()
         {
             var projectId = HttpContext.Session.GetString("ProjectId");
-            var projectDict = new Dictionary<BlisTimer.Models.Project, List<WorkActivity>>();
+            var projectDict = new Dictionary<Tuple<BlisTimer.Models.Project, bool>, List<WorkActivity>>();
                 
             if (String.IsNullOrEmpty(projectId))
             {
-                ViewBag.PreSelectedProject = true;
+                ViewBag.PreSelectedProject = false;
                 foreach (var project in _context.Projects.Include(_ => _.Activities))
                 {
-                    projectDict[project] = new List<WorkActivity>();
-                    foreach (var activity in project.Activities)
-                    {
-                        projectDict[project].Add(activity);
-                    }
+                    projectDict.Add(Tuple.Create(project, false), project.Activities.ToList());
                 }    
             }
             else
             {
-                ViewBag.PreSelectedProject = false;
-                var p = _context.Projects.Include(_ => _.Activities).Where(_ => _.Id == projectId).FirstOrDefault();
-                projectDict[p] = new List<WorkActivity>();
-                foreach (var activity in p.Activities)
+                ViewBag.PreSelectedProject = true;
+                var SelectedProject = _context.Projects.Include(_ => _.Activities).Where(_ => _.Id == projectId).FirstOrDefault();
+                foreach (var project in _context.Projects.Include(_ => _.Activities))
                 {
-                    projectDict[p].Add(activity);
-                    
+                    if (project.Id == SelectedProject.Id)
+                    {
+                        projectDict.Add(Tuple.Create(project, true), project.Activities.ToList());
+                    }
+                    else
+                    {
+                        projectDict.Add(Tuple.Create(project, false), project.Activities.ToList());
+                    }
                 }    
+
             }
             
             
-            return View(new SelectProject(){ ProjectDictionary = projectDict});
+            return View(projectDict);
         }
         [HttpPost]
         public IActionResult Index(string Id)
         {
             
             HttpContext.Session.SetString("ProjectId", Id);
+            
+            return RedirectToAction("Index");
+        }
+        [HttpPost]
+        public IActionResult Index2(string Id)
+        {
+            
+            HttpContext.Session.SetString("ActivityId", Id);
             
             return RedirectToAction("Index");
         }
