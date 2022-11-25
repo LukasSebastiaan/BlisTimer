@@ -37,8 +37,8 @@ namespace BlisTimer.Controllers
                 Name = addProjectRequest.Name
             };
             var p = _context.Projects.Where(_ => _.Id == "c5852ae9-4eae-4e98-ba19-94f64100c697").Include(_ => _.Activities).FirstOrDefault();
-            var activ = new WorkActivity(){Id = Guid.NewGuid().ToString(), Name = "Frontend dev", ProjectId = d};
-            var activ2 = new WorkActivity(){Id = Guid.NewGuid().ToString(), Name = "Backend dev", ProjectId = d};
+            var activ = new WorkActivity(){Id = Guid.NewGuid().ToString(), Name = "Frontend dev1", ProjectId = d};
+            var activ2 = new WorkActivity(){Id = Guid.NewGuid().ToString(), Name = "Backend dev2", ProjectId = d};
             // project.Activities.Add();
             // project.Activities.Add(new Models.Activity(){Id = Guid.NewGuid().ToString(), Name = "Backend dev", ProjectId = d});
             // project.Activities.Add(new Models.Activity(){Id = Guid.NewGuid().ToString(), Name = "Testing", ProjectId = d});
