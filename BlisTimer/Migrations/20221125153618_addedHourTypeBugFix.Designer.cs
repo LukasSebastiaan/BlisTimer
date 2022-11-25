@@ -2,6 +2,7 @@
 using BlisTimer.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BlisTimer.Migrations
 {
     [DbContext(typeof(TimerDbContext))]
-    partial class TimerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221125153618_addedHourTypeBugFix")]
+    partial class addedHourTypeBugFix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -20,6 +22,30 @@ namespace BlisTimer.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseSerialColumns(modelBuilder);
+
+            modelBuilder.Entity("BlisTimer.Controllers.HourType", b =>
+                {
+                    b.Property<string>("HourTypeId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Label")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("WorkActivityId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("HourTypeId");
+
+                    b.HasIndex("WorkActivityId");
+
+                    b.ToTable("HourType");
+                });
 
             modelBuilder.Entity("BlisTimer.Models.Employee", b =>
                 {
@@ -48,30 +74,6 @@ namespace BlisTimer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Employees");
-                });
-
-            modelBuilder.Entity("BlisTimer.Models.HourType", b =>
-                {
-                    b.Property<string>("HourTypeId")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Label")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("WorkActivityId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("HourTypeId");
-
-                    b.HasIndex("WorkActivityId");
-
-                    b.ToTable("HourType");
                 });
 
             modelBuilder.Entity("BlisTimer.Models.Project", b =>
@@ -154,7 +156,7 @@ namespace BlisTimer.Migrations
                     b.ToTable("EmployeeProject");
                 });
 
-            modelBuilder.Entity("BlisTimer.Models.HourType", b =>
+            modelBuilder.Entity("BlisTimer.Controllers.HourType", b =>
                 {
                     b.HasOne("BlisTimer.Models.WorkActivity", "WorkActivity")
                         .WithMany("HourTypes")
@@ -179,7 +181,7 @@ namespace BlisTimer.Migrations
                         .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
 
-                    b.HasOne("BlisTimer.Models.HourType", "HourType")
+                    b.HasOne("BlisTimer.Controllers.HourType", "HourType")
                         .WithMany()
                         .HasForeignKey("HourTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
