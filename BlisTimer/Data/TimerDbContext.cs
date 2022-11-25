@@ -13,10 +13,18 @@ namespace BlisTimer.Data
         public DbSet<TimeLog> TimeLogs { get; set; } = null!;
         public DbSet<Employee> Employees { get; set; } = null!;
         
+        public DbSet<HourType> HourTypes { get; set; } = null!;
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.UseSerialColumns();
+            
+            modelBuilder.Entity<HourType>()
+                .HasOne(_ => _.WorkActivity)
+                .WithMany(_ => _.HourTypes)
+                .HasForeignKey(_ => _.WorkActivityId)
+                .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<Employee>()
                 .HasMany(x => x.Projects)
@@ -38,6 +46,12 @@ namespace BlisTimer.Data
                 .HasOne(x => x.Activity)
                 .WithMany()
                 .HasForeignKey(x => x.ActivityId)
+                .OnDelete(DeleteBehavior.SetNull);
+            
+            modelBuilder.Entity<TimeLog>()
+                .HasOne(_ => _.HourType)
+                .WithMany()
+                .HasForeignKey(_ => _.HourTypeId)
                 .OnDelete(DeleteBehavior.SetNull);
 
         }

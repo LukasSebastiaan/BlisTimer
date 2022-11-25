@@ -1,4 +1,6 @@
-﻿namespace BlisTimer.Models
+﻿using BlisTimer.Controllers;
+
+namespace BlisTimer.Models
 {
     public class TimeLog
     {
@@ -8,5 +10,9 @@
         public string ActivityId { get; set; } = null!;
         public Employee Employee { get; set; } = null!;
         public string EmployeeId { get; set; } = null!;
+
+        public HourType HourType { get; set; } = null!;
+
+        public string HourTypeId { get; set; } = null!;
     }
 }
