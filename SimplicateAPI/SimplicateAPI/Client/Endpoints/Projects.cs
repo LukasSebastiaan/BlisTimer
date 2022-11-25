@@ -15,10 +15,14 @@ public sealed class Projects
     /// </summary>
     /// <param name="limit"></param>
     /// <returns></returns>
-    public async Task<Project[]> GetProjects(int limit = 5)
+    public async Task<Project[]> GetProjects(int? limit = null)
     {
+        if (limit is not null)
+            return (await RequestClient.GetRequestAsync<Project[]>(
+                $"projects/project?limit={limit}")) ?? Array.Empty<Project>();
+        
         return (await RequestClient.GetRequestAsync<Project[]>(
-            $"projects/project?limit={limit}")) ?? Array.Empty<Project>();
+            $"projects/project")) ?? Array.Empty<Project>();
     }
 
     /// <summary>
@@ -33,9 +37,13 @@ public sealed class Projects
             $"hours/hours/{id.Replace(":", "%3A")}");
     }
 
-    public async Task<Service[]> GetServices(int limit = 5)
+    public async Task<Service[]> GetServices(int? limit = null)
     {
+        if (limit is not null)
+            return (await RequestClient.GetRequestAsync<Service[]>(
+                $"projects/service?limit={limit}")) ?? Array.Empty<Service>();
+        
         return (await RequestClient.GetRequestAsync<Service[]>(
-            $"projects/service?limit={limit}")) ?? Array.Empty<Service>();
+            $"projects/service")) ?? Array.Empty<Service>();
     }
 }

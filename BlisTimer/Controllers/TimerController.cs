@@ -6,13 +6,19 @@ namespace BlisTimer.Controllers
 {
     public class TimerController : Controller
     {
-        private TimerDbContext _context { get; set; }
-        public TimerController(TimerDbContext context)
+        private readonly TimerDbContext _context;
+        private readonly ApiDatabaseHandler _apiDatabaseHandler;
+
+        public TimerController(TimerDbContext context, ApiDatabaseHandler apiDatabaseHandler)
         {
             _context = context;
+            _apiDatabaseHandler = apiDatabaseHandler;
         }
-        public IActionResult Index(string id)
+        
+        public async Task<IActionResult> Index(string id)
         {
+            await _apiDatabaseHandler.SyncDbWithSimplicate();
+            
             var activityId = HttpContext.Session.GetString("ActivityId");
             if (!String.IsNullOrEmpty(id))
             {

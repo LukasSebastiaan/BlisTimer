@@ -10,6 +10,7 @@ builder.Services.AddScoped<HomeController>();
 builder.Services.AddDbContext<TimerDbContext>(
         x => x.UseNpgsql(builder.Configuration.GetConnectionString("TimerDb"))
         );
+builder.Services.AddScoped<ApiDatabaseHandler>();
 
 builder.Services.AddControllersWithViews();
 

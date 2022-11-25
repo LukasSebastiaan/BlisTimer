@@ -24,7 +24,7 @@ public record Project(
     [property: JsonPropertyName("hours_rate_type")] string HoursRateType,
     [property: JsonPropertyName("organization")] Organization Organization,
     [property: JsonPropertyName("separate_invoice_recipient")] SeparateInvoiceRecipient SeparateInvoiceRecipient,
-    [property: JsonPropertyName("employees")] IReadOnlyList<ProjectEmployee> Employees,
+    [property: JsonPropertyName("employees")] IReadOnlyList<ProjectEmployee>? Employees,
     [property: JsonPropertyName("timeline_email_address")] string TimelineEmailAddress,
     [property: JsonPropertyName("created")] string Created,
     [property: JsonPropertyName("modified")] string Modified,

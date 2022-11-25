@@ -18,12 +18,14 @@ namespace BlisTimer.Controllers
     public class LoginController : Controller
     {
         private readonly ILogger<LoginController> _logger;
-        private TimerDbContext _context;
+        private readonly TimerDbContext _context;
+        private readonly ApiDatabaseHandler _apiDatabaseHandler;
 
-        public LoginController(ILogger<LoginController> logger, TimerDbContext context)
+        public LoginController(ILogger<LoginController> logger, TimerDbContext context, ApiDatabaseHandler apiDatabaseHandler)
         {
             _logger = logger;
             _context = context;
+            _apiDatabaseHandler = apiDatabaseHandler;
 
             // var h = new PHasher(new OptionsHash(1000));
             // var d = Guid.NewGuid().ToString();
@@ -51,7 +53,7 @@ namespace BlisTimer.Controllers
 
             var hasher = new PHasher(new OptionsHash(1000));
 
-            var loginResult = await ApiDatabaseHandler.SimplicateApiClient.Login.TryUnsafeLoginAsync(emp.Email, emp.Password);
+            var loginResult = await _apiDatabaseHandler.SimplicateApiClient.Login.TryUnsafeLoginAsync(emp.Email, emp.Password);
             
             //The login via the api was succesfull so we log them in, if the info is not yet in the database we add it.
             if (loginResult.IsSuccess)
@@ -68,6 +70,8 @@ namespace BlisTimer.Controllers
                 HttpContext.Session.SetString("Username", loginResult.User!.Username);
                 HttpContext.Session.SetString("Email", loginResult.User!.Email);
                 HttpContext.Session.SetString("Id", loginResult.User!.EmployeeId);
+
+                await _apiDatabaseHandler.SyncDbWithSimplicate();
                 
                 return RedirectToAction("Index", "Home");
             }
