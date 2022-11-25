@@ -1,12 +1,15 @@
-﻿@model WorkActivity
+﻿@model SelectProject
 
 @{
   ViewData["Title"] = "Stopwatch Page";
   Layout = "_HomeLayout";
 }
 
+@section head{
+  <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
+}
 @section scripts {
-    <script type="text/javascript">
+  <script type="text/javascript">
     // Globals
     const time_el = document.querySelector('.watch .time');
     const startButton = document.getElementById("start");
@@ -87,14 +90,41 @@
     function closePopup() {
       popup.classList.remove("open-popup");
     }
+    
+    function submitId(){
+        let p = document.getElementById("project");
+        console.log(p)
+        document.forms[0].Id.value = p.value 
+        document.forms[0].submit()
+    }
+    
     </script>
+
 }
+
 
 <div id="screen">
   <div class="watch">
     <div class="task">
-      @Model.Project.Name
-      <br/>@Model.Name
+      <form method="post" id="projects" asp-action="Index" asp-controller="Timer">
+            <input type="hidden" name="Id" value="blabla">
+            <select name="Project" id="project" onchange="submitId()">
+              @if (@ViewBag.preSelectedProject)
+              {
+                <option selected disabled hidden>Select a Project</option>
+                @foreach (var project in @Model.ProjectDictionary)
+                {
+                  <option value="@project.Key.Id">@project.Key.Name</option>
+                }
+              }
+              @if (!@ViewBag.preSelectedProject)
+              {
+                <option value="@Model.ProjectDictionary.Keys.First().Id">@Model.ProjectDictionary.Keys.First().Name</option>
+              }
+            </select>
+        </form>
+      
+      <br/>Activity
     </div>
 
     <div class="time">
