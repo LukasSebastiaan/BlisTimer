@@ -1,6 +1,8 @@
 ﻿using BlisTimer.Data;
+using BlisTimer.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Project = SimplicateAPI.Enitities.Project;
 
 namespace BlisTimer.Controllers
 {
@@ -11,24 +13,45 @@ namespace BlisTimer.Controllers
         {
             _context = context;
         }
-        public IActionResult Index(string id)
+        public IActionResult Index()
         {
-            var activityId = HttpContext.Session.GetString("ActivityId");
-            if (!String.IsNullOrEmpty(id))
+            var projectId = HttpContext.Session.GetString("ProjectId");
+            var projectDict = new Dictionary<BlisTimer.Models.Project, List<WorkActivity>>();
+                
+            if (String.IsNullOrEmpty(projectId))
             {
-                HttpContext.Session.SetString("ActivityId", id);
-                var activity = _context.WorkActivities.Include(_ => _.Project).Where(_ => _.Id == id).FirstOrDefault();
-                return View(activity);
+                ViewBag.PreSelectedProject = true;
+                foreach (var project in _context.Projects.Include(_ => _.Activities))
+                {
+                    projectDict[project] = new List<WorkActivity>();
+                    foreach (var activity in project.Activities)
+                    {
+                        projectDict[project].Add(activity);
+                    }
+                }    
             }
-            else if (!String.IsNullOrEmpty(activityId))
+            else
             {
-                id = activityId;
-                var activity = _context.WorkActivities.Include(_ => _.Project).Where(_ => _.Id == id).FirstOrDefault();
-                return View(activity);
+                ViewBag.PreSelectedProject = false;
+                var p = _context.Projects.Include(_ => _.Activities).Where(_ => _.Id == projectId).FirstOrDefault();
+                projectDict[p] = new List<WorkActivity>();
+                foreach (var activity in p.Activities)
+                {
+                    projectDict[p].Add(activity);
+                    
+                }    
             }
-
-
-            return RedirectToAction("Index", "Projects");
+            
+            
+            return View(new SelectProject(){ ProjectDictionary = projectDict});
+        }
+        [HttpPost]
+        public IActionResult Index(string Id)
+        {
+            
+            HttpContext.Session.SetString("ProjectId", Id);
+            
+            return RedirectToAction("Index");
         }
     }
-}
+ }

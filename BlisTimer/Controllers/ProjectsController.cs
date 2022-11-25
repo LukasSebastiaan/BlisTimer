@@ -8,23 +8,23 @@ namespace BlisTimer.Controllers
 {
     public class ProjectsController : Controller
     {
-        private TimerDbContext _context;
-        public ProjectsController(TimerDbContext context) =>
-            _context = context;
+                private TimerDbContext _context;
+                public ProjectsController(TimerDbContext context) =>
+                    _context = context;
+                
         
-
-        [HttpGet]
-        public async Task<IActionResult> Index(){
-            var projects = await _context.Projects.Include(_ => _.Activities).ToListAsync();
-            ViewBag.projects = await _context.Projects.Include(_ => _.Activities).ToListAsync();
-            HttpContext.Session.SetString("ActivityId", "");
-
-            return View();
-        }
+                [HttpGet]
+                public async Task<IActionResult> Index(){
+                    var projects = await _context.Projects.Include(_ => _.Activities).ToListAsync();
+                    ViewBag.projects = await _context.Projects.Include(_ => _.Activities).ToListAsync();
+                    HttpContext.Session.SetString("ActivityId", "");
         
-
+                    return View();
+                }
+                
         
-        
+                
+                
         [HttpGet]
         public IActionResult Add(){
             return View();
