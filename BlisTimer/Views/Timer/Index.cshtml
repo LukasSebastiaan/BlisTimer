@@ -98,10 +98,10 @@
         document.forms[0].submit()
     }
     function submitActivityId(){
-        let p = document.getElementById("project");
+        let p = document.getElementById("activity");
         console.log(p)
-        document.forms[0].Id.value = p.value 
-        document.forms[0].submit()
+        document.forms[1].Id.value = p.value 
+        document.forms[1].submit()
     }
     
     </script>
@@ -114,7 +114,7 @@
     <div class="task">
       <form method="post" id="projects" asp-action="Index" asp-controller="Timer">
         <input type="hidden" name="Id" value="blabla">
-        <select type="hidden" name="Project" id="project" onchange="submitProjectId()">
+        <select name="Project" id="project" onchange="submitProjectId()">
           @if (!@ViewBag.preSelectedProject)
           {
             <option selected disabled hidden>Select a Project</option>
@@ -142,11 +142,12 @@
           }
         </select>
       </form>
-        @if (@ViewBag.preSelectedProject)
+      @if (@ViewBag.preSelectedProject)
         {
-          <form method="post" id="activity" asp-action="Index2" asp-controller="Timer">
-            <input type="hidden" name="Id" value="blabla">
-            <select type="hidden" name="Project" id="project" onchange="submitId()">
+          <form method="post" id="activitys" asp-action="Index2" asp-controller="Timer">
+            <input type="hidden" name="Id" value="testetst">
+            <select name="Activity" id="activity" onchange="submitActivityId()">
+              <option selected disabled hidden>Select an Activity</option>
               @foreach (var Selectedproject in @Model)
               {
                 if (Selectedproject.Key.Item2 == true)
@@ -157,18 +158,13 @@
                   }
                 }
               }
-            
+
             </select>
           </form>
           //Make it so activities are shown when a project is selected.
         
         
         }
-      <form method="post">
-        
-      </form>
-      
-      <br/>Activity
     </div>
 
     <div class="time">
