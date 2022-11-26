@@ -8,20 +8,27 @@ namespace BlisTimer.Controllers
 {
     public class TimerController : Controller
     {
-        private TimerDbContext _context { get; set; }
-        public TimerController(TimerDbContext context)
+        private readonly TimerDbContext _context;
+        private readonly ApiDatabaseHandler _api;
+        public TimerController(TimerDbContext context, ApiDatabaseHandler api)
         {
             _context = context;
+            _api = api;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            await _api.SyncDbWithSimplicate();
             var projectId = HttpContext.Session.GetString("ProjectId");
             var projectDict = new Dictionary<Tuple<BlisTimer.Models.Project, bool>, List<WorkActivity>>();
                 
             if (String.IsNullOrEmpty(projectId))
             {
                 ViewBag.PreSelectedProject = false;
-                foreach (var project in _context.Projects.Include(_ => _.Activities))
+                var projectsOfUser = _context.Projects.Include(_ => _.Activities).Include(_ => _.EmployeeProjects)
+                    .Where(_ => _.EmployeeProjects
+                        .Where(x => x.EmployeeId == HttpContext.Session.GetString("Id"))
+                        .Select(p => p.ProjectId).Contains(_.Id)).ToList();
+                foreach (var project in projectsOfUser)
                 {
                     projectDict.Add(Tuple.Create(project, false), project.Activities.ToList());
                 }    
@@ -31,7 +38,12 @@ namespace BlisTimer.Controllers
                 ViewBag.PreSelectedProject = true;
                 ViewBag.PreSelectedActivity = false;
                 var SelectedProject = _context.Projects.Include(_ => _.Activities).Where(_ => _.Id == projectId).FirstOrDefault();
-                foreach (var project in _context.Projects.Include(_ => _.Activities))
+                var projectsOfUser = _context.Projects.Include(_ => _.Activities).Include(_ => _.EmployeeProjects)
+                    .Where(_ => _.EmployeeProjects
+                        .Where(x => x.EmployeeId == HttpContext.Session.GetString("Id"))
+                        .Select(p => p.ProjectId).Contains(_.Id)).ToList();
+                    
+                foreach (var project in projectsOfUser)
                 {
                     if (project.Id == SelectedProject.Id)
                     {
@@ -41,6 +53,31 @@ namespace BlisTimer.Controllers
                             ViewBag.PreSelectedActivityId = HttpContext.Session.GetString("ActivityId");
                             ViewBag.PreSelectedActivityName = HttpContext.Session.GetString("ActivityName");
                             ViewBag.PreSelectedActivity = true;
+                            
+                            ViewBag.PreSelectedHourType = false;
+                            var hourTypeOfUser = _context.HourTypes.Include(_ => _.WorkActivityHourTypes)
+                                .Where(_ => _.WorkActivityHourTypes
+                                    .Where(x => x.WorkActivityId == HttpContext.Session.GetString("ActivityId"))
+                                    .Select(p => p.HourType.HourTypeId).Contains(_.HourTypeId)).ToList();
+                            
+                            var hourTypeList = new List<HourType>();
+                            foreach (var hourtype in hourTypeOfUser)
+                            {
+                                hourTypeList.Add(hourtype);
+                                if(hourtype.HourTypeId == (HttpContext.Session.GetString("HourTypeId")))
+                                {
+                                    if (!String.IsNullOrEmpty(HttpContext.Session.GetString("HourTypeId")))
+                                    {
+                                        ViewBag.PreSelectedHourTypeId = HttpContext.Session.GetString("HourTypeId");
+                                        ViewBag.PreSelectedHourTypeName = HttpContext.Session.GetString("HourTypeName");
+                                        ViewBag.PreSelectedHourType = true;
+                                    }
+                                }
+                                
+                            }
+
+                            ViewBag.PreSelectedHourTypeList = hourTypeList;
+
                         }
                     }
                     else
@@ -69,7 +106,10 @@ namespace BlisTimer.Controllers
         {
             
             HttpContext.Session.SetString("ActivityId", Id);
-            HttpContext.Session.SetString("ActivityName", _context.WorkActivities.Where(_ => _.Id == Id).Select(_ => _.Name).FirstOrDefault());
+            var p = _context.WorkActivities.Where(_ => _.Id == Id).Select(_ => _.Name).FirstOrDefault();
+            HttpContext.Session.SetString("ActivityName", p);
+            HttpContext.Session.SetString("HourTypeId", "");
+
             
             return RedirectToAction("Index");
         }
@@ -77,7 +117,6 @@ namespace BlisTimer.Controllers
         {
             
             HttpContext.Session.SetString("HourTypeId", Id);
-            HttpContext.Session.SetString("HourtypeName", _context.HourTypes.Where(_ => _.HourTypeId == Id).Select(_ => _.Label).FirstOrDefault());
             
             return RedirectToAction("Index");
         }

@@ -103,6 +103,12 @@
         document.forms[1].Id.value = p.value 
         document.forms[1].submit()
     }
+    function submitHourTypeId(){
+        let p = document.getElementById("hourtype");
+        console.log(p)
+        document.forms[2].Id.value = p.value 
+        document.forms[2].submit()
+    }
     
     </script>
 
@@ -143,12 +149,12 @@
         </select>
       </form>
       @if (@ViewBag.PreSelectedProject)
-        {
-          <form method="post" id="activitys" asp-action="Index2" asp-controller="Timer">
-            <input type="hidden" name="Id" value="givenActivity">
+      {
+        <form method="post" id="activitys" asp-action="Index2" asp-controller="Timer">
+          <input type="hidden" name="Id" value="givenActivity">
+          <select name="Activity" id="activity" onchange="submitActivityId()">
             @if (!@ViewBag.PreSelectedActivity)
             {
-              <select name="Activity" id="activity" onchange="submitActivityId()">
               <option selected disabled hidden>Select an Activity</option>
               @foreach (var Selectedproject in @Model)
               {
@@ -161,39 +167,62 @@
                 }
               }
 
-            </select>
-              
+
             }
             @if (@ViewBag.PreSelectedActivity)
             {
-              <select name="Activity" id="activity" onchange="submitActivityId()">
-                @foreach (var Selectedproject in @Model)
+              @foreach (var Selectedproject in @Model)
+              {
+                if (Selectedproject.Key.Item2 == true)
                 {
-                  if (Selectedproject.Key.Item2 == true)
+
+                  <option value="@ViewBag.PreSelectedActivityId">@ViewBag.PreSelectedActivityName</option>
+                  foreach (var activity in Selectedproject.Value)
                   {
-                    
-                    <option value="@ViewBag.PreSelectedActivityId">@ViewBag.PreSelectedActivityName</option>
-                    foreach (var activity in Selectedproject.Value)
+                    if (activity.Id != @ViewBag.PreSelectedActivityId)
                     {
-                      if (activity.Id != @ViewBag.PreSelectedActivityId)
-                      {
-                        <option value="@activity.Id">@activity.Name</option>
-                      }
+                      <option value="@activity.Id">@activity.Name</option>
                     }
                   }
                 }
-              </select>
-              <form method="post" id="activitys" asp-action="Index2" asp-controller="Timer">
-                <input type="hidden" name="Id" value="givenHourType">
-                
-              </form>
+              }
             }
+          </select>
+        </form>
+        @if (@ViewBag.PreSelectedActivity)
+        {
+          <form method="post" id="hourtypes" asp-action="Index3" asp-controller="Timer">
+            <input type="hidden" name="Id" value="givenHourType">
+            <select name="HourType" id="hourtype" onchange="submitHourTypeId()">
+              @if (!@ViewBag.PreSelectedHourType)
+              {
+                <option selected disabled hidden>Select an HourType</option>
+                @foreach (var hourtype in @ViewBag.PreSelectedHourTypeList)
+                {
+                  <option value="@hourtype.HourTypeId">@hourtype.Label</option>
+                } 
+              }
+              @if (@ViewBag.PreSelectedHourType)
+              {
+                @foreach (var hourtype in @ViewBag.PreSelectedHourTypeList)
+                {
+                  if (@ViewBag.PreSelectedHourTypeId == hourtype.HourTypeId)
+                  {
+                    <option value="@hourtype.HourTypeId">@hourtype.Label</option>
+                  }
+                } 
+                @foreach (var hourtype in @ViewBag.PreSelectedHourTypeList)
+                {
+                  if (@ViewBag.PreSelectedHourTypeId != hourtype.HourTypeId)
+                  {
+                    <option value="@hourtype.HourTypeId">@hourtype.Label</option>
+                  }
+                } 
+              }
+            </select>
           </form>
-          
-          //Make it so activities are shown when a project is selected.
-        
-        
         }
+      }
     </div>
 
     <div class="time">
