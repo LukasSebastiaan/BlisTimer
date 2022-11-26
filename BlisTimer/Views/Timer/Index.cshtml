@@ -113,7 +113,7 @@
   <div class="watch">
     <div class="task">
       <form method="post" id="projects" asp-action="Index" asp-controller="Timer">
-        <input type="hidden" name="Id" value="blabla">
+        <input type="hidden" name="Id" value="givenProject">
         <select name="Project" id="project" onchange="submitProjectId()">
           @if (!@ViewBag.preSelectedProject)
           {
@@ -123,7 +123,7 @@
               <option value="@project.Key.Item1.Id">@project.Key.Item1.Name</option>
             }
           }
-          @if (@ViewBag.preSelectedProject)
+          @if (@ViewBag.PreSelectedProject)
           {
             @foreach (var Selectedproject in @Model)
             {
@@ -142,11 +142,13 @@
           }
         </select>
       </form>
-      @if (@ViewBag.preSelectedProject)
+      @if (@ViewBag.PreSelectedProject)
         {
           <form method="post" id="activitys" asp-action="Index2" asp-controller="Timer">
-            <input type="hidden" name="Id" value="testetst">
-            <select name="Activity" id="activity" onchange="submitActivityId()">
+            <input type="hidden" name="Id" value="givenActivity">
+            @if (!@ViewBag.PreSelectedActivity)
+            {
+              <select name="Activity" id="activity" onchange="submitActivityId()">
               <option selected disabled hidden>Select an Activity</option>
               @foreach (var Selectedproject in @Model)
               {
@@ -160,7 +162,34 @@
               }
 
             </select>
+              
+            }
+            @if (@ViewBag.PreSelectedActivity)
+            {
+              <select name="Activity" id="activity" onchange="submitActivityId()">
+                @foreach (var Selectedproject in @Model)
+                {
+                  if (Selectedproject.Key.Item2 == true)
+                  {
+                    
+                    <option value="@ViewBag.PreSelectedActivityId">@ViewBag.PreSelectedActivityName</option>
+                    foreach (var activity in Selectedproject.Value)
+                    {
+                      if (activity.Id != @ViewBag.PreSelectedActivityId)
+                      {
+                        <option value="@activity.Id">@activity.Name</option>
+                      }
+                    }
+                  }
+                }
+              </select>
+              <form method="post" id="activitys" asp-action="Index2" asp-controller="Timer">
+                <input type="hidden" name="Id" value="givenHourType">
+                
+              </form>
+            }
           </form>
+          
           //Make it so activities are shown when a project is selected.
         
         
