@@ -1,5 +1,6 @@
 ﻿using BlisTimer.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
 namespace BlisTimer.Data
 {
@@ -14,20 +15,14 @@ namespace BlisTimer.Data
         public DbSet<Employee> Employees { get; set; } = null!;
         
         public DbSet<EmployeeProject> EmployeeProjects { get; set; } = null!;
+        public DbSet<WorkActivityHourType> WorkActivityHourTypes { get; set; } = null!;
         
         // TODO: Add HourTypeWorkActivity tabel for many to many relationship
         public DbSet<HourType> HourTypes { get; set; } = null!;
         
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.UseSerialColumns();
-            
-            modelBuilder.Entity<HourType>()
-                .HasOne(_ => _.WorkActivity)
-                .WithMany(_ => _.HourTypes)
-                .HasForeignKey(_ => _.WorkActivityId)
-                .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<EmployeeProject>()
                 .HasKey(ep => new { ep.EmployeeId, ep.ProjectId });
@@ -39,6 +34,17 @@ namespace BlisTimer.Data
                 .HasOne(ep => ep.Project)
                 .WithMany(p => p.EmployeeProjects)
                 .HasForeignKey(ep => ep.ProjectId);
+
+            modelBuilder.Entity<WorkActivityHourType>()
+                .HasKey(wh => new { wh.WorkActivityId, wh.HourTypeId });
+            modelBuilder.Entity<WorkActivityHourType>()
+                .HasOne(wh => wh.WorkActivity)
+                .WithMany(h => h.WorkActivityHourTypes)
+                .HasForeignKey(wh => wh.WorkActivityId);
+            modelBuilder.Entity<WorkActivityHourType>()
+                .HasOne(wh => wh.HourType)
+                .WithMany(h => h.WorkActivityHourTypes)
+                .HasForeignKey(wh => wh.HourTypeId);
 
             modelBuilder.Entity<WorkActivity>()
                 .HasOne(x => x.Project)

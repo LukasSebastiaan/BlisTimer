@@ -78,6 +78,50 @@ public class ApiDatabaseHandler
                 Name = activity.Name ?? "No Name",
                 ProjectId = activity.ProjectId,
             });
+            
+            // Unlink all activities that have been unlinked from a project at Simplicate's side
+            var removedHourTypeIdsFromService = _dbContext.WorkActivityHourTypes
+                .Where(x => x.WorkActivityId == activity.ServiceId).AsEnumerable()
+                .Select(x => x.HourTypeId).AsEnumerable()
+                .Except(activity.HourTypes.Select(x => x.HourstypeInfo.Id).AsEnumerable());
+            
+            _dbContext.WorkActivityHourTypes
+                .RemoveRange(_dbContext.WorkActivityHourTypes.Where(_ => _.WorkActivityId == activity.ServiceId 
+                                                                         && removedHourTypeIdsFromService.Contains(_.HourTypeId)));
+
+            foreach (var activityHourType in activity.HourTypes)    
+            {
+                // Add HourType to db if it doesn't exist yet
+                if (!_dbContext.HourTypes.Any(x => x.HourTypeId == activityHourType.HourstypeInfo.Id))
+                {
+                    if (!_dbContext.HourTypes.Local.Any(x => x.HourTypeId == activityHourType.HourstypeInfo.Id))
+                    {
+                        await _dbContext.HourTypes.AddAsync(new()
+                        {
+                            HourTypeId = activityHourType.HourstypeInfo.Id,
+                            Label = activityHourType.HourstypeInfo.Label,
+                            Type = activityHourType.HourstypeInfo.Type,
+                        });
+                    }
+                }
+                else
+                {
+                    var dbHourTypeRecord =
+                        _dbContext.HourTypes.FirstOrDefault(x => x.HourTypeId == activityHourType.HourstypeInfo.Id);
+
+                    dbHourTypeRecord!.Label = activityHourType.HourstypeInfo.Label;
+                    dbHourTypeRecord!.Type = activityHourType.HourstypeInfo.Type;
+                }
+                
+                // Add record to WorkActivityHourTypes to link the HoursType to the work activity if it doesn't
+                // exist yet in the database
+                if (!_dbContext.WorkActivityHourTypes.Any(x => x.HourTypeId == activityHourType.HourstypeInfo.Id 
+                                                               && x.WorkActivityId == activity.ServiceId)) 
+                    await _dbContext.WorkActivityHourTypes.AddAsync(new() {
+                        HourTypeId = activityHourType.HourstypeInfo.Id,
+                        WorkActivityId = activity.ServiceId,
+                    });
+            }
         }
     }
 
@@ -112,7 +156,7 @@ public class ApiDatabaseHandler
 
             foreach (var employeeId in employeesIdsInDb)
             {
-                _dbContext.EmployeeProjects.Add(new()
+                await _dbContext.EmployeeProjects.AddAsync(new()
                 {
                     EmployeeId = employeeId,
                     ProjectId = project.Id,
@@ -121,7 +165,7 @@ public class ApiDatabaseHandler
         }
     }
 
-    private void ClearRemovedSimplicateData(SimplicateAPI.Enitities.Project[] projects, Service[] services)
+    private void ClearRemovedSimplicateData(SimplicateAPI.Enitities.Project[] projects, SimplicateAPI.Enitities.Service[] services)
     {
         _logger.LogInformation("Deleting all projects and linked activities/hourtypes from database that" +
                                "aren't in the Simplicate database anymore");
@@ -129,17 +173,26 @@ public class ApiDatabaseHandler
         var notExistingInSimplicateProjects = _dbContext.Projects.Select(x => x.Id).AsEnumerable()
             .Except(projects.Select(x => x.Id)).ToList();
 
-        // TODO: remove HourTypes of Activities from DB
+        var toBeDeletedActivities = _dbContext.WorkActivities.Where(x => notExistingInSimplicateProjects.Contains(x.ProjectId));
+        
+        // Deleting hour types of project activities do be deleted
+        _dbContext.WorkActivityHourTypes.RemoveRange(
+            _dbContext.WorkActivityHourTypes.Where(x => toBeDeletedActivities.Select(_ => _.Id).Contains(x.WorkActivityId)));
+        
+        // Deleting WorkActivities of project that are to be deleted
         _dbContext.WorkActivities.RemoveRange(
             _dbContext.WorkActivities.Where(x => notExistingInSimplicateProjects.Contains(x.ProjectId)));
         _dbContext.Projects.RemoveRange(_dbContext.Projects.Where(x => notExistingInSimplicateProjects.Contains(x.Id)));
 
 
+        _logger.LogInformation("Deleting all services that aren't in Simplicate anymore in general");
         // TODO: Remove HourTypes of activities that are not in Simplicate anymore
         // TODO: before deleting, check if any other activity has that HourType
-        _logger.LogInformation("Deleting all services that aren't in simplicate anymore in general");
+        // This requires adding another endpoint to the SimplicateAPI  project
+        
         var notExistingInSimplicateServices = _dbContext.WorkActivities.Select(x => x.Id).AsEnumerable()
             .Except(services.Select(x => x.ServiceId)).ToList();
+        
         _dbContext.WorkActivities.RemoveRange(
             _dbContext.WorkActivities.Where(x => notExistingInSimplicateServices.Contains(x.Id)));
     }

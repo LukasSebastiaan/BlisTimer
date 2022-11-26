@@ -25,6 +25,19 @@ namespace BlisTimer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "HourTypes",
+                columns: table => new
+                {
+                    HourTypeId = table.Column<string>(type: "text", nullable: false),
+                    Label = table.Column<string>(type: "text", nullable: false),
+                    Type = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HourTypes", x => x.HourTypeId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Projects",
                 columns: table => new
                 {
@@ -80,26 +93,6 @@ namespace BlisTimer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "HourTypes",
-                columns: table => new
-                {
-                    HourTypeId = table.Column<string>(type: "text", nullable: false),
-                    Label = table.Column<string>(type: "text", nullable: false),
-                    Type = table.Column<string>(type: "text", nullable: false),
-                    WorkActivityId = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_HourTypes", x => x.HourTypeId);
-                    table.ForeignKey(
-                        name: "FK_HourTypes_WorkActivities_WorkActivityId",
-                        column: x => x.WorkActivityId,
-                        principalTable: "WorkActivities",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "TimeLogs",
                 columns: table => new
                 {
@@ -132,15 +125,34 @@ namespace BlisTimer.Migrations
                         onDelete: ReferentialAction.SetNull);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "WorkActivityHourTypes",
+                columns: table => new
+                {
+                    WorkActivityId = table.Column<string>(type: "text", nullable: false),
+                    HourTypeId = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WorkActivityHourTypes", x => new { x.WorkActivityId, x.HourTypeId });
+                    table.ForeignKey(
+                        name: "FK_WorkActivityHourTypes_HourTypes_HourTypeId",
+                        column: x => x.HourTypeId,
+                        principalTable: "HourTypes",
+                        principalColumn: "HourTypeId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_WorkActivityHourTypes_WorkActivities_WorkActivityId",
+                        column: x => x.WorkActivityId,
+                        principalTable: "WorkActivities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_EmployeeProjects_ProjectId",
                 table: "EmployeeProjects",
                 column: "ProjectId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_HourTypes_WorkActivityId",
-                table: "HourTypes",
-                column: "WorkActivityId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TimeLogs_ActivityId",
@@ -161,6 +173,11 @@ namespace BlisTimer.Migrations
                 name: "IX_WorkActivities_ProjectId",
                 table: "WorkActivities",
                 column: "ProjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WorkActivityHourTypes_HourTypeId",
+                table: "WorkActivityHourTypes",
+                column: "HourTypeId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -170,6 +187,9 @@ namespace BlisTimer.Migrations
 
             migrationBuilder.DropTable(
                 name: "TimeLogs");
+
+            migrationBuilder.DropTable(
+                name: "WorkActivityHourTypes");
 
             migrationBuilder.DropTable(
                 name: "Employees");

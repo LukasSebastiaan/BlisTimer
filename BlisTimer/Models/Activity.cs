@@ -9,7 +9,6 @@ namespace BlisTimer.Models
         public string ProjectId { get; set; } = null!;
         public Project Project { get; set; } = null!;
 
-        public List<HourType> HourTypes { get; set; } = null!;
-
+        public ICollection<WorkActivityHourType> WorkActivityHourTypes { get; set; }
     }
 }
