@@ -29,12 +29,19 @@ namespace BlisTimer.Controllers
             else
             {
                 ViewBag.PreSelectedProject = true;
+                ViewBag.PreSelectedActivity = false;
                 var SelectedProject = _context.Projects.Include(_ => _.Activities).Where(_ => _.Id == projectId).FirstOrDefault();
                 foreach (var project in _context.Projects.Include(_ => _.Activities))
                 {
                     if (project.Id == SelectedProject.Id)
                     {
                         projectDict.Add(Tuple.Create(project, true), project.Activities.ToList());
+                        if (!String.IsNullOrEmpty(HttpContext.Session.GetString("ActivityId")))
+                        {
+                            ViewBag.PreSelectedActivityId = HttpContext.Session.GetString("ActivityId");
+                            ViewBag.PreSelectedActivityName = HttpContext.Session.GetString("ActivityName");
+                            ViewBag.PreSelectedActivity = true;
+                        }
                     }
                     else
                     {
@@ -52,6 +59,8 @@ namespace BlisTimer.Controllers
         {
             
             HttpContext.Session.SetString("ProjectId", Id);
+            HttpContext.Session.SetString("ActivityId", "");
+            HttpContext.Session.SetString("ActivityName", "");
             
             return RedirectToAction("Index");
         }
@@ -60,6 +69,15 @@ namespace BlisTimer.Controllers
         {
             
             HttpContext.Session.SetString("ActivityId", Id);
+            HttpContext.Session.SetString("ActivityName", _context.WorkActivities.Where(_ => _.Id == Id).Select(_ => _.Name).FirstOrDefault());
+            
+            return RedirectToAction("Index");
+        }
+        public IActionResult Index3(string Id)
+        {
+            
+            HttpContext.Session.SetString("HourTypeId", Id);
+            HttpContext.Session.SetString("HourtypeName", _context.HourTypes.Where(_ => _.HourTypeId == Id).Select(_ => _.Label).FirstOrDefault());
             
             return RedirectToAction("Index");
         }
