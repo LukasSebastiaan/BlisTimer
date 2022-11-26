@@ -8,6 +8,7 @@ namespace BlisTimer.Models
         public string Email { get; set; } = null!;
         public int Role { get; set; }
         public string Password { get; set; } = null!;
-        public List<Project>? Projects { get; set; } = new List<Project>();
+        
+        public ICollection<EmployeeProject> EmployeeProjects { get; set; }
     }
 }

@@ -4,7 +4,7 @@
 
 namespace BlisTimer.Migrations
 {
-    public partial class initialDb : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,7 +15,9 @@ namespace BlisTimer.Migrations
                     Id = table.Column<string>(type: "text", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
                     LastName = table.Column<string>(type: "text", nullable: false),
-                    Role = table.Column<int>(type: "integer", nullable: false)
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    Role = table.Column<int>(type: "integer", nullable: false),
+                    Password = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -32,30 +34,6 @@ namespace BlisTimer.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Projects", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "EmployeeProject",
-                columns: table => new
-                {
-                    EmployeesId = table.Column<string>(type: "text", nullable: false),
-                    ProjectsId = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_EmployeeProject", x => new { x.EmployeesId, x.ProjectsId });
-                    table.ForeignKey(
-                        name: "FK_EmployeeProject_Employees_EmployeesId",
-                        column: x => x.EmployeesId,
-                        principalTable: "Employees",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_EmployeeProject_Projects_ProjectsId",
-                        column: x => x.ProjectsId,
-                        principalTable: "Projects",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -102,13 +80,34 @@ namespace BlisTimer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "HourTypes",
+                columns: table => new
+                {
+                    HourTypeId = table.Column<string>(type: "text", nullable: false),
+                    Label = table.Column<string>(type: "text", nullable: false),
+                    Type = table.Column<string>(type: "text", nullable: false),
+                    WorkActivityId = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HourTypes", x => x.HourTypeId);
+                    table.ForeignKey(
+                        name: "FK_HourTypes_WorkActivities_WorkActivityId",
+                        column: x => x.WorkActivityId,
+                        principalTable: "WorkActivities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "TimeLogs",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
                     AmountOfTimeSpentInSeconds = table.Column<int>(type: "integer", nullable: false),
                     ActivityId = table.Column<string>(type: "text", nullable: false),
-                    EmployeeId = table.Column<string>(type: "text", nullable: false)
+                    EmployeeId = table.Column<string>(type: "text", nullable: false),
+                    HourTypeId = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -120,6 +119,12 @@ namespace BlisTimer.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
+                        name: "FK_TimeLogs_HourTypes_HourTypeId",
+                        column: x => x.HourTypeId,
+                        principalTable: "HourTypes",
+                        principalColumn: "HourTypeId",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
                         name: "FK_TimeLogs_WorkActivities_ActivityId",
                         column: x => x.ActivityId,
                         principalTable: "WorkActivities",
@@ -128,14 +133,14 @@ namespace BlisTimer.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_EmployeeProject_ProjectsId",
-                table: "EmployeeProject",
-                column: "ProjectsId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_EmployeeProjects_ProjectId",
                 table: "EmployeeProjects",
                 column: "ProjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_HourTypes_WorkActivityId",
+                table: "HourTypes",
+                column: "WorkActivityId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TimeLogs_ActivityId",
@@ -148,6 +153,11 @@ namespace BlisTimer.Migrations
                 column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_TimeLogs_HourTypeId",
+                table: "TimeLogs",
+                column: "HourTypeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_WorkActivities_ProjectId",
                 table: "WorkActivities",
                 column: "ProjectId");
@@ -156,9 +166,6 @@ namespace BlisTimer.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "EmployeeProject");
-
-            migrationBuilder.DropTable(
                 name: "EmployeeProjects");
 
             migrationBuilder.DropTable(
@@ -166,6 +173,9 @@ namespace BlisTimer.Migrations
 
             migrationBuilder.DropTable(
                 name: "Employees");
+
+            migrationBuilder.DropTable(
+                name: "HourTypes");
 
             migrationBuilder.DropTable(
                 name: "WorkActivities");

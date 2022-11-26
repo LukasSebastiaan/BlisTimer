@@ -26,19 +26,6 @@ namespace BlisTimer.Controllers
             _logger = logger;
             _context = context;
             _apiDatabaseHandler = apiDatabaseHandler;
-
-            // var h = new PHasher(new OptionsHash(1000));
-            // var d = Guid.NewGuid().ToString();
-            // var employee = new Employee()
-            // {
-            //     Id = d,
-            //     Name = "Dirk-jan",
-            //     LastName = "Kroon",
-            //     Email = "dirk-jan@weareblis.com",
-            //     Password = h.Hash("Hr2022$!S")
-            // };
-            // _context.Add(employee);
-            // _context.SaveChanges();
         }
 
         public IActionResult Index()
@@ -50,9 +37,10 @@ namespace BlisTimer.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(LoginForm emp)
         {
-
+            _logger.LogInformation("Getting hasher to hash password");
             var hasher = new PHasher(new OptionsHash(1000));
-
+            
+            _logger.LogInformation("Trying to log user with in simplicate");
             var loginResult = await _apiDatabaseHandler.SimplicateApiClient.Login.TryUnsafeLoginAsync(emp.Email, emp.Password);
             
             //The login via the api was succesfull so we log them in, if the info is not yet in the database we add it.
@@ -61,7 +49,7 @@ namespace BlisTimer.Controllers
                 var query = await _context.Employees.Where(_ => _.Email == emp.Email).ToListAsync();
                 if (query.Count == 0)
                 {
-                    await _context.AddAsync( new Employee() {Id = loginResult.User!.EmployeeId,Email = emp.Email,Password = hasher.Hash(emp.Password),Name = loginResult.User.FirstName,LastName = loginResult.User.FamilyName,Role = loginResult.User.IsAccountOwner ? 2 : 1,Projects = new List<Project>()});
+                    await _context.AddAsync( new Employee() {Id = loginResult.User!.EmployeeId,Email = emp.Email,Password = hasher.Hash(emp.Password),Name = loginResult.User.FirstName,LastName = loginResult.User.FamilyName,Role = loginResult.User.IsAccountOwner ? 2 : 1});
                     await _context.SaveChangesAsync();
                 }
                 

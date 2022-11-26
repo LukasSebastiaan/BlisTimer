@@ -13,6 +13,9 @@ namespace BlisTimer.Data
         public DbSet<TimeLog> TimeLogs { get; set; } = null!;
         public DbSet<Employee> Employees { get; set; } = null!;
         
+        public DbSet<EmployeeProject> EmployeeProjects { get; set; } = null!;
+        
+        // TODO: Add HourTypeWorkActivity tabel for many to many relationship
         public DbSet<HourType> HourTypes { get; set; } = null!;
         
 
@@ -26,10 +29,17 @@ namespace BlisTimer.Data
                 .HasForeignKey(_ => _.WorkActivityId)
                 .OnDelete(DeleteBehavior.SetNull);
 
-            modelBuilder.Entity<Employee>()
-                .HasMany(x => x.Projects)
-                .WithMany(x => x.Employees);
-                
+            modelBuilder.Entity<EmployeeProject>()
+                .HasKey(ep => new { ep.EmployeeId, ep.ProjectId });
+            modelBuilder.Entity<EmployeeProject>()
+                .HasOne(ep => ep.Employee)
+                .WithMany(p => p.EmployeeProjects)
+                .HasForeignKey(ep => ep.EmployeeId);
+            modelBuilder.Entity<EmployeeProject>()
+                .HasOne(ep => ep.Project)
+                .WithMany(p => p.EmployeeProjects)
+                .HasForeignKey(ep => ep.ProjectId);
+
             modelBuilder.Entity<WorkActivity>()
                 .HasOne(x => x.Project)
                 .WithMany(x => x.Activities)
@@ -53,8 +63,6 @@ namespace BlisTimer.Data
                 .WithMany()
                 .HasForeignKey(_ => _.HourTypeId)
                 .OnDelete(DeleteBehavior.SetNull);
-
         }
-
     }
 }

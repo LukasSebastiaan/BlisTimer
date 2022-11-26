@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BlisTimer.Migrations
 {
     [DbContext(typeof(TimerDbContext))]
-    [Migration("20221125153618_addedHourTypeBugFix")]
-    partial class addedHourTypeBugFix
+    [Migration("20221125173950_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -22,30 +22,6 @@ namespace BlisTimer.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseSerialColumns(modelBuilder);
-
-            modelBuilder.Entity("BlisTimer.Controllers.HourType", b =>
-                {
-                    b.Property<string>("HourTypeId")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Label")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("WorkActivityId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("HourTypeId");
-
-                    b.HasIndex("WorkActivityId");
-
-                    b.ToTable("HourType");
-                });
 
             modelBuilder.Entity("BlisTimer.Models.Employee", b =>
                 {
@@ -74,6 +50,45 @@ namespace BlisTimer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Employees");
+                });
+
+            modelBuilder.Entity("BlisTimer.Models.EmployeeProject", b =>
+                {
+                    b.Property<string>("EmployeeId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProjectId")
+                        .HasColumnType("text");
+
+                    b.HasKey("EmployeeId", "ProjectId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("EmployeeProjects");
+                });
+
+            modelBuilder.Entity("BlisTimer.Models.HourType", b =>
+                {
+                    b.Property<string>("HourTypeId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Label")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("WorkActivityId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("HourTypeId");
+
+                    b.HasIndex("WorkActivityId");
+
+                    b.ToTable("HourTypes");
                 });
 
             modelBuilder.Entity("BlisTimer.Models.Project", b =>
@@ -141,27 +156,31 @@ namespace BlisTimer.Migrations
                     b.ToTable("WorkActivities");
                 });
 
-            modelBuilder.Entity("EmployeeProject", b =>
+            modelBuilder.Entity("BlisTimer.Models.EmployeeProject", b =>
                 {
-                    b.Property<string>("EmployeesId")
-                        .HasColumnType("text");
+                    b.HasOne("BlisTimer.Models.Employee", "Employee")
+                        .WithMany("EmployeeProjects")
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<string>("ProjectsId")
-                        .HasColumnType("text");
+                    b.HasOne("BlisTimer.Models.Project", "Project")
+                        .WithMany("EmployeeProjects")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasKey("EmployeesId", "ProjectsId");
+                    b.Navigation("Employee");
 
-                    b.HasIndex("ProjectsId");
-
-                    b.ToTable("EmployeeProject");
+                    b.Navigation("Project");
                 });
 
-            modelBuilder.Entity("BlisTimer.Controllers.HourType", b =>
+            modelBuilder.Entity("BlisTimer.Models.HourType", b =>
                 {
                     b.HasOne("BlisTimer.Models.WorkActivity", "WorkActivity")
                         .WithMany("HourTypes")
                         .HasForeignKey("WorkActivityId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
 
                     b.Navigation("WorkActivity");
@@ -181,10 +200,10 @@ namespace BlisTimer.Migrations
                         .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
 
-                    b.HasOne("BlisTimer.Controllers.HourType", "HourType")
+                    b.HasOne("BlisTimer.Models.HourType", "HourType")
                         .WithMany()
                         .HasForeignKey("HourTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
 
                     b.Navigation("Activity");
@@ -205,24 +224,16 @@ namespace BlisTimer.Migrations
                     b.Navigation("Project");
                 });
 
-            modelBuilder.Entity("EmployeeProject", b =>
+            modelBuilder.Entity("BlisTimer.Models.Employee", b =>
                 {
-                    b.HasOne("BlisTimer.Models.Employee", null)
-                        .WithMany()
-                        .HasForeignKey("EmployeesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BlisTimer.Models.Project", null)
-                        .WithMany()
-                        .HasForeignKey("ProjectsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("EmployeeProjects");
                 });
 
             modelBuilder.Entity("BlisTimer.Models.Project", b =>
                 {
                     b.Navigation("Activities");
+
+                    b.Navigation("EmployeeProjects");
                 });
 
             modelBuilder.Entity("BlisTimer.Models.WorkActivity", b =>
