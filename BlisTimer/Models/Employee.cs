@@ -8,7 +8,9 @@ namespace BlisTimer.Models
         public string Email { get; set; } = null!;
         public int Role { get; set; }
         public string Password { get; set; } = null!;
-        
         public ICollection<EmployeeProject> EmployeeProjects { get; set; }
+        
+        public RunningTimers? RunningTimer { get; set; }
+        public string? RunningTimerId { get; set; }
     }
 }
