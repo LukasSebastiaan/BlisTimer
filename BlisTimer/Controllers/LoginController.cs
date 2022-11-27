@@ -30,8 +30,7 @@ namespace BlisTimer.Controllers
 
         public IActionResult Index()
         {
-            var _ = new LoginForm();
-            return View(_);
+            return View(new LoginForm());
         }
 
         [HttpPost]

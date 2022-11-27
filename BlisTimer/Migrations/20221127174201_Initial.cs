@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -17,7 +18,8 @@ namespace BlisTimer.Migrations
                     LastName = table.Column<string>(type: "text", nullable: false),
                     Email = table.Column<string>(type: "text", nullable: false),
                     Role = table.Column<int>(type: "integer", nullable: false),
-                    Password = table.Column<string>(type: "text", nullable: false)
+                    Password = table.Column<string>(type: "text", nullable: false),
+                    RunningTimerId = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -47,6 +49,27 @@ namespace BlisTimer.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Projects", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RunningTimers",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "text", nullable: false),
+                    ActivityId = table.Column<string>(type: "text", nullable: false),
+                    HourTypeId = table.Column<string>(type: "text", nullable: false),
+                    StartTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    EmployeeId = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RunningTimers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RunningTimers_Employees_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employees",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
@@ -97,7 +120,8 @@ namespace BlisTimer.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
-                    AmountOfTimeSpentInSeconds = table.Column<int>(type: "integer", nullable: false),
+                    StartTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    EndTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     ActivityId = table.Column<string>(type: "text", nullable: false),
                     EmployeeId = table.Column<string>(type: "text", nullable: false),
                     HourTypeId = table.Column<string>(type: "text", nullable: false)
@@ -155,6 +179,12 @@ namespace BlisTimer.Migrations
                 column: "ProjectId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_RunningTimers_EmployeeId",
+                table: "RunningTimers",
+                column: "EmployeeId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_TimeLogs_ActivityId",
                 table: "TimeLogs",
                 column: "ActivityId");
@@ -184,6 +214,9 @@ namespace BlisTimer.Migrations
         {
             migrationBuilder.DropTable(
                 name: "EmployeeProjects");
+
+            migrationBuilder.DropTable(
+                name: "RunningTimers");
 
             migrationBuilder.DropTable(
                 name: "TimeLogs");

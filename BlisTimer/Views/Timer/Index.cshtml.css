@@ -29,8 +29,6 @@
     background-color: var(--blis-purple-dark);
     font-size: 2rem;
     font-weight: 500;
-    margin: 0 0.8rem;
-    border-radius: 0.4rem;
 }
 
 .time {
@@ -124,4 +122,32 @@ button:active {
     font-size: 22px;
     font-weight: 500;
     border-radius: 30px;
+}
+
+#stop {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+#pause {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+
+#start-disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+#project, #activity, #hourtype {
+    font-size: 2rem;
+    font-weight: 500;
+    margin: 0 0.8rem;
+    min-width: 100%;
+    border-radius: 10px;
+    text-align: center;
+    border: none;
+    outline: black;
+    background: rgba(255, 255, 255, 0.6);
 }

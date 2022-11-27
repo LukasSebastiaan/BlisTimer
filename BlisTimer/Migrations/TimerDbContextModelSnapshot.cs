@@ -101,7 +101,7 @@ namespace BlisTimer.Migrations
                     b.ToTable("Projects");
                 });
 
-            modelBuilder.Entity("BlisTimer.Models.RunningTimers", b =>
+            modelBuilder.Entity("BlisTimer.Models.RunningTimer", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
@@ -138,16 +138,19 @@ namespace BlisTimer.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("AmountOfTimeSpentInSeconds")
-                        .HasColumnType("integer");
-
                     b.Property<string>("EmployeeId")
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("HourTypeId")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
@@ -214,11 +217,11 @@ namespace BlisTimer.Migrations
                     b.Navigation("Project");
                 });
 
-            modelBuilder.Entity("BlisTimer.Models.RunningTimers", b =>
+            modelBuilder.Entity("BlisTimer.Models.RunningTimer", b =>
                 {
                     b.HasOne("BlisTimer.Models.Employee", "Employee")
                         .WithOne("RunningTimer")
-                        .HasForeignKey("BlisTimer.Models.RunningTimers", "EmployeeId")
+                        .HasForeignKey("BlisTimer.Models.RunningTimer", "EmployeeId")
                         .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
 

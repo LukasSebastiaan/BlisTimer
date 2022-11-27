@@ -13,24 +13,21 @@ namespace BlisTimer.Data
         public DbSet<Project> Projects { get; set; } = null!;
         public DbSet<TimeLog> TimeLogs { get; set; } = null!;
         public DbSet<Employee> Employees { get; set; } = null!;
+        public DbSet<HourType> HourTypes { get; set; } = null!;
         
         public DbSet<EmployeeProject> EmployeeProjects { get; set; } = null!;
         public DbSet<WorkActivityHourType> WorkActivityHourTypes { get; set; } = null!;
-        public DbSet<RunningTimers> RunningTimers { get; set; } = null!;
+        public DbSet<RunningTimer> RunningTimers { get; set; } = null!;
         
-        
-        
-        // TODO: Add HourTypeWorkActivity tabel for many to many relationship
-        public DbSet<HourType> HourTypes { get; set; } = null!;
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.UseSerialColumns();
 
-            modelBuilder.Entity<RunningTimers>()
+            modelBuilder.Entity<RunningTimer>()
                 .HasOne(_ => _.Employee)
                 .WithOne(_ => _.RunningTimer)
-                .HasForeignKey<RunningTimers>(_ => _.EmployeeId)
+                .HasForeignKey<RunningTimer>(_ => _.EmployeeId)
                 .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<EmployeeProject>()

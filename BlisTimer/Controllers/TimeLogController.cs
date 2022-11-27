@@ -9,8 +9,13 @@ namespace BlisTimer.Controllers
     public class TimeLogController : Controller
     {
         private readonly TimerDbContext _context;
-        public TimeLogController(TimerDbContext context) =>
+        private readonly ILogger<TimeLogController> _logger;
+
+        public TimeLogController(TimerDbContext context,ILogger<TimeLogController> logger)
+        {
+            _logger = logger;
             _context = context;
+        }            
         
         
         public async Task<IActionResult> Index(){
@@ -22,12 +27,12 @@ namespace BlisTimer.Controllers
         public IActionResult Add(){
             return View();
         } 
+        
         [HttpPost]
         public async Task<IActionResult> Add(TimeLogAdd addTimeLog){
             var d = Guid.NewGuid().ToString();
             var timelog = new TimeLog(){
                 Id = d,
-                AmountOfTimeSpentInSeconds = addTimeLog.AmountOfTimeSpentInSeconds
             };
             var p = _context.Employees.Where(_ => _.Name == addTimeLog.EmployeeName).Include(_ => _.EmployeeProjects).FirstOrDefault();
             timelog.EmployeeId = p.Id;
@@ -40,6 +45,59 @@ namespace BlisTimer.Controllers
 
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
+            
+            
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> SumbitTimelog()
+        {
+            var employeeId = HttpContext.Session.GetString("Id");
+            
+            if (!_context.RunningTimers.Any(_ => _.EmployeeId == employeeId))
+                return BadRequest("There aren't any active timers running for the employee");
+
+            var runningTimer = _context.RunningTimers.FirstOrDefault(_ => _.EmployeeId == employeeId);
+
+            await _context.TimeLogs.AddAsync(new TimeLog()
+            {
+                Id = Guid.NewGuid().ToString(),
+                StartTime = runningTimer.StartTime,
+                EndTime = DateTime.Now.ToUniversalTime(),
+                ActivityId = HttpContext.Session.GetString("ActivityId")!,
+                HourTypeId = HttpContext.Session.GetString("HourTypeId")!,
+                EmployeeId = employeeId!,
+            });
+
+            _context.RunningTimers.Remove(runningTimer);
+
+            await _context.SaveChangesAsync();
+            
+            return Ok();
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> AddRunningTimer()
+        {
+            try
+            {
+                await _context.RunningTimers.AddAsync(new()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    StartTime = DateTime.Now.ToUniversalTime(),
+                    EmployeeId = HttpContext.Session.GetString("Id")!,
+                    ActivityId = HttpContext.Session.GetString("ActivityId")!,
+                    HourTypeId = HttpContext.Session.GetString("HourTypeId")!,
+                });
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+            catch (Exception err)
+            {
+                _logger.LogError("Couldn't add running timer to database with error: " + err.Message);
+                return BadRequest("There was probably already a timer running for this employee");
+            }
+            
         }
     }
 }

@@ -16,6 +16,10 @@
     const startButton = document.getElementById("start");
     const stopButton = document.getElementById("stop");
     const pauseButton = document.getElementById("pause");
+    const projectDropdown = document.getElementById("project")
+    const activityDropdown = document.getElementById("activity")
+    const hourtypeDropdown = document.getElementById("hourtype")
+    const options = document.getElementsByTagName("option");
 
     let seconds = 0;
     let interval = null;
@@ -23,6 +27,7 @@
     // Event Listeners
     
     startButton.addEventListener('click', start);
+    
     stopButton.addEventListener('click', stop);
     pauseButton.addEventListener('click', pause);
 
@@ -50,12 +55,47 @@
       }
 
       interval = setInterval(timer, 1000);
+      
+      $.ajax({
+        type: "POST",
+        url: "/TimeLog/AddRunningTimer",
+          data: "{}",
+          success: function (result) {
+            console.log("Added timer with code " + result)
+          }
+      })
+      
+      startButton.style.opacity = 0.3;
+      startButton.style.cursor = "not-allowed";
+      
+      hourtypeDropdown.style.opacity = 0.3;
+      hourtypeDropdown.disabled = true;
+      
+      projectDropdown.style.opacity = 0.3;
+      projectDropdown.disabled = true;
+      
+      activityDropdown.style.opacity = 0.3;
+      activityDropdown.disabled = true;
+      
+      pauseButton.style.opacity = 1;
+      pauseButton.style.cursor = "pointer";
+      
+      stopButton.style.opacity = 1;
+      stopButton.style.cursor = "pointer";
     }
 
     //pause button
     function pause() {
       clearInterval(interval);
       interval = null;
+      
+      
+      startButton.style.opacity = 1;
+      startButton.style.cursor = "pointer";
+      
+      pauseButton.style.opacity = 0.3;
+      pauseButton.style.cursor = "not-allowed";
+      
 }
 
     //stop button
@@ -73,6 +113,33 @@
       closePopup();
       seconds = 0;
       time_el.innerText = "00:00:00";
+      
+      $.ajax({
+        type: "POST",
+        url: "/TimeLog/SumbitTimelog",
+          data: "{}",
+          success: function (result) {
+            console.log("Saved time to database with response: " + result)
+          }
+      })
+      
+      startButton.style.opacity = 1;
+      startButton.style.cursor = "pointer";
+      
+      projectDropdown.style.opacity = 1;
+      projectDropdown.disabled = false;
+      
+      activityDropdown.style.opacity = 1;
+      activityDropdown.disabled = false;
+      
+      hourtypeDropdown.style.opacity = 1;
+      hourtypeDropdown.disabled = false;
+      
+      pauseButton.style.opacity = 0.3;
+      pauseButton.style.cursor = "not-allowed";
+      
+      stopButton.style.opacity = 0.3;
+      stopButton.style.cursor = "not-allowed";
     }
 
     //cancel button
@@ -111,7 +178,6 @@
         document.forms[2].Id.value = p.value 
         document.forms[2].submit()
     }
-    
     </script>
 
 }
@@ -238,7 +304,7 @@
       }
       else
       {
-        <button id="start1">Start</button>
+        <button id="start-disabled">Start</button>
       }
       <button id="stop">Stop</button>
     </div>
