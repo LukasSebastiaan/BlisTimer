@@ -1,4 +1,5 @@
-﻿@model Dictionary<Tuple<BlisTimer.Models.Project, bool>, List<WorkActivity>>
+﻿@using Microsoft.EntityFrameworkCore.Metadata.Internal
+@model Dictionary<Tuple<BlisTimer.Models.Project, bool>, List<WorkActivity>>
 
 @{
   ViewData["Title"] = "Stopwatch Page";
@@ -20,6 +21,7 @@
     let interval = null;
 
     // Event Listeners
+    
     startButton.addEventListener('click', start);
     stopButton.addEventListener('click', stop);
     pauseButton.addEventListener('click', pause);
@@ -230,7 +232,14 @@
     </div>
 
     <div class="controls">
-      <button id="start">Start</button>
+      @if (!@String.IsNullOrEmpty(ViewBag.PreSelectedHourTypeId))
+      {
+        <button id="start">Start</button>
+      }
+      else
+      {
+        <button id="start1">Start</button>
+      }
       <button id="stop">Stop</button>
     </div>
 
