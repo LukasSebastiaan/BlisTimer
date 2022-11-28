@@ -12,34 +12,25 @@
         <tr id="header">
             <th>Project</th>
             <th>Activity</th>
-            <th>Time</th>
-            <th>Send off</th>
+            <th>StartTime</th>
+            <th>EndTime</th>
+            <th>HourType</th>
+            <th>Handle</th>
         </tr>
-        
-        <tr>
-            <td>Website feyenoord</td>
-            <td>Frontend develoment</td>
-            <td>08:12:01</td>
-            <td>False</td>
-        </tr>
-        <tr>
-            <td>Website feyenoord</td>
-            <td>Frontend develoment</td>
-            <td>08:12:01</td>
-            <td>False</td>
-        </tr>
-        <tr>
-            <td>Website feyenoord</td>
-            <td>Frontend develoment</td>
-            <td>08:12:01</td>
-            <td>False</td>
-        </tr>
-        <tr>
-            <td>Website feyenoord</td>
-            <td>Frontend develoment</td>
-            <td>08:12:01</td>
-            <td>False</td>
-        </tr>
+
+        @foreach (var timelog in Model)
+        {
+            <tr>
+                <td>@timelog.Activity.Project.Name</td>
+                <td>@timelog.Activity.Name</td>
+                <td>@timelog.StartTime</td>
+                <td>@timelog.EndTime</td>
+                <td>@timelog.HourType.Label</td>
+                <td>
+                    <a class="rounded bg-warning p-2" asp-controller="TimeLog" asp-action="Edit" asp-route-id="@timelog.Id">Edit</a>
+                </td>
+            </tr>
+        }
     </table>
 </div>
 

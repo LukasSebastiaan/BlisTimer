@@ -1,0 +1,14 @@
+﻿@model BlisTimer.Models.TimeLog
+
+@{
+    
+}
+
+
+<div class="main">
+    <form asp-controller="TimeLog" method="post">
+        <input type="time" asp-for="StartTime" value="@ViewBag.log.StartTime.ToString("HH:mm")" />
+        <input type="time" asp-for="EndTime" value="@ViewBag.log.EndTime.ToString("HH:mm")" />
+        <input type="submit" value="Change Data">
+    </form>
+</div>

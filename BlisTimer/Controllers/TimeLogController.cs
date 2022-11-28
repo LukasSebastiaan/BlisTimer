@@ -3,6 +3,7 @@ using BlisTimer.Data;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.Serialization;
 
 namespace BlisTimer.Controllers
 {
@@ -11,16 +12,36 @@ namespace BlisTimer.Controllers
         private readonly TimerDbContext _context;
         private readonly ILogger<TimeLogController> _logger;
 
-        public TimeLogController(TimerDbContext context,ILogger<TimeLogController> logger)
+        public TimeLogController(TimerDbContext context, ILogger<TimeLogController> logger)
         {
             _logger = logger;
             _context = context;
-        }            
-        
-        
-        public async Task<IActionResult> Index(){
-            var timeLogs = await _context.TimeLogs.Include(_ => _.Activity).Include(_ => _.Employee).ToListAsync();
+        }
+
+        public async Task<IActionResult> Index() {
+            var timeLogs = await _context.TimeLogs.Include(_ => _.Activity.Project).Include(_ => _.HourType).Where(_ => _.EmployeeId == HttpContext.Session.GetString("Id")).ToListAsync();
             return View(timeLogs);
+        }
+
+        public IActionResult Edit(string id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.log = _context.TimeLogs.Where(_ => _.Id == id).Single();
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(TimeLogAdd timeForm, string id)
+        {
+            var log = await _context.TimeLogs.Where(_ => _.Id == id).SingleAsync();
+            log.StartTime = DateTime.SpecifyKind(timeForm.StartTime, DateTimeKind.Utc);
+            log.EndTime = DateTime.SpecifyKind(timeForm.EndTime, DateTimeKind.Utc);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
