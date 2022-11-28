@@ -3,30 +3,34 @@
 @{
 
 }
-<style>
-    .main{
-        background-color: white;
-    }
-</style>
+
 <div class="main">
-    <h1>Times</h1>
-    <table class="table">
-        <thead> 
+    <h1>Time overview</h1>
+    <hr>
+    
+    <table>
+        <tr id="header">
+            <th>Project</th>
+            <th>Activity</th>
+            <th>StartTime</th>
+            <th>EndTime</th>
+            <th>HourType</th>
+            <th>Handle</th>
+        </tr>
+
+        @foreach (var timelog in Model)
+        {
             <tr>
-                <th>Name</th>
-                <th>Activity</th>
-                <th>Time</th>
+                <td>@timelog.Activity.Project.Name</td>
+                <td>@timelog.Activity.Name</td>
+                <td>@timelog.StartTime</td>
+                <td>@timelog.EndTime</td>
+                <td>@timelog.HourType.Label</td>
+                <td>
+                    <a class="rounded bg-warning p-2" asp-controller="TimeLog" asp-action="Edit" asp-route-id="@timelog.Id">Edit</a>
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach (var TimeLog in Model)
-            {
-                <tr>
-                    <td>@TimeLog.Employee.Name</td>
-                    <td>@TimeLog.Activity.Name</td>
-                    <td>@((TimeLog.AmountOfTimeSpentInSeconds/3600) + ":" + (TimeLog.AmountOfTimeSpentInSeconds%3600)/60 + ":" + (TimeLog.AmountOfTimeSpentInSeconds%3600)%60)</td>
-                </tr>
-            }
-        </tbody>
+        }
     </table>
 </div>
+

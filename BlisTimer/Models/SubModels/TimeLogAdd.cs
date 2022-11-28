@@ -2,7 +2,8 @@ namespace BlisTimer.Models
 {
     public class TimeLogAdd
     {
-        public int AmountOfTimeSpentInSeconds { get; set; } 
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
         public string EmployeeName { get; set; }
     }
 }
