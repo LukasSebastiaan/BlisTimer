@@ -1,16 +1,9 @@
-﻿using System;
-using System.Linq;
-using System.Diagnostics;
-using System.Threading.Tasks;
-using System.Collections.Generic;
+﻿using System.Diagnostics;
 using BlisTimer.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using BlisTimer.Data;
-using System.Net.Security;
 using ConsoleApp1;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using SimplicateAPI.ReturnTypes;
 
 namespace BlisTimer.Controllers
@@ -39,7 +32,7 @@ namespace BlisTimer.Controllers
             _logger.LogInformation("Getting hasher to hash password");
             var hasher = new PHasher(new OptionsHash(1000));
             
-            _logger.LogInformation("Trying to log user with in simplicate");
+            _logger.LogInformation("Trying to log user with in Simplicate");
             var loginResult = await _apiDatabaseHandler.SimplicateApiClient.Login.TryUnsafeLoginAsync(emp.Email, emp.Password);
             
             //The login via the api was succesfull so we log them in, if the info is not yet in the database we add it.
@@ -63,8 +56,8 @@ namespace BlisTimer.Controllers
                 return RedirectToAction("Index", "Home");
             }
             
-            //The login was not succesfull via the api, we check if the details are in the database if so, we log them in. Else we show an error. 
-            else if (loginResult.Status == LoginResult.LoginStatus.BadCredentials)
+            //The login was not successful via the api, we check if the details are in the database if so, we log them in. Else we show an error. 
+            if (loginResult.Status == LoginResult.LoginStatus.BadCredentials)
             {
                 var allHashedPasswords = await _context.Employees.Where(_ => _.Email == emp.Email).Select(_ => _.Password).ToListAsync();
             
