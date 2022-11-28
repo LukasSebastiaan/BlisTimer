@@ -4,11 +4,55 @@
 
 }
 
+<style>
+    a.editButton {
+        color: white;
+        border: 2px solid white;
+        text-decoration: none;
+        border-radius: 15%;
+        padding: 8% 17%;
+    }
+    tr:hover a.editButton {
+        color: black;
+        border: 2px solid black;
+    }
+
+    #buttons {
+        position: fixed;
+        left: 50%;
+        bottom: 15%;
+        transform: translate(-50%, -50%);
+        margin: 0 auto;
+    }
+
+    input[type="button"] {
+        color: #ffffff;
+        border: 1px solid #ddd;
+        padding: 8px 16px;
+        text-decoration: none;
+        border-radius: 5px;
+        margin: 0 2px;
+    }
+
+    input[type="button"]:not(.active) {
+        background-color: transparent;
+    }
+
+    .active {
+        background-color: var(--blis-cyan);
+        color: #fff;
+    }
+
+    input[type="button"]:hover:not(.active) {
+        background-color: #ddd;
+    }
+</style>
+
 <div class="main">
     <h1>Time overview</h1>
     <hr>
     
-    <table>
+    <table id="logTable">
         <tr id="header">
             <th>Project</th>
             <th>Activity</th>
@@ -27,10 +71,60 @@
                 <td>@timelog.EndTime</td>
                 <td>@timelog.HourType.Label</td>
                 <td>
-                    <a class="rounded bg-warning p-2" asp-controller="TimeLog" asp-action="Edit" asp-route-id="@timelog.Id">Edit</a>
+                    <a class="editButton" asp-controller="TimeLog" asp-action="Edit" asp-route-id="@timelog.Id">Edit</a>
                 </td>
             </tr>
         }
     </table>
 </div>
 
+<script>
+    var $table = document.getElementById("logTable"),
+        $rowsPerPage = 4,
+        $rowCount = $table.rows.length,
+        $firstRow = $table.rows[0].firstElementChild.tagName,
+        // Check if table has a head row
+        $hasHead = ($firstRow === "TH"),
+        // Array to hold each row
+        $tr = [],
+        // Count vars, counts from 2nd row if first is "th"
+        $i, $ii, $j = ($hasHead) ? 1 : 0,
+        // Holds first row if it has "th", nothing "td"
+        $th = ($hasHead ? $table.rows[(0)].outerHTML : "");
+    var $pageCount = Math.ceil($rowCount / $rowsPerPage);
+    // Does something if we have more than 1 page
+    if ($pageCount > 1) {
+        // Assigns each table row to table
+        for ($i = $j, $ii = 0; $i < $rowCount; $i++, $ii++)
+            $tr[$ii] = $table.rows[$i].outerHTML;
+        // Div block for the buttons
+        $table.insertAdjacentHTML("afterend", "<div id='buttons'></div");
+        // Set default page (first amount of rows)
+        sort(1);
+    }
+
+    function sort($selectedPage) {
+        // Rows holds group rows, startpoint is first row on each page
+        var $rows = $th, $startPoint = (($rowsPerPage * $selectedPage) - $rowsPerPage);
+        for ($i = $startPoint; $i < ($startPoint + $rowsPerPage) && $i < $tr.length; $i++)
+            $rows += $tr[$i];
+
+        $table.innerHTML = $rows;
+        // Creates pagination buttons
+        document.getElementById("buttons").innerHTML = pageButtons($pageCount, $selectedPage);
+        document.getElementById("id" + $selectedPage).setAttribute("class", "active");
+    }
+
+    function pageButtons($pageCount, $currentPage) {
+        // Disables buttons on first and last page
+        var $prevDis = ($currentPage == 1) ? "disabled" : "",
+            $nextDis = ($currentPage == $pageCount) ? "disabled" : "",
+            
+            // Holds the buttons 
+            $buttons = "<input type='button' value='<< Prev' onclick='sort(" + ($currentPage - 1) + ")' " + $prevDis + ">";
+        for ($i = 1; $i <= $pageCount; $i++)
+            $buttons += "<input type='button' id='id" + $i + "'value='" + $i + "' onclick='sort(" + $i + ")'>";
+        $buttons += "<input type='button' value='Next >>' onclick='sort(" + ($currentPage + 1) + ")' " + $nextDis + ">";
+        return $buttons;
+    }
+</script>
