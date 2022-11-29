@@ -1,7 +1,7 @@
 @model List<BlisTimer.Models.TimeLog>
 
 @{
-
+    Layout = "_EmptyLayout";
 }
 
 <style>
@@ -91,7 +91,11 @@
         $i, $ii, $j = ($hasHead) ? 1 : 0,
         // Holds first row if it has "th", nothing "td"
         $th = ($hasHead ? $table.rows[(0)].outerHTML : "");
-    var $pageCount = Math.ceil($rowCount / $rowsPerPage);
+    if ($rowCount % $rowsPerPage <= 1) {
+        $pageCount = Math.floor($rowCount / $rowsPerPage);
+    } else {
+        $pageCount = Math.ceil($rowCount / $rowsPerPage);
+    }
     // Does something if we have more than 1 page
     if ($pageCount > 1) {
         // Assigns each table row to table
