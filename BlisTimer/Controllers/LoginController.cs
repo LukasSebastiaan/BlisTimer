@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Security.Claims;
+using System.Net;
 using BlisTimer.Models;
 using Microsoft.AspNetCore.Mvc;
 using BlisTimer.Data;
@@ -26,12 +27,15 @@ namespace BlisTimer.Controllers
         }
         [AllowAnonymous]
         public async Task<IActionResult> Index()
+
+        public async Task<IActionResult> Index()
         {
             if (User.Identity.IsAuthenticated)
             {
                 await HttpContext.SignOutAsync();
                 HttpContext.Session.Clear();
             }
+            var updateDatabaseTask = _apiDatabaseHandler.SyncDbWithSimplicate();
             return View(new LoginForm());
         }
 
@@ -88,10 +92,11 @@ namespace BlisTimer.Controllers
                 await _apiDatabaseHandler.SyncDbWithSimplicate();
                 
                 return RedirectToAction("Index", "Timer");
+                return RedirectToAction("Index", "Timer");
             }
             
             //The login was not successful via the api, we check if the details are in the database if so, we log them in. Else we show an error. 
-            if (loginResult.Status == LoginResult.LoginStatus.BadCredentials)
+            if (loginResult.Status == LoginResult.LoginStatus.Failed)
             {
                 var allHashedPasswords = await _context.Employees.Where(_ => _.Email == emp.Email).Select(_ => _.Password).ToListAsync();
             
