@@ -27,15 +27,29 @@ public class ApiDatabaseHandler
         _logger = logger;
     }
 
-    public async Task SyncDbWithSimplicate()
+    public async Task<bool> SyncDbWithSimplicate()
     {
         _logger.LogInformation("Getting projects and services (activity) information from Simplicate Api");
         // get projects from simplicate and also all services
-        var projectsTask = SimplicateApiClient.Projects.GetProjects();
-        var servicesTask = SimplicateApiClient.Projects.GetServices();
 
-        var projects = await projectsTask;
-        var services = await servicesTask;
+        SimplicateAPI.Enitities.Project[] projects;
+        SimplicateAPI.Enitities.Service[] services;
+        
+        try
+        {
+            var projectsTask = SimplicateApiClient.Projects.GetProjects();
+            var servicesTask = SimplicateApiClient.Projects.GetServices();
+
+            projects = await projectsTask;
+            services = await servicesTask;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Error while getting projects and services from Simplicate Api");
+            return false;
+        }
+        
+        
         
         ClearRemovedSimplicateData(projects, services);
 
@@ -52,7 +66,16 @@ public class ApiDatabaseHandler
         }
         
         // Saving the changes made to the database
-        await _dbContext.SaveChangesAsync();
+        try
+        {
+            await _dbContext.SaveChangesAsync();
+            return true;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Error while saving changes to the database");
+            return false;
+        }
     }
 
     private async Task AddOrUpdateProjectActivities(Service[] services, SimplicateAPI.Enitities.Project project)

@@ -16,25 +16,51 @@
 
 .watch {
     text-align: center;
-    background-color: var(--blis-purple-dark);
+    background: linear-gradient(-90deg, var(--blis-purple-lighter), var(--blis-purple));
     width: 100%;
+    height: 800px;
     position: relative;
     max-width: 720px;
     margin: 4rem auto;
     padding: 4rem 8rem;
     border-radius: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
 }
 
 .task {
-    background-color: var(--blis-purple-dark);
+    background: transparent;
     font-size: 2rem;
     font-weight: 500;
+    margin-bottom: auto;
+    translate: -10px 0px;
+}
+
+.clock
+{
+    position: relative;
+    height: 350px;
+    width: 350px;
+    border-radius: 50%;
+    border: 2px solid var(--blis-white);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 2s ease;
 }
 
 .time {
+    position: absolute;
     font-size: 5rem;
     font-weight: 700;
     margin-bottom: 1rem;
+}
+
+.controls-container
+{
+    margin-top: auto;
 }
 
 .controls {
