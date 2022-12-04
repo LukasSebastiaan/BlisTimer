@@ -38,19 +38,7 @@
     translate: -10px 0px;
 }
 
-@keyframes clock-fase {
-    0% {
-        box-shadow: 0px 0px 20px 0px rgba(240, 200, 0, 0.1);
-    }
-    80% {
-        box-shadow: 0px 0px 30px 0px rgba(240, 200, 0, 0.2);
-    }
-    100% {
-        box-shadow: 0px 0px 20px 0px rgba(240, 200, 0, 0.1);
-    }
-}
-
-#clock
+.clock
 {
     position: relative;
     height: 350px;
@@ -58,14 +46,9 @@
     border-radius: 50%;
     border: 2px solid var(--blis-white);
     display: flex;
-    box-shadow: 0px 0px 20px 0px rgba(240, 200, 0, 0.1);
     justify-content: center;
     align-items: center;
     transition: all 2s ease;
-}
-
-#clock.clock-fase {
-    animation: clock-fase 4s ease-in-out infinite;
 }
 
 .time {
@@ -84,7 +67,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 30px;
 }
 
 .controls button {
@@ -98,7 +80,8 @@
     background: var(--blis-yellow) none;
     margin: 0 0.8rem 1rem;
     padding: 0 2.5rem;
-    border-radius: 10px;
+    border-radius: 0.4rem;
+
     transition: 0.4s;
 }
 
@@ -123,7 +106,7 @@ button:active {
     background: var(--blis-purple-darker);
     border-radius: 2rem;
     position: absolute;
-    top: 50%;
+    top: 0;
     left: 0;
     transform: translateY(50%) scale(0.1);
     text-align: center;
@@ -192,5 +175,5 @@ button:active {
     text-align: center;
     border: none;
     outline: black;
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.6);
 }
