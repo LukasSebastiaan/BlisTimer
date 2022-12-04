@@ -22,9 +22,31 @@ namespace BlisTimer.Controllers
         public async Task<IActionResult> Index()
         {
             await _api.SyncDbWithSimplicate();
-            var projectId = HttpContext.Session.GetString("ProjectId");
             var projectDict = new Dictionary<Tuple<BlisTimer.Models.Project, bool>, List<WorkActivity>>();
+            
+            var running = _context.RunningTimers.Where(_ => _.EmployeeId == HttpContext.Session.GetString("Id")).FirstOrDefault();
+            ViewBag.RunningTimer = "false";
+            ViewBag.Time = 0;
+            
+            //When there is already a timer running it should select all the details from this timer. 
+            if (running is not null)
+            {
                 
+                var pId = _context.WorkActivities.Include(_ => _.Project).Where(_ => _.Id == running.ActivityId)
+                    .Select(_ => _.Project.Id).FirstOrDefault();
+                HttpContext.Session.SetString("ProjectId", pId);
+                ViewBag.PreSelectedActivityName = _context.WorkActivities.Where(_ => _.Id == running.ActivityId).Select(_ => _.Name).FirstOrDefault();
+                HttpContext.Session.SetString("ActivityId", running.ActivityId);
+                HttpContext.Session.SetString("ActivityName", _context.WorkActivities.Where(_ => _.Id == running.ActivityId).Select(_ => _.Name).FirstOrDefault());
+                HttpContext.Session.SetString("HourTypeId", running.HourTypeId);
+                HttpContext.Session.SetString("HourTypeName", _context.HourTypes.Where(_ => _.HourTypeId == running.HourTypeId).Select(_ => _.Label).FirstOrDefault());
+
+                ViewBag.RunningTimer = "true";
+                var time = ((int)(DateTime.Now - running.StartTime).TotalSeconds) - 3600;
+                ViewBag.Time = time;
+            }
+
+            var projectId = HttpContext.Session.GetString("ProjectId");
             if (String.IsNullOrEmpty(projectId))
             {
                 ViewBag.PreSelectedProject = false;
@@ -40,6 +62,7 @@ namespace BlisTimer.Controllers
             else
             {
                 ViewBag.PreSelectedProject = true;
+                ViewBag.PreSelectedProjectName = _context.Projects.Where(_ => _.Id == projectId).Select(_ => _.Name).FirstOrDefault();;
                 ViewBag.PreSelectedActivity = false;
                 var SelectedProject = _context.Projects.Include(_ => _.Activities).Where(_ => _.Id == projectId).FirstOrDefault();
                 var projectsOfUser = _context.Projects.Include(_ => _.Activities).Include(_ => _.EmployeeProjects)
@@ -92,13 +115,24 @@ namespace BlisTimer.Controllers
 
             }
             
+            //This Code takes care of the timer that might be already running.
+            // if (running is not null)
+            // {
+            //     ViewBag.PreSelectedActivity = true;
+            //     ViewBag.PreSelectedActivityId = running.ActivityId;
+            //     ViewBag.PreSelectedActivityName = _context.WorkActivities.Where(_ => _.Id == running.ActivityId).Select(_ => _.Name).FirstOrDefault();
+            //     ViewBag.PreSelectedProject = true;
+            //     ViewBag.PreSelectedProjectName = _context.Projects.Include(_ => _.Activities).Where(_ => _.Activities.Select(_ => _.Id).Contains(_.Id)).Select(_ => _.Name).FirstOrDefault();
+            //     ViewBag.PreSelectedHourType = true;
+            //     ViewBag.PreSelectedHourTypeId = HttpContext.Session.GetString("HourTypeId");
+            //     ViewBag.PreSelectedHourTypeName = HttpContext.Session.GetString("HourTypeName");
+            // }
             
             return View(projectDict);
         }
         [HttpPost]
         public IActionResult Index(string Id)
         {
-            
             HttpContext.Session.SetString("ProjectId", Id);
             HttpContext.Session.SetString("ActivityId", "");
             HttpContext.Session.SetString("ActivityName", "");
@@ -121,6 +155,7 @@ namespace BlisTimer.Controllers
         {
             
             HttpContext.Session.SetString("HourTypeId", Id);
+            HttpContext.Session.SetString("HourTypeName", _context.HourTypes.Where(_ => _.HourTypeId == Id).Select(_ => _.Label).FirstOrDefault());
             
             return RedirectToAction("Index");
         }
