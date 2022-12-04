@@ -1,4 +1,5 @@
 ﻿@using Microsoft.EntityFrameworkCore.Metadata.Internal
+@using System.Security.Cryptography
 @model Dictionary<Tuple<BlisTimer.Models.Project, bool>, List<WorkActivity>>
 
 @{
@@ -20,9 +21,12 @@
     const activityDropdown = document.getElementById("activity")
     const hourtypeDropdown = document.getElementById("hourtype")
     const options = document.getElementsByTagName("option");
-
-    let seconds = 0;
+    
     let interval = null;
+    let seconds = @ViewBag.Time;
+    if (@ViewBag.RunningTimer === true){
+        start();
+    }
 
     // Event Listeners
     
@@ -40,30 +44,38 @@
       let hrs = Math.floor(seconds / 3600);
       let mins = Math.floor((seconds - (hrs * 3600)) / 60);
       let secs = seconds % 60;
-
+      
       if (secs < 10) secs = "0" + secs;
       if (mins < 10) mins = "0" + mins;
       if (hrs < 10) hrs = "0" + hrs;
-
+      
       time_el.innerText = `${hrs}:${mins}:${secs}`;	
+        
     }
     
+      
+ 
     //start button
     function start() {
       if (interval) {
+        console.log("bad");
         return;
       }
-
-      interval = setInterval(timer, 1000);
       
-      $.ajax({
-        type: "POST",
-        url: "/TimeLog/AddRunningTimer",
-          data: "{}",
-          success: function (result) {
-            console.log("Added timer with code " + result)
-          }
-      })
+      
+      console.log(typeof @ViewBag.RunningTimer);
+      interval = setInterval(timer, 1000);
+      if (@ViewBag.RunningTimer === false){ 
+        $.ajax({
+          type: "POST",
+          url: "/TimeLog/AddRunningTimer",
+            data: "{}",
+            success: function (result) {
+              console.log("Added timer with code " + result)
+            }
+        })
+      }
+        
       
       startButton.style.opacity = 0.3;
       startButton.style.cursor = "not-allowed";
@@ -96,7 +108,7 @@
       pauseButton.style.opacity = 0.3;
       pauseButton.style.cursor = "not-allowed";
       
-}
+    }
 
     //stop button
     function stop() {
@@ -162,28 +174,28 @@
     
     function submitProjectId(){
         let p = document.getElementById("project");
-        console.log(p)
-        document.forms[0].Id.value = p.value 
-        document.forms[0].submit()
+        console.log(p);
+        document.forms[0].Id.value = p.value;
+        document.forms[0].submit();
     }
     function submitActivityId(){
         let p = document.getElementById("activity");
-        console.log(p)
-        document.forms[1].Id.value = p.value 
-        document.forms[1].submit()
+        console.log(p);
+        document.forms[1].Id.value = p.value;
+        document.forms[1].submit();
     }
     function submitHourTypeId(){
         let p = document.getElementById("hourtype");
-        console.log(p)
-        document.forms[2].Id.value = p.value 
-        document.forms[2].submit()
+        console.log(p);
+        document.forms[2].Id.value = p.value;
+        document.forms[2].submit();
     }
     </script>
 
 }
 
 
-<div id="screen">
+<div id="screen" >
   <div class="watch">
     <div class="task">
       <form method="post" id="projects" asp-action="Index" asp-controller="Timer">
@@ -294,7 +306,21 @@
     </div>
 
     <div class="time">
-      00:00:00
+      @if (ViewBag.RunningTimer == "true"){
+          
+           string hrs = (ViewBag.Time / 3600).ToString();
+           string mins = (((ViewBag.Time - (Int32.Parse(hrs) * 3600))) / 60).ToString();
+           string secs = (ViewBag.Time % 60).ToString();
+        
+          if (Int32.Parse(secs) < 10) secs = "0" + secs;
+          if (Int32.Parse(mins) < 10) mins = "0" + mins;
+          if (Int32.Parse(hrs) < 10) hrs = "0" + hrs;
+          <p>@hrs:@mins:@secs</p>;
+      }
+      else
+      {
+        <p>00:00:00</p>
+      }
     </div>
 
     <div class="controls">
@@ -314,7 +340,7 @@
     </div>
 
     <div class="popup" id="popup">
-      <h2>Project > Current Task</h2>
+      <h2>@ViewBag.PreSelectedProjectName > @ViewBag.PreSelectedActivityName > @ViewBag.PreSelectedHourTypeName</h2>
       <p>Please confirm you have worked (Time) on this task.</p>
       <button type="button" class="btn" onclick="confirm()">Confirm</button>
       <button type="button" class="btn" onclick="cancel()">Cancel</button>
