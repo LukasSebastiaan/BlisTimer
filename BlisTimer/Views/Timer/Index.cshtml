@@ -58,7 +58,6 @@
     //start button
     function start() {
       if (interval) {
-        console.log("bad");
         return;
       }
       
@@ -321,22 +320,29 @@
       {
         <p>00:00:00</p>
       }
+    
+    <div class="clock">
+      <div class="time">
+        00:00:00
+      </div>
     </div>
+   
+    <div class="controls-container">
+      <div class="controls">
+        @if (!@String.IsNullOrEmpty(ViewBag.PreSelectedHourTypeId))
+        {
+          <button id="start">Start</button>
+        }
+        else
+        {
+          <button id="start-disabled">Start</button>
+        }
+        <button id="stop">Stop</button>
+      </div>
 
-    <div class="controls">
-      @if (!@String.IsNullOrEmpty(ViewBag.PreSelectedHourTypeId))
-      {
-        <button id="start">Start</button>
-      }
-      else
-      {
-        <button id="start-disabled">Start</button>
-      }
-      <button id="stop">Stop</button>
-    </div>
-
-    <div class="controls">
-      <button id="pause">Take a break</button>
+      <div class="controls">
+        <button id="pause">Take a break</button>
+      </div>
     </div>
 
     <div class="popup" id="popup">

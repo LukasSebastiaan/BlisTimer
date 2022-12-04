@@ -29,20 +29,16 @@ public sealed class Hours
         // {
         //     "employee_id": "employee:be93045f0f01e63a",
         //     "project_id": "project:6cc70702c221b840",
-        //     "projectservice_id": "service:8c29d20520ed8ffe",
-        //     "type_id": "hourstype:f902fc5514b044a2",
-        //     "approvalstatus_id": "approvalstatus:9a4660a21af7234e",
-        //     "address_id": "address:6036ffae58d1b855e57e4617bc5cd25c",
+        //     "projectservice_id": "service:cb06f818e9b413da",
+        //     "type_id": "hourstype:a8df4761fe85a646",
         //     "hours": 10,
-        //     "start_date": "15-11-2022 8:00:00",
-        //     "end_date": "15-11-2022 18:00:00",
+        //     "start_date": "2022-12-04 8:00:00",
+        //     "end_date": "2022-12-04 18:00:00",
         //     "is_time_defined": false,
         //     "is_external": false,
         //     "billable": false,
-        //     "should_sync_to_cronofy": true,
         //     "source": "Blis Timer"
         // }
-        
     }
 
     public async Task<WorkedHours> GetHoursById(string id)
