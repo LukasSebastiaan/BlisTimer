@@ -304,52 +304,46 @@
       }
     </div>
 
-    <div class="time">
-      @if (ViewBag.RunningTimer == "true"){
-          
-           string hrs = (ViewBag.Time / 3600).ToString();
-           string mins = (((ViewBag.Time - (Int32.Parse(hrs) * 3600))) / 60).ToString();
-           string secs = (ViewBag.Time % 60).ToString();
-        
-          if (Int32.Parse(secs) < 10) secs = "0" + secs;
-          if (Int32.Parse(mins) < 10) mins = "0" + mins;
-          if (Int32.Parse(hrs) < 10) hrs = "0" + hrs;
-          <p>@hrs:@mins:@secs</p>;
-      }
-      else
-      {
-        <p>00:00:00</p>
-      }
     
-    <div class="clock">
-      <div class="time">
-        00:00:00
+      <div class="clock">
+        <div class="time">
+          @if (ViewBag.RunningTimer == "true"){
+              
+            string hrs = (ViewBag.Time / 3600).ToString();
+            string mins = (((ViewBag.Time - (Int32.Parse(hrs) * 3600))) / 60).ToString();
+            string secs = (ViewBag.Time % 60).ToString();
+            
+            if (Int32.Parse(secs) < 10) secs = "0" + secs;
+            if (Int32.Parse(mins) < 10) mins = "0" + mins;
+            if (Int32.Parse(hrs) < 10) hrs = "0" + hrs;
+            <p>@hrs:@mins:@secs</p>;
+          }
+          else
+          {
+            <p>00:00:00</p>
+          }
+        </div>
       </div>
-    </div>
    
-    <div class="controls-container">
-      <div class="controls">
-        @if (!@String.IsNullOrEmpty(ViewBag.PreSelectedHourTypeId))
-        {
-          <button id="start">Start</button>
-        }
-        else
-        {
-          <button id="start-disabled">Start</button>
-        }
-        <button id="stop">Stop</button>
+      <div class="controls-container">
+        <div class="controls">
+          @if (!@String.IsNullOrEmpty(ViewBag.PreSelectedHourTypeId))
+          {
+            <button id="start">Start</button>
+          }
+          else
+          {
+            <button id="start-disabled">Start</button>
+          }
+          <button id="stop">Stop</button>
+        </div>
       </div>
 
-      <div class="controls">
-        <button id="pause">Take a break</button>
+      <div class="popup" id="popup">
+        <h2>@ViewBag.PreSelectedProjectName > @ViewBag.PreSelectedActivityName > @ViewBag.PreSelectedHourTypeName</h2>
+        <p>Please confirm you have worked (Time) on this task.</p>
+        <button type="button" class="btn" onclick="confirm()">Confirm</button>
+        <button type="button" class="btn" onclick="cancel()">Cancel</button>
       </div>
-    </div>
-
-    <div class="popup" id="popup">
-      <h2>@ViewBag.PreSelectedProjectName > @ViewBag.PreSelectedActivityName > @ViewBag.PreSelectedHourTypeName</h2>
-      <p>Please confirm you have worked (Time) on this task.</p>
-      <button type="button" class="btn" onclick="confirm()">Confirm</button>
-      <button type="button" class="btn" onclick="cancel()">Cancel</button>
     </div>
   </div>
-</div>
