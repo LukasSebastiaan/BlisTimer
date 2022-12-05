@@ -31,6 +31,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     {
         options.LoginPath = new PathString("/login");
         options.AccessDeniedPath = new PathString("/denied");
+        options.SlidingExpiration = true;
     });
 
 var app = builder.Build();

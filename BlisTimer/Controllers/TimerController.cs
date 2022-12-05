@@ -25,7 +25,7 @@ namespace BlisTimer.Controllers
             await _api.SyncDbWithSimplicate();
             var projectDict = new Dictionary<Tuple<BlisTimer.Models.Project, bool>, List<WorkActivity>>();
             
-            var running = _context.RunningTimers.Where(_ => _.EmployeeId == HttpContext.Session.GetString("Id")).FirstOrDefault();
+            var running = _context.RunningTimers.FirstOrDefault(_ => _.EmployeeId == HttpContext.User.Claims.ToList()[0].Value);
             ViewBag.RunningTimer = "false";
             ViewBag.Time = 0;
             
@@ -53,7 +53,7 @@ namespace BlisTimer.Controllers
                 ViewBag.PreSelectedProject = false;
                 var projectsOfUser = _context.Projects.Include(_ => _.Activities).Include(_ => _.EmployeeProjects)
                     .Where(_ => _.EmployeeProjects
-                        .Where(x => x.EmployeeId == HttpContext.Session.GetString("Id"))
+                        .Where(x => x.EmployeeId == HttpContext.User.Claims.ToList()[0].Value)
                         .Select(p => p.ProjectId).Contains(_.Id)).ToList();
                 foreach (var project in projectsOfUser)
                 {
@@ -68,7 +68,8 @@ namespace BlisTimer.Controllers
                 var SelectedProject = _context.Projects.Include(_ => _.Activities).Where(_ => _.Id == projectId).FirstOrDefault();
                 var projectsOfUser = _context.Projects.Include(_ => _.Activities).Include(_ => _.EmployeeProjects)
                     .Where(_ => _.EmployeeProjects
-                        .Where(x => x.EmployeeId == HttpContext.Session.GetString("Id"))
+                        .Where(x => x.EmployeeId == HttpContext.User.Claims.ToList()[0].Value
+)
                         .Select(p => p.ProjectId).Contains(_.Id)).ToList();
                     
                 foreach (var project in projectsOfUser)

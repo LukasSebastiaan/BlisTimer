@@ -48,7 +48,7 @@ namespace BlisTimer.Controllers
             _logger.LogInformation("Trying to log user with in Simplicate");
             var loginResult = await _apiDatabaseHandler.SimplicateApiClient.Login.TryUnsafeLoginAsync(emp.Email, emp.Password);
             
-            //The login via the api was succesfull so we log them in, if the info is not yet in the database we add it.
+            //The login via the api was succesful so we log them in, if the info is not yet in the database we add it.
             if (loginResult.IsSuccess)
             {
                 
@@ -87,11 +87,15 @@ namespace BlisTimer.Controllers
                     new Claim("Id", loginResult.User.EmployeeId),
                     new Claim("Username", loginResult.User.Username)
                 };
-                HttpContext.SignInAsync(new ClaimsPrincipal(new ClaimsIdentity(claims, "Cookies", "Id", "Username")));
+
+                var identity = new ClaimsIdentity(claims, "Cookies");
+                ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(identity);
+
+
+                await HttpContext.SignInAsync("Cookies", claimsPrincipal);
                 
                 await _apiDatabaseHandler.SyncDbWithSimplicate();
                 
-                return RedirectToAction("Index", "Timer");
                 return RedirectToAction("Index", "Timer");
             }
             

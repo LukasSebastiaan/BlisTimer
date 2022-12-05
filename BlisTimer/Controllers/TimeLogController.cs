@@ -22,11 +22,7 @@ namespace BlisTimer.Controllers
         }
         [Authorize]
         public async Task<IActionResult> Index() {
-            if (!_databasehandler.IsLoggedIn(HttpContext))
-            {
-                return RedirectToAction("Index", "Login");
-            }
-            var timeLogs = await _context.TimeLogs.Include(_ => _.Activity.Project).Include(_ => _.HourType).Where(_ => _.EmployeeId == HttpContext.Session.GetString("Id")).ToListAsync();
+            var timeLogs = await _context.TimeLogs.Include(_ => _.Activity.Project).Include(_ => _.HourType).Where(_ => _.EmployeeId == HttpContext.User.Claims.ToList()[0].Value).ToListAsync();
             return View(timeLogs);
         }
         [Authorize]
@@ -80,7 +76,7 @@ namespace BlisTimer.Controllers
         [HttpPost]
         public async Task<IActionResult> SumbitTimelog()
         {
-            var employeeId = HttpContext.Session.GetString("Id");
+            var employeeId = HttpContext.User.Claims.ToList()[0].Value;
             
             if (!_context.RunningTimers.Any(_ => _.EmployeeId == employeeId))
                 return BadRequest("There aren't any active timers running for the employee");
@@ -113,7 +109,7 @@ namespace BlisTimer.Controllers
                 {
                     Id = Guid.NewGuid().ToString(),
                     StartTime = DateTime.Now.ToUniversalTime(),
-                    EmployeeId = HttpContext.Session.GetString("Id")!,
+                    EmployeeId = HttpContext.User.Claims.ToList()[0].Value!,
                     ActivityId = HttpContext.Session.GetString("ActivityId")!,
                     HourTypeId = HttpContext.Session.GetString("HourTypeId")!,
                 });
