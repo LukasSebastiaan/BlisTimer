@@ -1,13 +1,17 @@
 ﻿using System.Diagnostics;
+using System.Security.Claims;
 using BlisTimer.Models;
 using Microsoft.AspNetCore.Mvc;
 using BlisTimer.Data;
 using ConsoleApp1;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using SimplicateAPI.ReturnTypes;
 
 namespace BlisTimer.Controllers
 {
+    
     public class LoginController : Controller
     {
         private readonly ILogger<LoginController> _logger;
@@ -20,9 +24,14 @@ namespace BlisTimer.Controllers
             _context = context;
             _apiDatabaseHandler = apiDatabaseHandler;
         }
-
-        public IActionResult Index()
+        [AllowAnonymous]
+        public async Task<IActionResult> Index()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                await HttpContext.SignOutAsync();
+                HttpContext.Session.Clear();
+            }
             return View(new LoginForm());
         }
 
@@ -38,6 +47,7 @@ namespace BlisTimer.Controllers
             //The login via the api was succesfull so we log them in, if the info is not yet in the database we add it.
             if (loginResult.IsSuccess)
             {
+                
                 var query = await _context.Employees.Where(_ => _.Email == emp.Email).ToListAsync();
                 if (query.Count == 0)
                 {
@@ -51,9 +61,16 @@ namespace BlisTimer.Controllers
                 HttpContext.Session.SetString("Email", loginResult.User!.Email);
                 HttpContext.Session.SetString("Id", loginResult.User!.EmployeeId);
 
+                var claims = new List<Claim>
+                {
+                    new Claim("Id", loginResult.User.EmployeeId),
+                    new Claim("Username", loginResult.User.Username)
+                };
+                HttpContext.SignInAsync(new ClaimsPrincipal(new ClaimsIdentity(claims, "Cookies", "Id", "Username")));
+                
                 await _apiDatabaseHandler.SyncDbWithSimplicate();
                 
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Timer");
             }
             
             //The login was not successful via the api, we check if the details are in the database if so, we log them in. Else we show an error. 
@@ -68,7 +85,7 @@ namespace BlisTimer.Controllers
                     var check = hasher.Check(hashedPassword, emp.Password);
                     if (check.verified)
                     {
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Index", "Timer");
                     }
                 }
                 

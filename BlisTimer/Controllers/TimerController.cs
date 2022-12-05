@@ -1,5 +1,6 @@
 ﻿using BlisTimer.Data;
 using BlisTimer.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Project = SimplicateAPI.Enitities.Project;
@@ -10,11 +11,14 @@ namespace BlisTimer.Controllers
     {
         private readonly TimerDbContext _context;
         private readonly ApiDatabaseHandler _api;
-        public TimerController(TimerDbContext context, ApiDatabaseHandler api)
+        private readonly ApiDatabaseHandler _databasehandler;
+        public TimerController(TimerDbContext context, ApiDatabaseHandler api, ApiDatabaseHandler databasehandler)
         {
             _context = context;
             _api = api;
+            _databasehandler = databasehandler;
         }
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             await _api.SyncDbWithSimplicate();
@@ -105,8 +109,8 @@ namespace BlisTimer.Controllers
         public IActionResult Index2(string Id)
         {
             
-            HttpContext.Session.SetString("ActivityId", Id);
             var p = _context.WorkActivities.Where(_ => _.Id == Id).Select(_ => _.Name).FirstOrDefault();
+            HttpContext.Session.SetString("ActivityId", Id);
             HttpContext.Session.SetString("ActivityName", p);
             HttpContext.Session.SetString("HourTypeId", "");
 

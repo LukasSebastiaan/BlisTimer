@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.Serialization;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BlisTimer.Controllers
 {
@@ -11,20 +12,30 @@ namespace BlisTimer.Controllers
     {
         private readonly TimerDbContext _context;
         private readonly ILogger<TimeLogController> _logger;
+        private readonly ApiDatabaseHandler _databasehandler;
 
-        public TimeLogController(TimerDbContext context, ILogger<TimeLogController> logger)
+        public TimeLogController(TimerDbContext context, ILogger<TimeLogController> logger, ApiDatabaseHandler databaseHandler)
         {
             _logger = logger;
             _context = context;
+            _databasehandler = databaseHandler;
         }
-
+        [Authorize]
         public async Task<IActionResult> Index() {
+            if (!_databasehandler.IsLoggedIn(HttpContext))
+            {
+                return RedirectToAction("Index", "Login");
+            }
             var timeLogs = await _context.TimeLogs.Include(_ => _.Activity.Project).Include(_ => _.HourType).Where(_ => _.EmployeeId == HttpContext.Session.GetString("Id")).ToListAsync();
             return View(timeLogs);
         }
-
+        [Authorize]
         public IActionResult Edit(string id)
         {
+            if (!_databasehandler.IsLoggedIn(HttpContext))
+            {
+                return RedirectToAction("Index", "Login");
+            }
             if (id == null)
             {
                 return RedirectToAction("Index");
@@ -43,11 +54,7 @@ namespace BlisTimer.Controllers
             _context.SaveChanges();
             return RedirectToAction("Index");
         }
-
-        [HttpGet]
-        public IActionResult Add(){
-            return View();
-        } 
+        
         
         [HttpPost]
         public async Task<IActionResult> Add(TimeLogAdd addTimeLog){

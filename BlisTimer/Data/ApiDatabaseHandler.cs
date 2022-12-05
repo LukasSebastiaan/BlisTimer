@@ -1,4 +1,5 @@
-﻿using BlisTimer.Models;
+﻿using System.Net;
+using BlisTimer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SimplicateAPI;
@@ -195,5 +196,14 @@ public class ApiDatabaseHandler
         
         _dbContext.WorkActivities.RemoveRange(
             _dbContext.WorkActivities.Where(x => notExistingInSimplicateServices.Contains(x.Id)));
+    }
+
+    public bool IsLoggedIn(HttpContext httpContext)
+    {
+        if (string.IsNullOrEmpty(httpContext.Session.GetString("Id")))
+        {
+            return false;
+        }
+        return true;
     }
 }
