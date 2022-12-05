@@ -16,7 +16,7 @@ namespace BlisTimer.Controllers
             _logger = logger;
             _context = context;
         }
-
+        
         public IActionResult Index()
         {
             var fullName = $"{HttpContext.Session.GetString("Firstname")} {HttpContext.Session.GetString("Lastname")}";
