@@ -66,6 +66,9 @@
 
 #clock.clock-fase {
     animation: clock-fase 4s ease-in-out infinite;
+    justify-content: center;
+    align-items: center;
+    transition: all 2s ease;
 }
 
 .time {
