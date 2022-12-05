@@ -87,6 +87,29 @@ namespace BlisTimer.Migrations
                     b.ToTable("HourTypes");
                 });
 
+            modelBuilder.Entity("BlisTimer.Models.Preferences", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<string>("EmployeeId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("NotificationEnabled")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("NotificationTimeSeconds")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId")
+                        .IsUnique();
+
+                    b.ToTable("Preferences");
+                });
+
             modelBuilder.Entity("BlisTimer.Models.Project", b =>
                 {
                     b.Property<string>("Id")
@@ -217,6 +240,17 @@ namespace BlisTimer.Migrations
                     b.Navigation("Project");
                 });
 
+            modelBuilder.Entity("BlisTimer.Models.Preferences", b =>
+                {
+                    b.HasOne("BlisTimer.Models.Employee", "Employee")
+                        .WithOne("Preferences")
+                        .HasForeignKey("BlisTimer.Models.Preferences", "EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+                });
+
             modelBuilder.Entity("BlisTimer.Models.RunningTimer", b =>
                 {
                     b.HasOne("BlisTimer.Models.Employee", "Employee")
@@ -288,6 +322,9 @@ namespace BlisTimer.Migrations
             modelBuilder.Entity("BlisTimer.Models.Employee", b =>
                 {
                     b.Navigation("EmployeeProjects");
+
+                    b.Navigation("Preferences")
+                        .IsRequired();
 
                     b.Navigation("RunningTimer");
                 });

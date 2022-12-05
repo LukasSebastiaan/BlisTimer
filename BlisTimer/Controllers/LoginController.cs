@@ -51,7 +51,24 @@ namespace BlisTimer.Controllers
                 var query = await _context.Employees.Where(_ => _.Email == emp.Email).ToListAsync();
                 if (query.Count == 0)
                 {
-                    await _context.AddAsync( new Employee() {Id = loginResult.User!.EmployeeId,Email = emp.Email,Password = hasher.Hash(emp.Password),Name = loginResult.User.FirstName,LastName = loginResult.User.FamilyName,Role = loginResult.User.IsAccountOwner ? 2 : 1});
+                    await _context.AddAsync(
+                        new Preferences()
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            EmployeeId = loginResult.User!.EmployeeId,
+                            NotificationEnabled = true,
+                            NotificationTimeSeconds = 3600,
+                        }
+                    );
+                    await _context.AddAsync( new Employee()
+                    {
+                        Id = loginResult.User!.EmployeeId,
+                        Email = emp.Email,
+                        Password = hasher.Hash(emp.Password),
+                        Name = loginResult.User.FirstName,
+                        LastName = loginResult.User.FamilyName,
+                        Role = loginResult.User.IsAccountOwner ? 2 : 1,
+                    });
                     await _context.SaveChangesAsync();
                 }
                 
