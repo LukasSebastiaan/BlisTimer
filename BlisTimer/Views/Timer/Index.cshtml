@@ -20,6 +20,7 @@
     const projectDropdown = document.getElementById("project")
     const activityDropdown = document.getElementById("activity")
     const hourtypeDropdown = document.getElementById("hourtype")
+    const clock = document.getElementById("clock")
     const options = document.getElementsByTagName("option");
     
     let interval = null;
@@ -88,25 +89,10 @@
       activityDropdown.style.opacity = 0.3;
       activityDropdown.disabled = true;
       
-      pauseButton.style.opacity = 1;
-      pauseButton.style.cursor = "pointer";
-      
       stopButton.style.opacity = 1;
       stopButton.style.cursor = "pointer";
-    }
-
-    //pause button
-    function pause() {
-      clearInterval(interval);
-      interval = null;
       
-      
-      startButton.style.opacity = 1;
-      startButton.style.cursor = "pointer";
-      
-      pauseButton.style.opacity = 0.3;
-      pauseButton.style.cursor = "not-allowed";
-      
+      clock.classList.add("clock-fase")
     }
 
     //stop button
@@ -115,6 +101,7 @@
         clearInterval(interval);
         interval = null;
     
+        clock.classList.remove("clock-fase")
         openPopup();
       }
     }
@@ -146,11 +133,9 @@
       hourtypeDropdown.style.opacity = 1;
       hourtypeDropdown.disabled = false;
       
-      pauseButton.style.opacity = 0.3;
-      pauseButton.style.cursor = "not-allowed";
-      
       stopButton.style.opacity = 0.3;
       stopButton.style.cursor = "not-allowed";
+      
     }
 
     //cancel button
@@ -161,13 +146,13 @@
 
 
     //Popup message
-    let popup = document.getElementById("popup");
-
     function openPopup() {
+      popup = document.getElementById("popup");
       popup.classList.add("open-popup");
     }
 
     function closePopup() {
+      popup = document.getElementById("popup");
       popup.classList.remove("open-popup");
     }
     
@@ -305,7 +290,7 @@
     </div>
 
     
-      <div class="clock">
+      <div id="clock">
         <div class="time">
           @if (ViewBag.RunningTimer == "true"){
               
