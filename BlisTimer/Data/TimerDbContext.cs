@@ -14,6 +14,7 @@ namespace BlisTimer.Data
         public DbSet<TimeLog> TimeLogs { get; set; } = null!;
         public DbSet<Employee> Employees { get; set; } = null!;
         public DbSet<HourType> HourTypes { get; set; } = null!;
+        public DbSet<Preferences> Preferences { get; set; } = null!;
         
         public DbSet<EmployeeProject> EmployeeProjects { get; set; } = null!;
         public DbSet<WorkActivityHourType> WorkActivityHourTypes { get; set; } = null!;

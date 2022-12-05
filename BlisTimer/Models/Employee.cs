@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace BlisTimer.Models
 {
     public class Employee
@@ -12,5 +14,7 @@ namespace BlisTimer.Models
         
         public RunningTimer? RunningTimer { get; set; }
         public string? RunningTimerId { get; set; }
+        
+        public Preferences Preferences { get; set; }
     }
 }

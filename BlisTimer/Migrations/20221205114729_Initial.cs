@@ -52,6 +52,26 @@ namespace BlisTimer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Preferences",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "text", nullable: false),
+                    NotificationEnabled = table.Column<bool>(type: "boolean", nullable: false),
+                    NotificationTimeSeconds = table.Column<int>(type: "integer", nullable: false),
+                    EmployeeId = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Preferences", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Preferences_Employees_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employees",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "RunningTimers",
                 columns: table => new
                 {
@@ -179,6 +199,12 @@ namespace BlisTimer.Migrations
                 column: "ProjectId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Preferences_EmployeeId",
+                table: "Preferences",
+                column: "EmployeeId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_RunningTimers_EmployeeId",
                 table: "RunningTimers",
                 column: "EmployeeId",
@@ -214,6 +240,9 @@ namespace BlisTimer.Migrations
         {
             migrationBuilder.DropTable(
                 name: "EmployeeProjects");
+
+            migrationBuilder.DropTable(
+                name: "Preferences");
 
             migrationBuilder.DropTable(
                 name: "RunningTimers");
