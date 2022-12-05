@@ -98,9 +98,6 @@
     //stop button
     function stop() {
       if(seconds > 0){
-        clearInterval(interval);
-        interval = null;
-    
         clock.classList.remove("clock-fase")
         openPopup();
       }
@@ -110,6 +107,8 @@
     function confirm() {
       closePopup();
       seconds = 0;
+      clearInterval(interval);
+      interval = null;
       time_el.innerText = "00:00:00";
       
       $.ajax({

@@ -18,6 +18,7 @@ namespace BlisTimer.Controllers
             _api = api;
             _databasehandler = databasehandler;
         }
+        
         [Authorize]
         public async Task<IActionResult> Index()
         {

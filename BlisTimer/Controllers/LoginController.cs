@@ -25,9 +25,8 @@ namespace BlisTimer.Controllers
             _context = context;
             _apiDatabaseHandler = apiDatabaseHandler;
         }
+        
         [AllowAnonymous]
-        public async Task<IActionResult> Index()
-
         public async Task<IActionResult> Index()
         {
             if (User.Identity.IsAuthenticated)
@@ -35,6 +34,7 @@ namespace BlisTimer.Controllers
                 await HttpContext.SignOutAsync();
                 HttpContext.Session.Clear();
             }
+            
             var updateDatabaseTask = _apiDatabaseHandler.SyncDbWithSimplicate();
             return View(new LoginForm());
         }
