@@ -52,7 +52,7 @@ namespace BlisTimer.Controllers
             if (loginResult.IsSuccess)
             {
                 
-                var query = await _context.Employees.Where(_ => _.Email == emp.Email).ToListAsync();
+                var query = await _context.Employees.Where(_ => _.Id == loginResult.User.EmployeeId).ToListAsync();
                 if (query.Count == 0)
                 {
                     await _context.AddAsync(
@@ -74,6 +74,34 @@ namespace BlisTimer.Controllers
                         Role = loginResult.User.IsAccountOwner ? 2 : 1,
                     });
                     await _context.SaveChangesAsync();
+                }
+                else //We should check if they changed their password, if so their details are not correct in our database and need to be update
+                {
+                    var allHashedPasswords = await _context.Employees.Where(_ => _.Email == emp.Email).Select(_ => _.Password).ToListAsync();
+                    
+                    //loops trough all the hashed passwords that matches the input email
+                    //then checks if the hashed version of the given password matches any of the hashed once in the database
+                    bool isUpdated = false;
+                    foreach (var hashedPassword in allHashedPasswords) 
+                    {
+                        var check = hasher.Check(hashedPassword, emp.Password);
+                        if (check.verified)
+                        {
+                            isUpdated = true;
+                            break;
+                        }
+                    }
+                    if (!isUpdated)
+                    {
+                        _logger.LogInformation("Password was not up-to-date");
+                        var employee = _context.Employees.Where(_ => _.Id == loginResult.User.EmployeeId).FirstOrDefault();
+                        if (employee != null)
+                        {
+                            employee.Password = hasher.Hash(emp.Password);
+                        }
+
+                        await _context.SaveChangesAsync();
+                    }
                 }
                 
                 HttpContext.Session.SetString("Firstname", loginResult.User!.FirstName);
