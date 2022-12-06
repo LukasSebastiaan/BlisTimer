@@ -5,6 +5,10 @@
 }
 
 <style>
+    #hoursWorked {
+        text-align: center;
+    }
+
     a.editButton{
         color: white;
         border: 2px solid white;
@@ -20,11 +24,11 @@
     #buttons{
         display: flex;
         justify-content: right;
-        width: 400px;
+        width: 550px;
         margin: 3vh auto 0 50vw;
     }
 
-    input[type="button"]{
+    #submitButton, input[type="button"]{
         color: #ffffff;
         border: 1px solid #ddd;
         border-radius: 5px;
@@ -37,7 +41,7 @@
         background-color: transparent;
     }
 
-    .active {
+    .active{
         background-color: var(--blis-cyan);
         color: #fff;
     }
@@ -49,62 +53,73 @@
     #submitHoursContainer{
         display: flex;
         justify-content: left;
-        width: 400px;
+        width: 550px;
         margin: 3vh 50vw 0 auto;
         transform: translate(0, -153%);
-    }
-    #submitButton{
-        color: white;
-        border: 1px solid white;
-        border-radius: 5px;
-        text-decoration: none;
-        padding: 8px 16px;
     }
     #submitButton:hover{
         background-color: #ddd;
     }
 
+    @@media (max-width: 1100px)
+    {
+        #hoursWorked {
+            text-align: left;
+        }
+
+        #submitHoursContainer{
+            width: 48.5vw;
+            justify-content: left;
+        }
+        #buttons{
+            width: 48.5vw;
+            justify-content: right;
+        }
+    }
     @@media (max-width: 850px)
     {
-        html {
+        html{
             overflow: auto;
         }
-        tr#header {
+        tr#header{
             display: none;
         }
-        td {
+        td{
             display: block;
         }
-        td:first-child {
+        td:first-child{
             background-color: var(--blis-cyan);
             text-align: center;
             color: black;
             font-weight: 600;
         }
-        td:nth-child(2)::before {
+        td:nth-child(2)::before{
             content: "Activity: ";
         }
-        td:nth-child(3)::before {
+        td:nth-child(3)::before{
              content: "Start time: ";
         }
-        td:nth-child(4)::before {
+        td:nth-child(4)::before{
             content: "End time: ";
         }
-        td:nth-child(5)::before {
+        td:nth-child(5)::before{
+            content: "Hours Worked: ";
+        }
+        td:nth-child(6)::before {
             content: "Hourtype: ";
         }
-        a.editButton {
+        a.editButton{
             padding: 1% 3%;
         }
 
-        #buttons, #submitHoursContainer {
+        #buttons, #submitHoursContainer{
             width: unset;
             justify-content: center;
         }
-        #submitButton {
-            transform: translate(-22%, 2%);
+        #submitButton{
+            transform: translate(-22%, -10%);
         }
-        input.pageButtons, input.active {
+        input.pageButtons, input.active{
             display: none;
         }
     }
@@ -121,6 +136,7 @@
                     <th>Activity</th>
                     <th>StartTime</th>
                     <th>EndTime</th>
+                    <th>Hours Worked</th>
                     <th>HourType</th>
                     <th>Handle</th>
                 </tr>
@@ -133,6 +149,10 @@
                         <td>@timelog.Activity.Name</td>
                         <td>@timelog.StartTime</td>
                         <td>@timelog.EndTime</td>
+                        <td id="hoursWorked">
+                            @{var workedHours = timelog.EndTime - timelog.StartTime;}
+                            @workedHours.Hours.ToString("0#"):@workedHours.Minutes.ToString("0#")
+                        </td>
                         <td>@timelog.HourType.Label</td>
                         <td>
                             <a class="editButton" asp-controller="TimeLog" asp-action="Edit" asp-route-id="@timelog.Id">Edit</a>

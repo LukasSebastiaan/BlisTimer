@@ -28,15 +28,6 @@ namespace BlisTimer.Controllers
         [Authorize]
         public IActionResult Edit(string id)
         {
-            if (!_databasehandler.IsLoggedIn(HttpContext))
-            {
-                return RedirectToAction("Index", "Login");
-            }
-            if (id == null)
-            {
-                return RedirectToAction("Index");
-            }
-
             ViewBag.log = _context.TimeLogs.Where(_ => _.Id == id).Single();
             return View();
         }

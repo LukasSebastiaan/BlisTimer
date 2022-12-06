@@ -20,11 +20,16 @@ h1{
 table{
     background-color: var(--blis-purple-dark);
     border-collapse: collapse;
-    width: 800px;
+    width: 1100px;
     height: 350px;
     border: 1px solid #bdc3c7;
     *box-shadow: 2px 2px 12px rgba(0,0,0,0.2), -1px -1px 8px rgba(0,0,0, 0.2);
     margin-top: 4rem;
+}
+#header {
+    color: black;
+    background-color: var(--blis-cyan);
+    height: 50px;
 }
 tr{
     transition: all .2s ease-in;
@@ -34,11 +39,6 @@ th,
 td{
     padding: 12px;
     text-align: left;
-}
-#header {
-    color: black;
-    background-color: var(--blis-cyan);
-    height: 50px;
 }
 tr:hover{
     background-color: white;
