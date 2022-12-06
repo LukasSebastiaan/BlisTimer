@@ -5,30 +5,15 @@
 }
 
 <style>
+    #box form {
+        width: 100%;
+    }
+
     input[type=time] {
-            width: 14rem;
-            padding-left: 20px;
-            border: none;
-            border-radius: 1rem;
-            margin-top: 1rem;
-    }
-
-    input[type=time]:active, input[type=time]:focus {
-        outline: 3px solid var(--blis-cyan);
-    }
-    input[type=submit] {
-        width: 20rem;
-        border: 2px solid white;
-        background-color: transparent;
-        border-radius: 1vh;
-        padding: 1%;
-        color: rgba(255,255,255,1);
-        font-weight: 500;
-        transition: 1s ease-out;
-    }
-
-    input[type=submit]:hover {
-            background-color: var(--blis-cyan);
+        width: 8rem;
+        padding-left: 20px;
+        border: none;
+        border-radius: 1em;
     }
 </style>
 
@@ -36,12 +21,16 @@
     <h1>Change Timelog</h1>
     <hr />
     <div id="container">
-        <div id="innerBox">
+        <div id="box">
             <form asp-controller="TimeLog" method="post">
-                <label>Start time:</label>
-                <input type="time" asp-for="StartTime" value="@ViewBag.log.StartTime.ToString("HH:mm")" />
-                <label>End time:</label>
-                <input type="time" asp-for="EndTime" value="@ViewBag.log.EndTime.ToString("HH:mm")" />
+                <div id="labelBox">
+                    <label>Start time:</label>
+                    <label>End time:</label>
+                </div>
+                <div id="inputBox">
+                    <input type="time" asp-for="StartTime" value="@ViewBag.log.StartTime.ToString("HH:mm")" />
+                    <input type="time" asp-for="EndTime" value="@ViewBag.log.EndTime.ToString("HH:mm")" />
+                </div>
                 <div id="submitBox">
                     <input type="submit" value="Save changes">
                 </div>

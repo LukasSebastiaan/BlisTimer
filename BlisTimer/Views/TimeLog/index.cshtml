@@ -5,36 +5,35 @@
 }
 
 <style>
-    a.editButton {
+    a.editButton{
         color: white;
         border: 2px solid white;
-        text-decoration: none;
         border-radius: 15%;
+        text-decoration: none;
         padding: 8% 17%;
     }
-    tr:hover a.editButton {
+    tr:hover a.editButton{
         color: black;
         border: 2px solid black;
     }
 
-    #buttons {
-        position: fixed;
-        left: 50%;
-        bottom: 15%;
-        transform: translate(-50%, -50%);
-        margin: 0 auto;
+    #buttons{
+        display: flex;
+        justify-content: right;
+        width: 400px;
+        margin: 3vh auto 0 50vw;
     }
 
-    input[type="button"] {
+    input[type="button"]{
         color: #ffffff;
         border: 1px solid #ddd;
+        border-radius: 5px;
         padding: 8px 16px;
         text-decoration: none;
-        border-radius: 5px;
         margin: 0 2px;
     }
 
-    input[type="button"]:not(.active) {
+    input[type="button"]:not(.active){
         background-color: transparent;
     }
 
@@ -43,43 +42,111 @@
         color: #fff;
     }
 
-    input[type="button"]:hover:not(.active) {
+    input[type="button"]:hover:not(.active){
         background-color: #ddd;
+    }
+
+    #submitHoursContainer{
+        display: flex;
+        justify-content: left;
+        width: 400px;
+        margin: 3vh 50vw 0 auto;
+        transform: translate(0, -153%);
+    }
+    #submitButton{
+        color: white;
+        border: 1px solid white;
+        border-radius: 5px;
+        text-decoration: none;
+        padding: 8px 16px;
+    }
+    #submitButton:hover{
+        background-color: #ddd;
+    }
+
+    @@media (max-width: 850px)
+    {
+        html {
+            overflow: auto;
+        }
+        tr#header {
+            display: none;
+        }
+        td {
+            display: block;
+        }
+        td:first-child {
+            background-color: var(--blis-cyan);
+            text-align: center;
+            color: black;
+            font-weight: 600;
+        }
+        td:nth-child(2)::before {
+            content: "Activity: ";
+        }
+        td:nth-child(3)::before {
+             content: "Start time: ";
+        }
+        td:nth-child(4)::before {
+            content: "End time: ";
+        }
+        td:nth-child(5)::before {
+            content: "Hourtype: ";
+        }
+        a.editButton {
+            padding: 1% 3%;
+        }
+
+        #buttons {
+            width: unset;
+            justify-content: center;
+        }
+        input.pageButtons, input.active {
+            display: none;
+        }
     }
 </style>
 
 <div class="main">
     <h1>Time overview</h1>
     <hr>
-    
-    <table id="logTable">
-        <tr id="header">
-            <th>Project</th>
-            <th>Activity</th>
-            <th>StartTime</th>
-            <th>EndTime</th>
-            <th>HourType</th>
-            <th>Handle</th>
-        </tr>
-
-        @foreach (var timelog in Model)
-        {
-            <tr>
-                <td>@timelog.Activity.Project.Name</td>
-                <td>@timelog.Activity.Name</td>
-                <td>@timelog.StartTime</td>
-                <td>@timelog.EndTime</td>
-                <td>@timelog.HourType.Label</td>
-                <td>
-                    <a class="editButton" asp-controller="TimeLog" asp-action="Edit" asp-route-id="@timelog.Id">Edit</a>
-                </td>
-            </tr>
-        }
-    </table>
+    <div id="time-table">
+        <table id="logTable">
+            <thead>
+                <tr id="header">
+                    <th>Project</th>
+                    <th>Activity</th>
+                    <th>StartTime</th>
+                    <th>EndTime</th>
+                    <th>HourType</th>
+                    <th>Handle</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var timelog in Model)
+                {
+                    <tr>
+                        <td>@timelog.Activity.Project.Name</td>
+                        <td>@timelog.Activity.Name</td>
+                        <td>@timelog.StartTime</td>
+                        <td>@timelog.EndTime</td>
+                        <td>@timelog.HourType.Label</td>
+                        <td>
+                            <a class="editButton" asp-controller="TimeLog" asp-action="Edit" asp-route-id="@timelog.Id">Edit</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div id="submitHoursContainer">
+        <a id="submitButton" asp-controller="Timelog">Submit hours</a>
+    </div>
 </div>
 
 <script>
     var $table = document.getElementById("logTable"),
+        $div = document.getElementById("time-table"),
         $rowsPerPage = 4,
         $rowCount = $table.rows.length,
         $firstRow = $table.rows[0].firstElementChild.tagName,
@@ -102,7 +169,7 @@
         for ($i = $j, $ii = 0; $i < $rowCount; $i++, $ii++)
             $tr[$ii] = $table.rows[$i].outerHTML;
         // Div block for the buttons
-        $table.insertAdjacentHTML("afterend", "<div id='buttons'></div");
+        $div.insertAdjacentHTML("afterend", "<div id='buttons'></div");
         // Set default page (first amount of rows)
         sort(1);
     }
@@ -125,10 +192,8 @@
             $nextDis = ($currentPage == $pageCount) ? "disabled" : "",
             
             // Holds the buttons 
-            $buttons = "<input type='button' value='<< Prev' onclick='sort(" + ($currentPage - 1) + ")' " + $prevDis + ">";
-        for ($i = 1; $i <= $pageCount; $i++)
-            $buttons += "<input type='button' id='id" + $i + "'value='" + $i + "' onclick='sort(" + $i + ")'>";
-        $buttons += "<input type='button' value='Next >>' onclick='sort(" + ($currentPage + 1) + ")' " + $nextDis + ">";
+            $buttons = "<input type='button' id='prevButton' value='<< Prev' onclick='sort(" + ($currentPage - 1) + ")' " + $prevDis + ">";
+        $buttons += "<input type='button' id='nextButton' value='Next >>' onclick='sort(" + ($currentPage + 1) + ")' " + $nextDis + ">";
         return $buttons;
     }
 </script>
