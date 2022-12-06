@@ -5,35 +5,35 @@
 }
 
 <style>
-    a.editButton {
+    a.editButton{
         color: white;
         border: 2px solid white;
-        text-decoration: none;
         border-radius: 15%;
+        text-decoration: none;
         padding: 8% 17%;
     }
-    tr:hover a.editButton {
+    tr:hover a.editButton{
         color: black;
         border: 2px solid black;
     }
 
-    #buttons {
+    #buttons{
         display: flex;
         justify-content: right;
-        width: 800px;
-        margin: 3vh auto;
+        width: 400px;
+        margin: 3vh auto 0 50vw;
     }
 
-    input[type="button"] {
+    input[type="button"]{
         color: #ffffff;
         border: 1px solid #ddd;
+        border-radius: 5px;
         padding: 8px 16px;
         text-decoration: none;
-        border-radius: 5px;
         margin: 0 2px;
     }
 
-    input[type="button"]:not(.active) {
+    input[type="button"]:not(.active){
         background-color: transparent;
     }
 
@@ -42,7 +42,25 @@
         color: #fff;
     }
 
-    input[type="button"]:hover:not(.active) {
+    input[type="button"]:hover:not(.active){
+        background-color: #ddd;
+    }
+
+    #submitHoursContainer{
+        display: flex;
+        justify-content: left;
+        width: 400px;
+        margin: 3vh 50vw 0 auto;
+        transform: translate(0, -153%);
+    }
+    #submitButton{
+        color: white;
+        border: 1px solid white;
+        border-radius: 5px;
+        text-decoration: none;
+        padding: 8px 16px;
+    }
+    #submitButton:hover{
         background-color: #ddd;
     }
 
@@ -120,6 +138,9 @@
                 }
             </tbody>
         </table>
+    </div>
+    <div id="submitHoursContainer">
+        <a id="submitButton" asp-controller="Timelog">Submit hours</a>
     </div>
 </div>
 
