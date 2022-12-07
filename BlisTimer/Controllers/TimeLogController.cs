@@ -1,9 +1,7 @@
 using BlisTimer.Models;
 using BlisTimer.Data;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
-using System.Runtime.Serialization;
 using Microsoft.AspNetCore.Authorization;
 
 namespace BlisTimer.Controllers
@@ -23,6 +21,11 @@ namespace BlisTimer.Controllers
         [Authorize]
         public async Task<IActionResult> Index() {
             var timeLogs = await _context.TimeLogs.Include(_ => _.Activity.Project).Include(_ => _.HourType).Where(_ => _.EmployeeId == HttpContext.User.Claims.ToList()[0].Value).ToListAsync();
+
+            var totalWorkedHours = timeLogs.Select(_ => _.EndTime - _.StartTime).Sum(_ => _.TotalHours);
+            var time = TimeSpan.FromHours(totalWorkedHours);
+            ViewBag.totalTime = $"{time.TotalHours.ToString("0#")}:{time.Minutes.ToString("0#")}:{time.Seconds.ToString("0#")}";
+
             return View(timeLogs);
         }
         [Authorize]
