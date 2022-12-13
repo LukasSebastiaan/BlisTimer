@@ -14,6 +14,7 @@
   <script type="text/javascript">
     // Globals
     const time_el = document.querySelector('.watch .time');
+    const watch = document.getElementsByClassName('watch')[0];
     const startButton = document.getElementById("start");
     const stopButton = document.getElementById("stop");
     const pauseButton = document.getElementById("pause");
@@ -147,11 +148,15 @@
     //Popup message
     function openPopup() {
       popup = document.getElementById("popup");
+      watch.style.opacity = 0;
+      watch.style.pointerEvents = "none";
       popup.classList.add("open-popup");
     }
 
     function closePopup() {
       popup = document.getElementById("popup");
+      watch.style.opacity = 1;
+      watch.style.pointerEvents = "auto";
       popup.classList.remove("open-popup");
     }
     
@@ -322,10 +327,12 @@
           <button id="stop">Stop</button>
         </div>
       </div>
-
-      <div class="popup" id="popup">
-        <h2>@ViewBag.PreSelectedProjectName > @ViewBag.PreSelectedActivityName > @ViewBag.PreSelectedHourTypeName</h2>
-        <p>Please confirm you have worked (Time) on this task.</p>
+    </div>
+    
+    <div class="popup" id="popup">
+      <h2>@ViewBag.PreSelectedProjectName > @ViewBag.PreSelectedActivityName > @ViewBag.PreSelectedHourTypeName</h2>
+      <p>Please confirm you have worked (Time) on this task.</p>
+      <div class="controls">
         <button type="button" class="btn" onclick="confirm()">Confirm</button>
         <button type="button" class="btn" onclick="cancel()">Cancel</button>
       </div>
