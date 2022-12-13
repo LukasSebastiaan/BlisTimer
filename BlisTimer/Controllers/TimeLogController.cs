@@ -126,7 +126,6 @@ namespace BlisTimer.Controllers
             
             var failedSubmissions = await _databasehandler.SubmitHoursToSimplicate(hoursToSubmit);
             
-            // TODO: Make hours that are successfully submitted their submitted value to true
             var successfullySubmittedHours = hoursToSubmit.Where(_ => !failedSubmissions.Contains(_)).ToList();
             
             foreach (var hour in successfullySubmittedHours)
