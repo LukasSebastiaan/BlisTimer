@@ -1,6 +1,5 @@
-﻿using BlisTimer.Models;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+﻿using Microsoft.EntityFrameworkCore;
+using Domain.Models;
 
 namespace BlisTimer.Data
 {

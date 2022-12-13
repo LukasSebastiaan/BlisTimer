@@ -1,8 +1,26 @@
-@model List<BlisTimer.Models.TimeLog>
+@model List<Domain.Models.TimeLog>
 
 @{
     Layout = "_HomeLayout";
 }
+
+<script>
+    function submitHours() {
+        alert("Your hours are being submitted, this make take a few minutes.");
+        
+        $.ajax({
+          type: "POST",
+          url: "/TimeLog/PostHoursToSimplicate",
+            data: "{}",
+            success: function (result) {
+              location.reload();
+            },
+            error: function (result) {
+              alert(result.responseText);
+            }
+        })
+    }
+</script>
 
 <style>
     a.editButton{
@@ -170,7 +188,7 @@
             </table>
         </div>
         <div id="submitHoursContainer">
-            <a id="submitButton" asp-controller="Timelog">Submit hours</a>
+            <a id="submitButton" onclick="submitHours()">Submit hours</a>
         </div>
         <div id="totalTimeContainer">
             <p>Total time worked: @ViewBag.totalTime</p>

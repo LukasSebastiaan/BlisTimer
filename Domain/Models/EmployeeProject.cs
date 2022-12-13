@@ -1,4 +1,4 @@
-﻿namespace BlisTimer.Models;
+﻿namespace Domain.Models;
 
 public class EmployeeProject
 {

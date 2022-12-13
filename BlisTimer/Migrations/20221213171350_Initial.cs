@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BlisTimer.Migrations
 {
-    public partial class InitialDB : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -49,6 +49,26 @@ namespace BlisTimer.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Projects", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Preferences",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "text", nullable: false),
+                    NotificationEnabled = table.Column<bool>(type: "boolean", nullable: false),
+                    NotificationTimeSeconds = table.Column<int>(type: "integer", nullable: false),
+                    EmployeeId = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Preferences", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Preferences_Employees_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employees",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -124,7 +144,10 @@ namespace BlisTimer.Migrations
                     EndTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     ActivityId = table.Column<string>(type: "text", nullable: false),
                     EmployeeId = table.Column<string>(type: "text", nullable: false),
-                    HourTypeId = table.Column<string>(type: "text", nullable: false)
+                    HourTypeId = table.Column<string>(type: "text", nullable: false),
+                    ProjectId = table.Column<string>(type: "text", nullable: false),
+                    Deleted = table.Column<bool>(type: "boolean", nullable: false),
+                    Submitted = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -141,6 +164,12 @@ namespace BlisTimer.Migrations
                         principalTable: "HourTypes",
                         principalColumn: "HourTypeId",
                         onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_TimeLogs_Projects_ProjectId",
+                        column: x => x.ProjectId,
+                        principalTable: "Projects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_TimeLogs_WorkActivities_ActivityId",
                         column: x => x.ActivityId,
@@ -179,6 +208,12 @@ namespace BlisTimer.Migrations
                 column: "ProjectId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Preferences_EmployeeId",
+                table: "Preferences",
+                column: "EmployeeId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_RunningTimers_EmployeeId",
                 table: "RunningTimers",
                 column: "EmployeeId",
@@ -200,6 +235,11 @@ namespace BlisTimer.Migrations
                 column: "HourTypeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_TimeLogs_ProjectId",
+                table: "TimeLogs",
+                column: "ProjectId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_WorkActivities_ProjectId",
                 table: "WorkActivities",
                 column: "ProjectId");
@@ -214,6 +254,9 @@ namespace BlisTimer.Migrations
         {
             migrationBuilder.DropTable(
                 name: "EmployeeProjects");
+
+            migrationBuilder.DropTable(
+                name: "Preferences");
 
             migrationBuilder.DropTable(
                 name: "RunningTimers");

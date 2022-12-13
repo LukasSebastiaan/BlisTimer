@@ -1,4 +1,10 @@
-﻿using SimplicateAPI.Client;
+﻿using System.Net;
+using Domain.Models;
+using System.Net.Http;
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using SimplicateAPI.Client;
 using SimplicateAPI.Enitities;
 
 namespace SimplicateAPI.Endpoints;
@@ -21,10 +27,10 @@ public sealed class Hours
     public async Task<WorkedHours[]> GetHours(int limit = 5)
     {
         return await RequestClient.GetRequestAsync<WorkedHours[]>(
-            $"hours/hours?limit={limit}");
+            $"hours/hours?limit={limit}") ?? Array.Empty<WorkedHours>();
     }
 
-    public async Task AddHours()
+    public async Task<HttpStatusCode> AddHour(TimeLog hourToSubmit, string projectId)
     {
         // {
         //     "employee_id": "employee:be93045f0f01e63a",
@@ -39,6 +45,26 @@ public sealed class Hours
         //     "billable": false,
         //     "source": "Blis Timer"
         // }
+        
+        
+        var hourJson = new JsonObject();
+        hourJson.Add("employee_id", hourToSubmit.EmployeeId);
+        hourJson.Add("project_id", hourToSubmit.ProjectId);
+        hourJson.Add("projectservice_id", hourToSubmit.ActivityId);
+        hourJson.Add("type_id", hourToSubmit.HourTypeId);
+        hourJson.Add("hours", (hourToSubmit.EndTime - hourToSubmit.StartTime!).TotalHours);
+        hourJson.Add("start_date", hourToSubmit.StartTime.ToString("yyyy-MM-dd HH:mm:ss"));
+        hourJson.Add("end_date", hourToSubmit.EndTime.ToString("yyyy-MM-dd HH:mm:ss"));
+        hourJson.Add("is_time_defined", true);
+        hourJson.Add("is_external", false);
+        hourJson.Add("billable", false);
+        hourJson.Add("source", "Blis Timer");
+
+        var hoursJsonString = JsonSerializer.Serialize(hourJson);
+        
+        var httpContent = new StringContent(hoursJsonString, Encoding.UTF8, "application/json");
+
+        return await RequestClient.PostRequestAsync("hours/hours" , httpContent);
     }
 
     public async Task<WorkedHours> GetHoursById(string id)

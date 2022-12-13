@@ -1,5 +1,7 @@
+using System.Net;
 using BlisTimer.Models;
 using BlisTimer.Data;
+using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
@@ -19,8 +21,14 @@ namespace BlisTimer.Controllers
             _databasehandler = databaseHandler;
         }
         [Authorize]
-        public async Task<IActionResult> Index() {
-            var timeLogs = await _context.TimeLogs.Include(_ => _.Activity.Project).Include(_ => _.HourType).Where(_ => _.EmployeeId == HttpContext.User.Claims.ToList()[0].Value).ToListAsync();
+        public async Task<IActionResult> Index()
+        {
+            var timeLogs = _context.TimeLogs
+                .Include(_ => _.Activity.Project)
+                .Include(_ => _.HourType)
+                .Where(_ => _.EmployeeId == HttpContext.User.Claims.ToList()[0].Value)
+                .ToList()
+                .Where(_ => (!_.Deleted && !_.Submitted)).ToList();
 
             var totalWorkedHours = timeLogs.Select(_ => _.EndTime - _.StartTime).Sum(_ => _.TotalHours);
             var time = TimeSpan.FromHours(totalWorkedHours);
@@ -45,28 +53,6 @@ namespace BlisTimer.Controllers
             return RedirectToAction("Index");
         }
         
-        
-        [HttpPost]
-        public async Task<IActionResult> Add(TimeLogAdd addTimeLog){
-            var d = Guid.NewGuid().ToString();
-            var timelog = new TimeLog(){
-                Id = d,
-            };
-            var p = _context.Employees.Where(_ => _.Name == addTimeLog.EmployeeName).Include(_ => _.EmployeeProjects).FirstOrDefault();
-            timelog.EmployeeId = p.Id;
-            timelog.Employee = p;
-            var a = _context.WorkActivities.Where(_ => _.Id == "2c46d7b1-3481-4839-a97d-7a1dc21ee11c").Include(_ => _.Project).FirstOrDefault();
-            timelog.ActivityId = a.Id;
-            timelog.Activity = a;
-
-            await _context.TimeLogs.AddAsync(timelog);
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
-            
-            
-        }
-        
         [HttpPost]
         public async Task<IActionResult> SumbitTimelog()
         {
@@ -84,6 +70,7 @@ namespace BlisTimer.Controllers
                 EndTime = DateTime.Now.ToUniversalTime(),
                 ActivityId = HttpContext.Session.GetString("ActivityId")!,
                 HourTypeId = HttpContext.Session.GetString("HourTypeId")!,
+                ProjectId = HttpContext.Session.GetString("ProjectId")!,
                 EmployeeId = employeeId!,
             });
 
@@ -116,6 +103,42 @@ namespace BlisTimer.Controllers
                 return BadRequest("There was probably already a timer running for this employee");
             }
             
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PostHoursToSimplicate()
+        {
+            if (HttpContext.Session.GetString("hoursBeingSubmitted") == "true")
+                return BadRequest("There are already hours being submitted");
+            
+            var hoursToSubmit = _context.TimeLogs
+                .Where(_ => _.Submitted == false)
+                .Include(_ => _.Activity)
+                .Include(_ => _.HourType)
+                .Include(_ => _.Employee)
+                .ToList()
+                .Where(_ => _.EmployeeId == HttpContext.User.Claims.ToList()[0].Value!).ToList();
+            
+            if (hoursToSubmit.Count == 0)
+                return BadRequest("There are no hours to submit");
+            
+            HttpContext.Session.SetString("hoursBeingSubmitted", "true");
+            
+            var failedSubmissions = await _databasehandler.SubmitHoursToSimplicate(hoursToSubmit);
+            
+            // TODO: Make hours that are successfully submitted their submitted value to true
+            var successfullySubmittedHours = hoursToSubmit.Where(_ => !failedSubmissions.Contains(_)).ToList();
+            
+            foreach (var hour in successfullySubmittedHours)
+            {
+                hour.Submitted = true;
+            }
+            
+            _context.SaveChanges();
+            
+            HttpContext.Session.SetString("hoursBeingSubmitted", "false");
+
+            return Ok();
         }
     }
 }
