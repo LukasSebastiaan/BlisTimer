@@ -64,6 +64,24 @@
     transition: all 2s ease;
 }
 
+#clock #plus{
+    position: relative;
+    right: -70%;
+    font-size: 50px;
+}
+#clock #plus:hover{
+    cursor: pointer;
+}
+#clock #minus{
+    position: relative;
+    right: 70%;
+    font-size: 50px;
+}
+#clock #minus:hover{
+    cursor: pointer;
+}
+
+
 #clock.clock-fase {
     animation: clock-fase 4s ease-in-out infinite;
     justify-content: center;
@@ -217,3 +235,5 @@ button:active {
     font-size: 30px;
     position: relative;
 }
+
+

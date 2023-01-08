@@ -8,6 +8,8 @@ public class Preferences
     
     public int NotificationEnabled { get; set; }
     public int NotificationTimeSeconds { get; set; }
+    public int ChangeCountTimeSeconds { get; set; }
+    
     // TODO: Add more preference variables here
     
     [ForeignKey("EmployeeId")]

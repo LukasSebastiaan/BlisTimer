@@ -61,6 +61,7 @@ namespace BlisTimer.Controllers
                             Id = Guid.NewGuid().ToString(),
                             EmployeeId = loginResult.User!.EmployeeId,
                             NotificationEnabled = 1, //1 == true, 0 == false
+                            ChangeCountTimeSeconds = 15,
                             NotificationTimeSeconds = 3600,
                         }
                     );

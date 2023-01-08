@@ -74,7 +74,7 @@ namespace BlisTimer.Controllers
         }
         
         [HttpPost]
-        public async Task<IActionResult> SumbitTimelog()
+        public async Task<IActionResult> SumbitTimelog(int timeModified)
         {
             var employeeId = HttpContext.User.Claims.ToList()[0].Value;
             
@@ -83,10 +83,17 @@ namespace BlisTimer.Controllers
 
             var runningTimer = _context.RunningTimers.FirstOrDefault(_ => _.EmployeeId == employeeId);
 
+            var Id = Guid.NewGuid().ToString();
+            var StartTime = runningTimer.StartTime.AddHours(1).AddSeconds(timeModified * -1);
+            var EndTime = DateTime.Now.ToUniversalTime().AddHours(1);
+            var ActivityId = HttpContext.Session.GetString("ActivityId");
+            var HourTypeId = HttpContext.Session.GetString("HourTypeId");
+            var EmployeeId = employeeId;
+            
             await _context.TimeLogs.AddAsync(new TimeLog()
             {
                 Id = Guid.NewGuid().ToString(),
-                StartTime = runningTimer.StartTime,
+                StartTime = runningTimer.StartTime.AddSeconds(timeModified * -1),
                 EndTime = DateTime.Now.ToUniversalTime(),
                 ActivityId = HttpContext.Session.GetString("ActivityId")!,
                 HourTypeId = HttpContext.Session.GetString("HourTypeId")!,
@@ -101,14 +108,14 @@ namespace BlisTimer.Controllers
         }
         
         [HttpPost]
-        public async Task<IActionResult> AddRunningTimer()
+        public async Task<IActionResult> AddRunningTimer(int time)
         {
             try
             {
                 await _context.RunningTimers.AddAsync(new()
                 {
                     Id = Guid.NewGuid().ToString(),
-                    StartTime = DateTime.Now.ToUniversalTime(),
+                    StartTime = DateTime.Now.ToUniversalTime().AddSeconds(time * -1),
                     EmployeeId = HttpContext.User.Claims.ToList()[0].Value!,
                     ActivityId = HttpContext.Session.GetString("ActivityId")!,
                     HourTypeId = HttpContext.Session.GetString("HourTypeId")!,

@@ -21,6 +21,8 @@
                         <label>Notification Time</label>
                         <input type="number" min="1" max="8" asp-for="NotificationTimeHours" value="@ViewBag.timeInHours">
                     </div>
+                    <label>Add/Subtract time from timer</label>
+                    <input type="number" min="1" max="600" asp-for="ChangeCountTimeSeconds" value="@ViewBag.ModifyCount"> <br>
                     <button type="submit">Save changes</button>
                 </ul>
             </form>

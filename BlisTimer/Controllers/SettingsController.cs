@@ -27,6 +27,7 @@ namespace BlisTimer.Controllers
             ViewBag.Preferences = preference;
             ViewBag.timeInHours = (preference.NotificationTimeSeconds/60)/60;
             ViewBag.checkBoxEnabled = preference.NotificationEnabled;
+            ViewBag.ModifyCount = preference.ChangeCountTimeSeconds;
             return View();
         }
         [Authorize, HttpPost]
@@ -35,6 +36,7 @@ namespace BlisTimer.Controllers
             var preference = _context.Preferences.FirstOrDefault(_ => _.EmployeeId == HttpContext.User.Claims.ToList()[0].Value);
             preference.NotificationEnabled = pForm.NotificationEnabled ? 1 : 0;
             preference.NotificationTimeSeconds = pForm.NotificationTimeHours * 60 * 60;
+            preference.ChangeCountTimeSeconds = pForm.ChangeCountTimeSeconds;
 
             await _context.SaveChangesAsync();
             return RedirectToAction("Index", "Settings");
