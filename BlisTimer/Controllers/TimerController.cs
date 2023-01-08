@@ -29,6 +29,12 @@ namespace BlisTimer.Controllers
             ViewBag.RunningTimer = "false";
             ViewBag.Time = 0;
             
+            var preference = _context.Preferences.FirstOrDefault(_ => _.EmployeeId == HttpContext.User.Claims.ToList()[0].Value);
+            //The ViewBags that handle the Settings:
+            ViewBag.NotificationEnabled = preference.NotificationEnabled;
+            ViewBag.NotificationTimeSeconds = preference.NotificationTimeSeconds;
+
+
             //When there is already a timer running it should select all the details from this timer. 
             if (running is not null)
             {
@@ -116,20 +122,7 @@ namespace BlisTimer.Controllers
                 }    
 
             }
-            
-            //This Code takes care of the timer that might be already running.
-            // if (running is not null)
-            // {
-            //     ViewBag.PreSelectedActivity = true;
-            //     ViewBag.PreSelectedActivityId = running.ActivityId;
-            //     ViewBag.PreSelectedActivityName = _context.WorkActivities.Where(_ => _.Id == running.ActivityId).Select(_ => _.Name).FirstOrDefault();
-            //     ViewBag.PreSelectedProject = true;
-            //     ViewBag.PreSelectedProjectName = _context.Projects.Include(_ => _.Activities).Where(_ => _.Activities.Select(_ => _.Id).Contains(_.Id)).Select(_ => _.Name).FirstOrDefault();
-            //     ViewBag.PreSelectedHourType = true;
-            //     ViewBag.PreSelectedHourTypeId = HttpContext.Session.GetString("HourTypeId");
-            //     ViewBag.PreSelectedHourTypeName = HttpContext.Session.GetString("HourTypeName");
-            // }
-            
+
             return View(projectDict);
         }
         [HttpPost]

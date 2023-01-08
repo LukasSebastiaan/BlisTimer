@@ -197,3 +197,23 @@ button:active {
     outline: black;
     background: rgba(255, 255, 255, 0.9);
 }
+.notification{
+    display: none;
+    right: 0;
+    color: black;
+    position: absolute;
+    width: 500px;
+    height: 300px;
+    background-color: antiquewhite;
+    margin: 0 auto;
+    align-items: center;
+    justify-content: center;
+    border-radius: 2rem 0px 0px 2rem;
+    transition: transform 5s ease-in;
+
+}
+.notification .message{
+    margin: 40px;
+    font-size: 30px;
+    position: relative;
+}

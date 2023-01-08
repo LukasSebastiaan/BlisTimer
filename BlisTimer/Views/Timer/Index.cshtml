@@ -24,6 +24,8 @@
     const options = document.getElementsByTagName("option");
     
     let interval = null;
+    let secondsOfNotification = 0
+    let notificationIsShown = false
     let seconds = @ViewBag.Time;
     if (@ViewBag.RunningTimer === true){
         start();
@@ -40,7 +42,24 @@
     // Timer updates
     function timer() {
       seconds++;
-
+      
+      notificationIsShown && secondsOfNotification++;
+      //When Notifications are enabled we enter
+      if (@ViewBag.NotificationEnabled === 1){
+        
+        //when the seconds are divisible the message is shown
+        if (seconds % @ViewBag.NotificationTimeSeconds === 0){
+          document.getElementById("note").style.display = "flex"
+          console.log(document.getElementById("note"))
+          notificationIsShown = true;
+        }
+        //after 2 mins the notification is revoked. /todo: make setting to change this.
+        if (secondsOfNotification % 120 === 0 && secondsOfNotification !== 0){
+          secondsOfNotification = 0
+          notificationIsShown = false
+          document.getElementById("note").style.display = "None"
+        }
+      }
       //Format the time 
       let hrs = Math.floor(seconds / 3600);
       let mins = Math.floor((seconds - (hrs * 3600)) / 60);
@@ -105,6 +124,9 @@
 
     //confirm button
     function confirm() {
+      document.getElementById("note").style.display = "None";
+      notificationIsShown = false;
+      secondsOfNotification = 0;
       closePopup();
       seconds = 0;
       clearInterval(interval);
@@ -330,4 +352,10 @@
         <button type="button" class="btn" onclick="cancel()">Cancel</button>
       </div>
     </div>
+    <div id="note" class="notification">
+      <div class="message">
+        Hey there! Your timer has been running
+        for quite a while now. Are you still here?
+      </div>
+  </div>
   </div>
