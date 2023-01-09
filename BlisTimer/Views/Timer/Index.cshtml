@@ -35,6 +35,17 @@
         start();
     }
     
+    function UpdateTimerSecondsDisplay() {
+      let hrs = Math.floor(seconds / 3600);
+      let mins = Math.floor((seconds - (hrs * 3600)) / 60);
+      let secs = seconds % 60;
+      
+      if (secs < 10) secs = "0" + secs;
+      if (mins < 10) mins = "0" + mins;
+      if (hrs < 10) hrs = "0" + hrs;
+      
+      time_el.innerText = `${hrs}:${mins}:${secs}`;	
+    }
 
     // Event Listeners
     
@@ -49,12 +60,13 @@
       if (seconds < 28800 && @ViewBag.AllOptionsSelected === true){
         seconds += @ViewBag.ModifyCount
         if (!timerOn){
-          seconds -= 1
+          seconds--
           timer()
         }
         else{
           secondsAddSubtracted += @ViewBag.ModifyCount
           console.log(secondsAddSubtracted)
+          UpdateTimerSecondsDisplay();
         }
       }
     }
@@ -63,13 +75,13 @@
       if (seconds >= @ViewBag.ModifyCount && @ViewBag.AllOptionsSelected === true){
         if (!timerOn){
           seconds -= @ViewBag.ModifyCount;
-          seconds -= 1;
           timer()
         }
         else if (seconds - @ViewBag.ModifyCount >= startSeconds){
           seconds -= @ViewBag.ModifyCount;
           secondsAddSubtracted -= @ViewBag.ModifyCount
           console.log(secondsAddSubtracted)
+          UpdateTimerSecondsDisplay();
         }
       }
     }
@@ -84,7 +96,9 @@
         
         //when the seconds are divisible the message is shown
         if (seconds % @ViewBag.NotificationTimeSeconds === 0 && seconds !== 0){
-          document.getElementById("note").style.display = "flex"
+          document.getElementById("note").style.display = "flex";
+          setTimeout(function(){ document.getElementById("note").style.right = "0"; }, 10);
+          
           console.log(document.getElementById("note"))
           notificationIsShown = true;
         }
@@ -96,16 +110,7 @@
         }
       }
       //Format the time 
-      let hrs = Math.floor(seconds / 3600);
-      let mins = Math.floor((seconds - (hrs * 3600)) / 60);
-      let secs = seconds % 60;
-      
-      if (secs < 10) secs = "0" + secs;
-      if (mins < 10) mins = "0" + mins;
-      if (hrs < 10) hrs = "0" + hrs;
-      
-      time_el.innerText = `${hrs}:${mins}:${secs}`;	
-        
+      UpdateTimerSecondsDisplay();
     }
     
       
@@ -201,6 +206,14 @@
     function cancel() {
       closePopup();
       start();
+    }
+    
+    
+    function closeNotifiction() {
+      document.getElementById("note").style.removeProperty("right");
+      setTimeout(function(){ document.getElementById("note").style.removeProperty("display"); }, 1000);
+      secondsOfNotification = 0
+      notificationIsShown = false
     }
 
 
@@ -394,10 +407,11 @@
       <button type="button" class="btn" onclick="cancel()">Cancel</button>
     </div>
   </div>
-    <div id="note" class="notification">
-      <div class="message">
-        Hey there! Your timer has been running
-        for quite a while now. Are you still here?
-      </div>
+  <div id="note" class="notification">
+    <button onclick="closeNotifiction()"><img src="icons/Close%20Square%20Filled%20SVG%20File.svg"/></button>
+    <div class="message">
+      Hey there! Your timer has been running
+      for quite a while now. Are you still here?
+    </div>
   </div>
   </div>
