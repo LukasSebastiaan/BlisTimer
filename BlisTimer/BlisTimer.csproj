@@ -49,4 +49,8 @@
       <DependentUpon>index.cshtml</DependentUpon>
     </Content>
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20230107235307_InitalDb.Designer.cs" />
+  </ItemGroup>
 </Project>

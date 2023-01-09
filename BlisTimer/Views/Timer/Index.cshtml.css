@@ -75,6 +75,19 @@
     transition: all 2s ease;
 }
 
+#clock #plus{
+    position: relative;
+    right: -70%;
+    font-size: 50px;
+    cursor: pointer;
+}
+#clock #minus{
+    position: relative;
+    right: 70%;
+    font-size: 50px;
+    cursor: pointer;
+}
+
 #clock.clock-fase {
     animation: clock-fase 4s ease-in-out infinite;
     justify-content: center;
@@ -192,3 +205,78 @@ button:active {
     outline: black;
     background: rgba(255, 255, 255, 0.9);
 }
+
+@keyframes notification-move {
+    0% {
+        right: 230px;
+        top: 10px;
+    }
+    10% {
+        right: 0;
+        top: 0px;
+    }
+    20% {
+        right: 1000px;
+        top: 400px;
+    }
+    30% {
+        right: 1000px;
+        top: 0px;
+    }
+    40% {
+        right: 0;
+        top: 0px;
+    }
+    50% {
+        right: 1000px;
+        top: 100px;
+    }
+    80% {
+        right: 500px;
+        top: 440px;
+    }
+    100% {
+        right: 230px;
+        top: 10px;
+    }
+}
+
+.notification{
+    display: none;
+    right: -500px;
+    bottom: 0;
+    position: absolute;
+    width: 300px;
+    height: 100px;
+    background-color: #202020;
+    box-shadow: black 0px 0px 10px 0px;
+    color: white;
+    margin: 0 auto;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem 0px 0px 0rem;
+    transition: all 1s ease-out;
+}
+
+.notification button {
+    position: absolute;
+    background: transparent;
+    border: none;
+    left: 5px;
+    top: 5px;
+}
+
+.notification button img {
+    width: 21px;
+    height: 21px;
+    filter: invert(1);
+}
+
+.notification .message{
+    margin: 40px;
+    margin-left: 50px;
+    font-size: 14px;
+    position: relative;
+}
+
+

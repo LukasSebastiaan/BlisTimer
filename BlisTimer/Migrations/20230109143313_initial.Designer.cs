@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BlisTimer.Migrations
 {
     [DbContext(typeof(TimerDbContext))]
-    [Migration("20221205114729_Initial")]
-    partial class Initial
+    [Migration("20230109143313_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -94,12 +94,15 @@ namespace BlisTimer.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("text");
 
+                    b.Property<int>("ChangeCountTimeSeconds")
+                        .HasColumnType("integer");
+
                     b.Property<string>("EmployeeId")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<bool>("NotificationEnabled")
-                        .HasColumnType("boolean");
+                    b.Property<int>("NotificationEnabled")
+                        .HasColumnType("integer");
 
                     b.Property<int>("NotificationTimeSeconds")
                         .HasColumnType("integer");

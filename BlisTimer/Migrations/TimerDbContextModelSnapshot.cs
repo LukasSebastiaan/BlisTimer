@@ -92,12 +92,15 @@ namespace BlisTimer.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("text");
 
+                    b.Property<int>("ChangeCountTimeSeconds")
+                        .HasColumnType("integer");
+
                     b.Property<string>("EmployeeId")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<bool>("NotificationEnabled")
-                        .HasColumnType("boolean");
+                    b.Property<int>("NotificationEnabled")
+                        .HasColumnType("integer");
 
                     b.Property<int>("NotificationTimeSeconds")
                         .HasColumnType("integer");

@@ -9,6 +9,7 @@
 
 @section head{
   <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
+  <script src="https://kit.fontawesome.com/c6d7f2cfd9.js" crossorigin="anonymous"></script>
 }
 @section scripts {
   <script type="text/javascript">
@@ -25,24 +26,19 @@
     const options = document.getElementsByTagName("option");
     
     let interval = null;
+    let secondsOfNotification = 0
+    let notificationIsShown = false
     let seconds = @ViewBag.Time;
+    let secondsAddSubtracted = 0
+    let startSeconds = 0
+    let timerOn = false
     if (@ViewBag.RunningTimer === true){
         start();
     }
-
-    // Event Listeners
     
-    startButton.addEventListener('click', start);
     
-    stopButton.addEventListener('click', stop);
-    pauseButton.addEventListener('click', pause);
-
-
-    // Timer updates
-    function timer() {
-      seconds++;
-
-      //Format the time 
+    
+    function UpdateTimerSecondsDisplay() {
       let hrs = Math.floor(seconds / 3600);
       let mins = Math.floor((seconds - (hrs * 3600)) / 60);
       let secs = seconds % 60;
@@ -52,7 +48,85 @@
       if (hrs < 10) hrs = "0" + hrs;
       
       time_el.innerText = `${hrs}:${mins}:${secs}`;	
+    }
+
+    // Event Listeners
+    
+    startButton.addEventListener('click', start);
+    
+    stopButton.addEventListener('click', stop);
+    window.addEventListener('beforeunload', function (e) {
+
+            
+            console.log("hello")
+          $.ajax({
+            type: "POST",
+            url: "/TimeLog/ChangeRunningTimer/",
+              data: { time: secondsAddSubtracted },
+              success: function (result) {
+                console.log("Added timer with code " + result)
+              }
+          })
+
+    });
+
+    function addToTimer() {
+      console.log(seconds < 28800 && @ViewBag.AllOptionsSelected === true)
+      console.log(typeof @ViewBag.AllOptionsSelected)
+      if (seconds < 28800 && @ViewBag.AllOptionsSelected === true){
+        seconds += @ViewBag.ModifyCount
+        if (!timerOn){
+          seconds--
+          timer()
+        }
+        else{
+          secondsAddSubtracted += @ViewBag.ModifyCount
+          console.log(secondsAddSubtracted)
+          UpdateTimerSecondsDisplay();
+        }
+      }
+    }
+    function subtractFromTimer(){
+      console.log(startSeconds)
+      if (seconds >= @ViewBag.ModifyCount && @ViewBag.AllOptionsSelected === true){
+        seconds -= @ViewBag.ModifyCount;
+        if (!timerOn){
+          seconds--
+          timer()
+        }
+        else if (seconds - @ViewBag.ModifyCount >= startSeconds){
+          secondsAddSubtracted -= @ViewBag.ModifyCount
+          console.log(secondsAddSubtracted)
+          UpdateTimerSecondsDisplay();
+        }
+      }
+    }
+
+    // Timer updates
+    function timer() {
+      seconds++;
+      
+      notificationIsShown && secondsOfNotification++;
+      //When Notifications are enabled we enter
+      if (@ViewBag.NotificationEnabled === 1 && timerOn){
         
+        //when the seconds are divisible the message is shown
+        if (seconds % @ViewBag.NotificationTimeSeconds === 0 && seconds !== 0){
+          document.getElementById("note").style.display = "flex";
+          setTimeout(function(){ document.getElementById("note").style.right = "0"; }, 10);
+          
+          console.log(document.getElementById("note"))
+          notificationIsShown = true;
+        }
+        //after 2 mins the notification is revoked. /todo: make setting to change this.
+        if (secondsOfNotification % 120 === 0 && secondsOfNotification !== 0){
+          secondsOfNotification = 0
+          notificationIsShown = false
+          document.getElementById("note").style.display = "None"
+        }
+      }
+      //Format the time 
+      UpdateTimerSecondsDisplay();
     }
     
       
@@ -63,14 +137,15 @@
         return;
       }
       
-      
+      timerOn = true
       console.log(typeof @ViewBag.RunningTimer);
       interval = setInterval(timer, 1000);
       if (@ViewBag.RunningTimer === false){ 
+        startSeconds = seconds;
         $.ajax({
           type: "POST",
           url: "/TimeLog/AddRunningTimer",
-            data: "{}",
+            data: { time: seconds },
             success: function (result) {
               console.log("Added timer with code " + result)
             }
@@ -106,16 +181,21 @@
 
     //confirm button
     function confirm() {
+      timerOn = false
+     
+      document.getElementById("note").style.display = "None";
+      notificationIsShown = false;
+      secondsOfNotification = 0;
       closePopup();
       seconds = 0;
       clearInterval(interval);
       interval = null;
       time_el.innerText = "00:00:00";
-      
+      console.log(secondsAddSubtracted)
       $.ajax({
         type: "POST",
         url: "/TimeLog/SumbitTimelog",
-          data: "{}",
+          data: { timeModified: secondsAddSubtracted },
           success: function (result) {
             console.log("Saved time to database with response: " + result)
           }
@@ -142,6 +222,14 @@
     function cancel() {
       closePopup();
       start();
+    }
+    
+    
+    function closeNotifiction() {
+      document.getElementById("note").style.removeProperty("right");
+      setTimeout(function(){ document.getElementById("note").style.removeProperty("display"); }, 1000);
+      secondsOfNotification = 0
+      notificationIsShown = false
     }
 
 
@@ -268,7 +356,7 @@
                 @foreach (var hourtype in @ViewBag.PreSelectedHourTypeList)
                 {
                   <option value="@hourtype.HourTypeId">@hourtype.Label</option>
-                } 
+                }
               }
               @if (@ViewBag.PreSelectedHourType)
               {
@@ -278,14 +366,14 @@
                   {
                     <option value="@hourtype.HourTypeId">@hourtype.Label</option>
                   }
-                } 
+                }
                 @foreach (var hourtype in @ViewBag.PreSelectedHourTypeList)
                 {
                   if (@ViewBag.PreSelectedHourTypeId != hourtype.HourTypeId)
                   {
                     <option value="@hourtype.HourTypeId">@hourtype.Label</option>
                   }
-                } 
+                }
               }
             </select>
           </form>
@@ -293,6 +381,57 @@
       }
     </div>
 
+
+    <div id="clock">
+      <i onclick="subtractFromTimer()" id="minus" class="fa-solid fa-minus"></i>
+      <i onclick="addToTimer()" id="plus" class="fa-solid fa-plus"></i>
+
+      <div class="time">
+        @if (ViewBag.RunningTimer == "true")
+        {
+
+          string hrs = (ViewBag.Time / 3600).ToString();
+          string mins = (((ViewBag.Time - (Int32.Parse(hrs) * 3600))) / 60).ToString();
+          string secs = (ViewBag.Time % 60).ToString();
+
+          if (Int32.Parse(secs) < 10) secs = "0" + secs;
+          if (Int32.Parse(mins) < 10) mins = "0" + mins;
+          if (Int32.Parse(hrs) < 10) hrs = "0" + hrs;
+          <p>@hrs:@mins:@secs</p>;
+        }
+        else
+        {
+          <p>00:00:00</p>
+        }
+      </div>
+    </div>
+
+    <div class="controls-container">
+      <div class="controls">
+        @if (!@String.IsNullOrEmpty(ViewBag.PreSelectedHourTypeId))
+        {
+          <button id="start">Start</button>
+        }
+        else
+        {
+          <button id="start-disabled">Start</button>
+        }
+        <button id="stop">Stop</button>
+      </div>
+    </div>
+
+    <div class="popup" id="popup">
+      <h2>@ViewBag.PreSelectedProjectName > @ViewBag.PreSelectedActivityName > @ViewBag.PreSelectedHourTypeName</h2>
+      <p>Please confirm you have worked (Time) on this task.</p>
+      <button type="button" class="btn" onclick="confirm()">Confirm</button>
+      <button type="button" class="btn" onclick="cancel()">Cancel</button>
+    </div>
+  </div>
+  <div id="note" class="notification">
+    <button onclick="closeNotifiction()"><img src="icons/Close%20Square%20Filled%20SVG%20File.svg"/></button>
+    <div class="message">
+      Hey there! Your timer has been running
+      for quite a while now. Are you still here?
     
       <div id="clock">
         <div class="time">
@@ -337,4 +476,5 @@
         <button type="button" class="btn" onclick="cancel()">Cancel</button>
       </div>
     </div>
+  </div>
   </div>
