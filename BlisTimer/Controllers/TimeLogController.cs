@@ -110,6 +110,12 @@ namespace BlisTimer.Controllers
         [HttpPost]
         public async Task<IActionResult> AddRunningTimer(int time)
         {
+            if (_context.RunningTimers.Any(_ => _.EmployeeId == HttpContext.User.Claims.ToList()[0].Value))
+            {
+                Console.WriteLine("There is already a running timer");
+                return BadRequest("There is already a running timer for the employee");
+            }
+            
             try
             {
                 await _context.RunningTimers.AddAsync(new()

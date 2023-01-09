@@ -3,16 +3,16 @@
 @model Dictionary<Tuple<BlisTimer.Models.Project, bool>, List<WorkActivity>>
 
 @{
-  ViewData["Title"] = "Stopwatch Page";
-  Layout = "_HomeLayout";
+    ViewData["Title"] = "Stopwatch Page";
+    Layout = "_HomeLayout";
 }
 
 @section head{
-  <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
-  <script src="https://kit.fontawesome.com/c6d7f2cfd9.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
+    <script src="https://kit.fontawesome.com/c6d7f2cfd9.js" crossorigin="anonymous"></script>
 }
 @section scripts {
-  <script type="text/javascript">
+    <script type="text/javascript">
     // Globals
     const time_el = document.querySelector('.watch .time');
     const watch = document.getElementsByClassName('watch')[0];
@@ -24,6 +24,7 @@
     const hourtypeDropdown = document.getElementById("hourtype")
     const clock = document.getElementById("clock")
     const options = document.getElementsByTagName("option");
+    const workedTime = document.getElementById("worked-time");
     
     let interval = null;
     let secondsOfNotification = 0
@@ -48,6 +49,7 @@
       if (hrs < 10) hrs = "0" + hrs;
       
       time_el.innerText = `${hrs}:${mins}:${secs}`;	
+      workedTime.innerText = `${hrs}:${mins}:${secs}`;	
     }
 
     // Event Listeners
@@ -140,7 +142,6 @@
       timerOn = true
       console.log(typeof @ViewBag.RunningTimer);
       interval = setInterval(timer, 1000);
-      if (@ViewBag.RunningTimer === false){ 
         startSeconds = seconds;
         $.ajax({
           type: "POST",
@@ -150,7 +151,6 @@
               console.log("Added timer with code " + result)
             }
         })
-      }
         
       
       startButton.style.opacity = 0.3;
@@ -235,17 +235,24 @@
 
     //Popup message
     function openPopup() {
+        
       popup = document.getElementById("popup");
-      watch.style.opacity = 0;
+      for (let i = 0; i < watch.children.length-1; i++) {
+        watch.children[i].style.opacity = 0;
+      }
       watch.style.pointerEvents = "none";
-      popup.classList.add("open-popup");
+      setTimeout(function(){ popup.classList.add("open-popup")}, 500);
     }
 
     function closePopup() {
       popup = document.getElementById("popup");
-      watch.style.opacity = 1;
-      watch.style.pointerEvents = "auto";
       popup.classList.remove("open-popup");
+      setTimeout(function(){
+        for (let i = 0; i < watch.children.length-1; i++) {
+          watch.children[i].style.opacity = 1;
+        }
+        watch.style.pointerEvents = "auto";
+      }, 500);
     }
     
     function submitProjectId(){
@@ -272,209 +279,169 @@
 
 
 <div id="screen" >
-  <div class="watch">
+<div class="watch">
     <div class="task">
-      <form method="post" id="projects" asp-action="Index" asp-controller="Timer">
-        <input type="hidden" name="Id" value="givenProject">
-        <select name="Project" id="project" onchange="submitProjectId()">
-          @if (!@ViewBag.preSelectedProject)
-          {
-            <option selected disabled hidden>Select a Project</option>
-            @foreach (var project in @Model)
-            {
-              <option value="@project.Key.Item1.Id">@project.Key.Item1.Name</option>
-            }
-          }
-          @if (@ViewBag.PreSelectedProject)
-          {
-            @foreach (var Selectedproject in @Model)
-            {
-              if (Selectedproject.Key.Item2 == true)
-              {
-                <option value="@Selectedproject.Key.Item1.Id">@Selectedproject.Key.Item1.Name</option>
-              }
-            }
-            @foreach (var project in @Model)
-            {
-              if (project.Key.Item2 == false)
-              {
-                <option value="@project.Key.Item1.Id">@project.Key.Item1.Name</option>
-              }
-            }
-          }
-        </select>
-      </form>
-      @if (@ViewBag.PreSelectedProject)
-      {
-        <form method="post" id="activitys" asp-action="Index2" asp-controller="Timer">
-          <input type="hidden" name="Id" value="givenActivity">
-          <select name="Activity" id="activity" onchange="submitActivityId()">
-            @if (!@ViewBag.PreSelectedActivity)
-            {
-              <option selected disabled hidden>Select an Activity</option>
-              @foreach (var Selectedproject in @Model)
-              {
-                if (Selectedproject.Key.Item2 == true)
+        <form method="post" id="projects" asp-action="Index" asp-controller="Timer">
+            <input type="hidden" name="Id" value="givenProject">
+            <select name="Project" id="project" onchange="submitProjectId()">
+                @if (!@ViewBag.preSelectedProject)
                 {
-                  foreach (var activity in Selectedproject.Value)
-                  {
-                    <option value="@activity.Id">@activity.Name</option>
-                  }
+                    <option selected disabled hidden>Select a Project</option>
+                    @foreach (var project in @Model)
+                    {
+                        <option value="@project.Key.Item1.Id">@project.Key.Item1.Name</option>
+                    }
                 }
-              }
+                @if (@ViewBag.PreSelectedProject)
+                {
+                    @foreach (var Selectedproject in @Model)
+                    {
+                        if (Selectedproject.Key.Item2 == true)
+                        {
+                            <option value="@Selectedproject.Key.Item1.Id">@Selectedproject.Key.Item1.Name</option>
+                        }
+                    }
+                    @foreach (var project in @Model)
+                    {
+                        if (project.Key.Item2 == false)
+                        {
+                            <option value="@project.Key.Item1.Id">@project.Key.Item1.Name</option>
+                        }
+                    }
+                }
+            </select>
+        </form>
+        @if (@ViewBag.PreSelectedProject)
+        {
+            <form method="post" id="activitys" asp-action="Index2" asp-controller="Timer">
+                <input type="hidden" name="Id" value="givenActivity">
+                <select name="Activity" id="activity" onchange="submitActivityId()">
+                    @if (!@ViewBag.PreSelectedActivity)
+                    {
+                        <option selected disabled hidden>Select an Activity</option>
+                        @foreach (var Selectedproject in @Model)
+                        {
+                            if (Selectedproject.Key.Item2 == true)
+                            {
+                                foreach (var activity in Selectedproject.Value)
+                                {
+                                    <option value="@activity.Id">@activity.Name</option>
+                                }
+                            }
+                        }
 
 
-            }
+                    }
+                    @if (@ViewBag.PreSelectedActivity)
+                    {
+                        @foreach (var Selectedproject in @Model)
+                        {
+                            if (Selectedproject.Key.Item2 == true)
+                            {
+
+                                <option value="@ViewBag.PreSelectedActivityId">@ViewBag.PreSelectedActivityName</option>
+                                foreach (var activity in Selectedproject.Value)
+                                {
+                                    if (activity.Id != @ViewBag.PreSelectedActivityId)
+                                    {
+                                        <option value="@activity.Id">@activity.Name</option>
+                                    }
+                                }
+                            }
+                        }
+                    }
+                </select>
+            </form>
             @if (@ViewBag.PreSelectedActivity)
             {
-              @foreach (var Selectedproject in @Model)
-              {
-                if (Selectedproject.Key.Item2 == true)
-                {
-
-                  <option value="@ViewBag.PreSelectedActivityId">@ViewBag.PreSelectedActivityName</option>
-                  foreach (var activity in Selectedproject.Value)
-                  {
-                    if (activity.Id != @ViewBag.PreSelectedActivityId)
-                    {
-                      <option value="@activity.Id">@activity.Name</option>
-                    }
-                  }
-                }
-              }
+                <form method="post" id="hourtypes" asp-action="Index3" asp-controller="Timer">
+                    <input type="hidden" name="Id" value="givenHourType">
+                    <select name="HourType" id="hourtype" onchange="submitHourTypeId()">
+                        @if (!@ViewBag.PreSelectedHourType)
+                        {
+                            <option selected disabled hidden>Select an HourType</option>
+                            @foreach (var hourtype in @ViewBag.PreSelectedHourTypeList)
+                            {
+                                <option value="@hourtype.HourTypeId">@hourtype.Label</option>
+                            }
+                        }
+                        @if (@ViewBag.PreSelectedHourType)
+                        {
+                            @foreach (var hourtype in @ViewBag.PreSelectedHourTypeList)
+                            {
+                                if (@ViewBag.PreSelectedHourTypeId == hourtype.HourTypeId)
+                                {
+                                    <option value="@hourtype.HourTypeId">@hourtype.Label</option>
+                                }
+                            }
+                            @foreach (var hourtype in @ViewBag.PreSelectedHourTypeList)
+                            {
+                                if (@ViewBag.PreSelectedHourTypeId != hourtype.HourTypeId)
+                                {
+                                    <option value="@hourtype.HourTypeId">@hourtype.Label</option>
+                                }
+                            }
+                        }
+                    </select>
+                </form>
             }
-          </select>
-        </form>
-        @if (@ViewBag.PreSelectedActivity)
-        {
-          <form method="post" id="hourtypes" asp-action="Index3" asp-controller="Timer">
-            <input type="hidden" name="Id" value="givenHourType">
-            <select name="HourType" id="hourtype" onchange="submitHourTypeId()">
-              @if (!@ViewBag.PreSelectedHourType)
-              {
-                <option selected disabled hidden>Select an HourType</option>
-                @foreach (var hourtype in @ViewBag.PreSelectedHourTypeList)
-                {
-                  <option value="@hourtype.HourTypeId">@hourtype.Label</option>
-                }
-              }
-              @if (@ViewBag.PreSelectedHourType)
-              {
-                @foreach (var hourtype in @ViewBag.PreSelectedHourTypeList)
-                {
-                  if (@ViewBag.PreSelectedHourTypeId == hourtype.HourTypeId)
-                  {
-                    <option value="@hourtype.HourTypeId">@hourtype.Label</option>
-                  }
-                }
-                @foreach (var hourtype in @ViewBag.PreSelectedHourTypeList)
-                {
-                  if (@ViewBag.PreSelectedHourTypeId != hourtype.HourTypeId)
-                  {
-                    <option value="@hourtype.HourTypeId">@hourtype.Label</option>
-                  }
-                }
-              }
-            </select>
-          </form>
         }
-      }
     </div>
 
 
     <div id="clock">
-      <i onclick="subtractFromTimer()" id="minus" class="fa-solid fa-minus"></i>
-      <i onclick="addToTimer()" id="plus" class="fa-solid fa-plus"></i>
+        <i onclick="subtractFromTimer()" id="minus" class="fa-solid fa-minus"></i>
+        <i onclick="addToTimer()" id="plus" class="fa-solid fa-plus"></i>
 
-      <div class="time">
-        @if (ViewBag.RunningTimer == "true")
-        {
+        <div class="time">
+            @if (ViewBag.RunningTimer == "true")
+            {
 
-          string hrs = (ViewBag.Time / 3600).ToString();
-          string mins = (((ViewBag.Time - (Int32.Parse(hrs) * 3600))) / 60).ToString();
-          string secs = (ViewBag.Time % 60).ToString();
+                string hrs = (ViewBag.Time / 3600).ToString();
+                string mins = (((ViewBag.Time - (Int32.Parse(hrs) * 3600))) / 60).ToString();
+                string secs = (ViewBag.Time % 60).ToString();
 
-          if (Int32.Parse(secs) < 10) secs = "0" + secs;
-          if (Int32.Parse(mins) < 10) mins = "0" + mins;
-          if (Int32.Parse(hrs) < 10) hrs = "0" + hrs;
-          <p>@hrs:@mins:@secs</p>;
-        }
-        else
-        {
-          <p>00:00:00</p>
-        }
-      </div>
+                if (Int32.Parse(secs) < 10) secs = "0" + secs;
+                if (Int32.Parse(mins) < 10) mins = "0" + mins;
+                if (Int32.Parse(hrs) < 10) hrs = "0" + hrs;
+                <p>@hrs:@mins:@secs</p>;
+            }
+            else
+            {
+                <p>00:00:00</p>
+            }
+        </div>
     </div>
 
     <div class="controls-container">
-      <div class="controls">
-        @if (!@String.IsNullOrEmpty(ViewBag.PreSelectedHourTypeId))
-        {
-          <button id="start">Start</button>
-        }
-        else
-        {
-          <button id="start-disabled">Start</button>
-        }
-        <button id="stop">Stop</button>
-      </div>
+        <div class="controls">
+            @if (!@String.IsNullOrEmpty(ViewBag.PreSelectedHourTypeId))
+            {
+                <button id="start">Start</button>
+            }
+            else
+            {
+                <button id="start-disabled">Start</button>
+            }
+            <button id="stop">Stop</button>
+        </div>
     </div>
 
     <div class="popup" id="popup">
-      <h2>@ViewBag.PreSelectedProjectName > @ViewBag.PreSelectedActivityName > @ViewBag.PreSelectedHourTypeName</h2>
-      <p>Please confirm you have worked (Time) on this task.</p>
-      <button type="button" class="btn" onclick="confirm()">Confirm</button>
-      <button type="button" class="btn" onclick="cancel()">Cancel</button>
+        <p>Do you wanna end the task?</p>
+        <div id="worked-time">00:00:00</div> 
+        <div id="button-container">
+            <button type="button" class="btn" onclick="confirm()">Confirm</button>
+            <button type="button" class="btn" onclick="cancel()">Cancel</button>
+        </div>
     </div>
-  </div>
-  <div id="note" class="notification">
+</div>
+    
+<div id="note" class="notification">
     <button onclick="closeNotifiction()"><img src="icons/Close%20Square%20Filled%20SVG%20File.svg"/></button>
     <div class="message">
-      Hey there! Your timer has been running
-      for quite a while now. Are you still here?
-    
-      <div id="clock">
-        <div class="time">
-          @if (ViewBag.RunningTimer == "true"){
-              
-            string hrs = (ViewBag.Time / 3600).ToString();
-            string mins = (((ViewBag.Time - (Int32.Parse(hrs) * 3600))) / 60).ToString();
-            string secs = (ViewBag.Time % 60).ToString();
-            
-            if (Int32.Parse(secs) < 10) secs = "0" + secs;
-            if (Int32.Parse(mins) < 10) mins = "0" + mins;
-            if (Int32.Parse(hrs) < 10) hrs = "0" + hrs;
-            <p>@hrs:@mins:@secs</p>;
-          }
-          else
-          {
-            <p>00:00:00</p>
-          }
-        </div>
-      </div>
-   
-      <div class="controls-container">
-        <div class="controls">
-          @if (!@String.IsNullOrEmpty(ViewBag.PreSelectedHourTypeId))
-          {
-            <button id="start">Start</button>
-          }
-          else
-          {
-            <button id="start-disabled">Start</button>
-          }
-          <button id="stop">Stop</button>
-        </div>
-      </div>
+        Hey there! Your timer has been running
+        for quite a while now. Are you still here?
     </div>
-    
-    <div class="popup" id="popup">
-      <h2>@ViewBag.PreSelectedProjectName > @ViewBag.PreSelectedActivityName > @ViewBag.PreSelectedHourTypeName</h2>
-      <p>Please confirm you have worked (Time) on this task.</p>
-      <div class="controls">
-        <button type="button" class="btn" onclick="confirm()">Confirm</button>
-        <button type="button" class="btn" onclick="cancel()">Cancel</button>
-      </div>
-    </div>
-  </div>
-  </div>
+</div>
+</div>

@@ -27,13 +27,23 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    transition: all 2s ease;
+    transition: all 0.5s ease;
 }
 
 .popup {
     opacity: 0;
+    top: 0;
+    display: flex;
     position: absolute;
+    align-items: center;
+    gap: 50px;
+    justify-content: center;
     pointer-events: none;
+}
+
+.popup #button-container {
+    display: flex;
+    gap: 20px;
 }
 
 .watch {
@@ -72,7 +82,7 @@
     box-shadow: 0px 0px 20px 0px rgba(240, 200, 0, 0.1);
     justify-content: center;
     align-items: center;
-    transition: all 2s ease;
+    transition: all 0.5s ease;
 }
 
 #clock #plus{
@@ -146,6 +156,25 @@ button:active {
 .open-popup {
     opacity: 1;
     pointer-events: auto;
+}
+
+.popup #worked-time {
+    /* make the time (format HH:MM:SS) look good with a nice border */
+    font-size: 4rem;
+    font-weight: 500;
+    margin-bottom: 100px;
+    min-width: 70%;
+    border: 2px solid var(--blis-white);
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.popup #worked-activity {
+    /* The worked activity that shows above the time to indicate what task was worked on
+     put in in a box like a header*/
+    font-size: 2rem;
+    font-weight: 500;
+    
 }
 
 .popup h2 {
