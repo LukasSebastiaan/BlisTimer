@@ -35,6 +35,8 @@
         start();
     }
     
+    
+    
     function UpdateTimerSecondsDisplay() {
       let hrs = Math.floor(seconds / 3600);
       let mins = Math.floor((seconds - (hrs * 3600)) / 60);
@@ -52,7 +54,20 @@
     startButton.addEventListener('click', start);
     
     stopButton.addEventListener('click', stop);
-    pauseButton.addEventListener('click', pause);
+    window.addEventListener('beforeunload', function (e) {
+
+            
+            console.log("hello")
+          $.ajax({
+            type: "POST",
+            url: "/TimeLog/ChangeRunningTimer/",
+              data: { time: secondsAddSubtracted },
+              success: function (result) {
+                console.log("Added timer with code " + result)
+              }
+          })
+
+    });
 
     function addToTimer() {
       console.log(seconds < 28800 && @ViewBag.AllOptionsSelected === true)
@@ -73,12 +88,12 @@
     function subtractFromTimer(){
       console.log(startSeconds)
       if (seconds >= @ViewBag.ModifyCount && @ViewBag.AllOptionsSelected === true){
+        seconds -= @ViewBag.ModifyCount;
         if (!timerOn){
-          seconds -= @ViewBag.ModifyCount;
+          seconds--
           timer()
         }
         else if (seconds - @ViewBag.ModifyCount >= startSeconds){
-          seconds -= @ViewBag.ModifyCount;
           secondsAddSubtracted -= @ViewBag.ModifyCount
           console.log(secondsAddSubtracted)
           UpdateTimerSecondsDisplay();

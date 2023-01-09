@@ -130,5 +130,26 @@ namespace BlisTimer.Controllers
             }
             
         }
+
+        public async Task<IActionResult> ChangeRunningTimer(int time)
+        {
+            try
+            {
+                var employeeId = HttpContext.User.Claims.ToList()[0].Value;
+
+                var timer = _context.RunningTimers.FirstOrDefault(_ => _.EmployeeId == employeeId);
+                var startTime = timer.StartTime.ToUniversalTime().AddHours(1);
+                timer.StartTime = timer.StartTime.AddSeconds(time * -1);
+                
+
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+            catch (Exception err)
+            {
+                _logger.LogError("Couldn't add running timer to database with error: " + err.Message);
+                return BadRequest("There was probably already a timer running for this employee");
+            }
+        }
     }
 }
