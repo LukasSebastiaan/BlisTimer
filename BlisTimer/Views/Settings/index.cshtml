@@ -12,21 +12,23 @@
 <body>
 <div id="screen">
     <div class="watch">
-        <div class="settings">
-            <form method="post" asp-action="Index" id="settings-form">
-                <ul>
-                    <label>Notifications</label>
-                    <input id="notification-enabled" type="checkbox" asp-for="NotificationEnabled">
-                    <div class="notification-time">
-                        <label>Notification Time</label>
-                        <input type="number" min="1" max="8" asp-for="NotificationTimeHours" value="@ViewBag.timeInHours">
-                    </div>
-                    <label>Add/Subtract time from timer</label>
-                    <input type="number" min="1" max="600" asp-for="ChangeCountTimeSeconds" value="@ViewBag.ModifyCount"> <br>
-                    <button type="submit">Save changes</button>
-                </ul>
-            </form>
-        </div>
+        <form method="post" asp-action="Index" id="settings-form">
+            <div class="formBox">
+                <label>Notifications</label>
+                <input id="notification-enabled" type="checkbox" asp-for="NotificationEnabled">
+            </div class="formBox">
+            <div class="notification-time formBox">
+                <label>Notification Time</label>
+                <input type="number" min="1" max="8" asp-for="NotificationTimeHours" value="@ViewBag.timeInHours">
+            </div>
+            <div class="formBox">
+                <label>Add/Subtract time from timer</label>
+                <input type="number" min="1" max="600" asp-for="ChangeCountTimeSeconds" value="@ViewBag.ModifyCount"> <br>
+            </div>
+            <div id="submitBox">
+                <button type="submit">Save changes</button>
+            </div>
+        </form>
     </div>
 </div>
 <script>
