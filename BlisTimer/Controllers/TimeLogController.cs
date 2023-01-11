@@ -38,6 +38,7 @@ namespace BlisTimer.Controllers
             }
 
             ViewBag.log = _context.TimeLogs.Where(_ => _.Id == id).Single();
+            ViewBag.max = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
             return View();
         }
 

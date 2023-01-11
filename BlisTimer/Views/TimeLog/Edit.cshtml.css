@@ -19,7 +19,6 @@ h1{
 #box {
     border-radius: 7px;
     background-color: var(--blis-purple-lighter);
-    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
