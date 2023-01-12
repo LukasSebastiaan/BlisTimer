@@ -1,5 +1,5 @@
 ﻿* {
-    font-family: 'Fira sans', sans-serif;
+    font-family: 'TT Commons', sans-serif;
     box-sizing: border-box;
     margin: 0;
 }
@@ -110,6 +110,7 @@
     font-size: 5rem;
     font-weight: 700;
     margin-bottom: 1rem;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .controls-container
@@ -189,6 +190,7 @@ button:active {
     font-size: 30px;
     font-weight: 400;
     margin: 10px 0 30px;
+    font-family: "TT Commons", sans-serif;
 }
 
 .btn{
