@@ -57,17 +57,16 @@
     stopButton.addEventListener('click', stop);
     window.addEventListener('beforeunload', function (e) {
 
-            
-            console.log("hello")
-          $.ajax({
+        if (timerOn) {
+            $.ajax({
             type: "POST",
             url: "/TimeLog/ChangeRunningTimer/",
-              data: { time: secondsAddSubtracted },
-              success: function (result) {
+                data: { time: secondsAddSubtracted },
+                success: function (result) {
                 console.log("Added timer with code " + result)
-              }
-          })
-
+                }
+            })
+        }
     });
 
     function addToTimer() {
