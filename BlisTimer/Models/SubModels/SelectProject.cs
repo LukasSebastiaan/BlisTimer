@@ -1,3 +1,5 @@
+using Domain.Models;
+
 namespace BlisTimer.Models;
 
 public class SelectProject

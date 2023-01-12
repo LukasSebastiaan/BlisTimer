@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace BlisTimer.Models;
+namespace Domain.Models;
 
 public class Preferences
 {

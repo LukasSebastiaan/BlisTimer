@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddScoped<UserDataHolder>();
 builder.Services.AddDbContext<TimerDbContext>(
         x => x.UseNpgsql(builder.Configuration.GetConnectionString("TimerDb"))
         );

@@ -1,15 +1,11 @@
-﻿@model BlisTimer.Models.TimeLog
+﻿@model Domain.Models.TimeLog
 
 @{
     Layout = "_HomeLayout";
 }
 
 <style>
-    #box form {
-        width: 100%;
-    }
-
-    input[type=time] {
+    #inputBox input {
         width: 8rem;
         padding-left: 20px;
         border: none;
@@ -18,10 +14,8 @@
 </style>
 
 <div class="main">
-    <h1>Change Timelog</h1>
-    <hr />
     <div id="container">
-        <div id="box">
+        <div id="formBox">
             <form asp-controller="TimeLog" method="post">
                 <div id="labelBox">
                     <label>Start time:</label>

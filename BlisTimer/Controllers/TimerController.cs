@@ -1,9 +1,8 @@
 ﻿using BlisTimer.Data;
-using BlisTimer.Models;
+using Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Project = SimplicateAPI.Enitities.Project;
 
 namespace BlisTimer.Controllers
 {
@@ -23,7 +22,7 @@ namespace BlisTimer.Controllers
         public async Task<IActionResult> Index()
         {
             await _api.SyncDbWithSimplicate();
-            var projectDict = new Dictionary<Tuple<BlisTimer.Models.Project, bool>, List<WorkActivity>>();
+            var projectDict = new Dictionary<Tuple<Domain.Models.Project, bool>, List<WorkActivity>>();
             
             var running = _context.RunningTimers.FirstOrDefault(_ => _.EmployeeId == HttpContext.User.Claims.ToList()[0].Value);
             ViewBag.RunningTimer = "false";

@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Security.Claims;
-using System.Net;
 using BlisTimer.Models;
+using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using BlisTimer.Data;
 using ConsoleApp1;

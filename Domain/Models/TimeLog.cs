@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using BlisTimer.Controllers;
 
-namespace BlisTimer.Models
+namespace Domain.Models
 {
     public class TimeLog
     {
@@ -20,5 +19,11 @@ namespace BlisTimer.Models
 
         public HourType HourType { get; set; } = null!;
         public string HourTypeId { get; set; } = null!;
+        
+        public Project Project { get; set; } = null!;
+        public string ProjectId { get; set; } = null!;
+
+        public bool Deleted { get; set; } = false;
+        public bool Submitted { get; set; } = false;
     }
 }

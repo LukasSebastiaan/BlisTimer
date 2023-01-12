@@ -4,52 +4,45 @@
     margin: 0;
     font-family: "TT Commons", sans-serif;
 }
+
 h1{
     font-weight: 600;
     text-align: center;
-    padding: 10px 0;
 }
+
 #container{
-    width: 100%;
-    min-height: 100vh;
+    height: calc(100vh - 50px);
     display: flex;
     justify-content: center;
     align-items: center;
 }
-#box {
+#formBox{
     border-radius: 7px;
     background-color: var(--blis-purple-lighter);
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    width: 440px;
-    height: 185px;
+    padding: 4%;
     transform: translate(0, -30%);
 }
-#labelBox {
+#labelBox{
     display: flex;
     justify-content: space-between;
     margin: 2vh auto 0 auto;
-    width: 60%;
+    width: 83%;
 }
-#inputBox {
+#inputBox{
     display: flex;
     justify-content: space-between;
     margin: 1vh auto;
-    width: 75%;
-
 }
-#submitBox {
+#submitBox{
     display: flex;
     justify-content: center;
     margin: 6vh auto 0 auto;
     width: 60%;
 }
-input[type=time]:active, input[type=time]:focus {
+input[type=time]:active, input[type=time]:focus{
     outline: 3px solid var(--blis-cyan);
 }
-input[type=submit] {
+input[type=submit]{
     width: 20rem;
     border: 2px solid white;
     background-color: transparent;
@@ -59,6 +52,6 @@ input[type=submit] {
     font-weight: 500;
     transition: 1s ease-out;
 }
-input[type=submit]:hover {
+input[type=submit]:hover{
     background-color: var(--blis-cyan);
 }

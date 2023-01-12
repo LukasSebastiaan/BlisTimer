@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace BlisTimer.Models;
+namespace Domain.Models;
 
 public class RunningTimer
 {

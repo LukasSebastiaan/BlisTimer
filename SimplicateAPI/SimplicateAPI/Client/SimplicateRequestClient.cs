@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Net;
+using System.Text.Json;
 using System.Text.Json.Nodes;
 
 namespace SimplicateAPI.Client;
@@ -30,9 +31,10 @@ public class SimplicateRequestClient
         return JsonSerializer.Deserialize<T>(responseJson["data"]!.ToJsonString())!;
     }
 
-    public async Task PostRequestAsync(string relativeUrl, HttpContent content)
+    public async Task<HttpStatusCode> PostRequestAsync(string relativeUrl, HttpContent content)
     {
         var httpResponse = await HttpClient.PostAsync(relativeUrl, content);
-        httpResponse.EnsureSuccessStatusCode();
+        
+        return httpResponse.StatusCode;
     }
 }

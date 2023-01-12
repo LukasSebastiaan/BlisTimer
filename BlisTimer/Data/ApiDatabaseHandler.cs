@@ -1,11 +1,8 @@
 ﻿using System.Net;
-using BlisTimer.Models;
+using Domain.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using SimplicateAPI;
 using SimplicateAPI.Client;
 using SimplicateAPI.Enitities;
-using Project = BlisTimer.Models.Project;
 
 namespace BlisTimer.Data;
 
@@ -28,10 +25,46 @@ public class ApiDatabaseHandler
         _logger = logger;
     }
 
+    /// <summary>
+    /// Tries to submit a list of TimeLogs to the Simplicate API.
+    /// </summary>
+    /// <param name="hoursToSumbit"></param>
+    /// <returns>List of TimeLogs that were nog sent successfully</returns>
+    public async Task<IEnumerable<TimeLog>> SubmitHoursToSimplicate(List<TimeLog> hoursToSumbit)
+    {
+        var submitTasks = new List<Tuple<Task<HttpStatusCode>, TimeLog>>();
+        
+        for (int tries = 10; tries > 0; tries--)
+        {
+            foreach (var timeLog in hoursToSumbit)
+            {
+                await Task.Delay(100);
+                
+                var task = SimplicateApiClient.Hours.AddHour(timeLog, "");
+                submitTasks.Add(new(task, timeLog));
+            }
+
+            await Task.WhenAll(submitTasks.Select(t => t.Item1));
+            
+            if (submitTasks.All(t => t.Item1.Result == HttpStatusCode.OK))
+                return Enumerable.Empty<TimeLog>();
+            
+            _logger.LogWarning("Failed to submit some hours to Simplicate, retrying");
+            
+            hoursToSumbit = hoursToSumbit
+                .Except(submitTasks
+                    .Where(t => t.Item1.Result == HttpStatusCode.OK)
+                    .Select(t => t.Item2))
+                .ToList();
+        }
+        
+        return hoursToSumbit;
+    }
+
     public async Task<bool> SyncDbWithSimplicate()
     {
         _logger.LogInformation("Getting projects and services (activity) information from Simplicate Api");
-        // get projects from simplicate and also all services
+        // get projects from Simplicate and also all services
 
         SimplicateAPI.Enitities.Project[] projects;
         SimplicateAPI.Enitities.Service[] services;
@@ -155,7 +188,7 @@ public class ApiDatabaseHandler
         if (!_dbContext.Projects.Select(x => x.Id).Contains(project.Id))
         {
             _logger.LogInformation("Adding project from Simplicate to own database");
-            await _dbContext.Projects.AddAsync(new Project()
+            await _dbContext.Projects.AddAsync(new Domain.Models.Project()
             {
                 Id = project.Id,
                 Name = project.Name,

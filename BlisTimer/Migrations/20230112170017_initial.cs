@@ -145,7 +145,10 @@ namespace BlisTimer.Migrations
                     EndTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     ActivityId = table.Column<string>(type: "text", nullable: false),
                     EmployeeId = table.Column<string>(type: "text", nullable: false),
-                    HourTypeId = table.Column<string>(type: "text", nullable: false)
+                    HourTypeId = table.Column<string>(type: "text", nullable: false),
+                    ProjectId = table.Column<string>(type: "text", nullable: false),
+                    Deleted = table.Column<bool>(type: "boolean", nullable: false),
+                    Submitted = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -162,6 +165,12 @@ namespace BlisTimer.Migrations
                         principalTable: "HourTypes",
                         principalColumn: "HourTypeId",
                         onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_TimeLogs_Projects_ProjectId",
+                        column: x => x.ProjectId,
+                        principalTable: "Projects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_TimeLogs_WorkActivities_ActivityId",
                         column: x => x.ActivityId,
@@ -225,6 +234,11 @@ namespace BlisTimer.Migrations
                 name: "IX_TimeLogs_HourTypeId",
                 table: "TimeLogs",
                 column: "HourTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TimeLogs_ProjectId",
+                table: "TimeLogs",
+                column: "ProjectId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_WorkActivities_ProjectId",
