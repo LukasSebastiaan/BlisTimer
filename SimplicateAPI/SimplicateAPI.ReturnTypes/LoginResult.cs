@@ -16,6 +16,7 @@ public sealed class LoginResult
     public enum LoginStatus
     {
         BadCredentials,
+        ServerError,
         Failed,
         Success
     }
@@ -34,4 +35,9 @@ public sealed class LoginResult
     /// Returns a reusable instance of <see cref="LoginResult"/> with <see cref="Status"/> set to <see cref="LoginStatus.Failed"/>.
     /// </summary>
     public static readonly LoginResult Failed = new LoginResult { Status = LoginStatus.Failed };
+    
+    /// <summary>
+    /// Returns a reusable instance of <see cref="LoginResult"/> with <see cref="Status"/> set to <see cref="LoginStatus.ServerDown"/>.
+    /// </summary>
+    public static readonly LoginResult ServerError = new LoginResult { Status = LoginStatus.ServerError };
 }

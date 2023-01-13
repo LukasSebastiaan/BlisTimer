@@ -137,6 +137,22 @@ namespace BlisTimer.Controllers
 
             return View(projectDict);
         }
+
+        [Authorize, HttpGet]
+        public async Task<IActionResult> GetRunningTimer()
+        {
+            var running = _context.RunningTimers.FirstOrDefault(_ => _.EmployeeId == HttpContext.User.Claims.ToList()[0].Value);
+            var preference = _context.Preferences.FirstOrDefault(_ => _.EmployeeId == HttpContext.User.Claims.ToList()[0].Value);
+            
+            if (running is not null)
+            {
+                var time = ((int)(DateTime.Now - running.StartTime).TotalSeconds) - 3600;
+                return Json(new {running = true, time = time});
+            }
+            
+            return Json(new {running = false, time = 0, notificationInterval = preference.NotificationTimeSeconds, notificationEnabled = preference.NotificationEnabled});
+        }
+        
         [HttpPost]
         public IActionResult Index(string Id)
         {

@@ -43,10 +43,10 @@ nav {
     background-color: var(--blis-purple-dark);
 }
 
-#hide-button svg {
+#hide-button img {
     transition: all 0.5s ease;
     filter: invert(100%);
-    width: 100px;
+    width: 30px;
     left: 10px;
 }
 
@@ -75,7 +75,7 @@ nav ul li a {
     width: 100%;
 }
 
-nav ul li a svg {
+nav ul li a img {
     width: 37px;
     height: 37px;
 }
@@ -112,8 +112,8 @@ nav:hover ~ #hide-button:not(:is(#hide-button.hide)) {
     translate: 0 -170px;
 }
 
-#hide-button:not(:is(#hide-button.hide)):hover svg,
-nav:hover ~ #hide-button:not(:is(#hide-button.hide)) svg {
+#hide-button:not(:is(#hide-button.hide)):hover img,
+nav:hover ~ #hide-button:not(:is(#hide-button.hide)) img {
     translate: 0 -19px;
 }
 
@@ -152,12 +152,12 @@ main {
         align-items: center;
         justify-content: center;
         flex-flow: column;
+        bottom: 0;
     }
     
     nav {
         margin: 0;
         left: 0;
-        top: calc(100vh - 50px);
         bottom: 0;
         border-radius: 0;
         border: none;

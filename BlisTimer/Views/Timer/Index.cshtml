@@ -1,4 +1,5 @@
-﻿@model Dictionary<Tuple<Domain.Models.Project, bool>, List<Domain.Models.WorkActivity>>
+﻿@using Microsoft.EntityFrameworkCore.Metadata.Internal
+@model Dictionary<Tuple<Domain.Models.Project, bool>, List<Domain.Models.WorkActivity>>
 
 @{
     ViewData["Title"] = "Stopwatch Page";
@@ -31,7 +32,8 @@
     let secondsAddSubtracted = 0
     let startSeconds = 0
     let timerOn = false
-    if (@ViewBag.RunningTimer === true){
+    let timerIsRunningAlready = @ViewBag.RunningTimer
+    if (timerIsRunningAlready === true){
         start();
     }
     
@@ -57,8 +59,7 @@
     stopButton.addEventListener('click', stop);
     window.addEventListener('beforeunload', function (e) {
 
-          
-            console.log("hello")
+        if (timerOn) {
           $.ajax({
             type: "POST",
             url: "/TimeLog/ChangeRunningTimer/",
@@ -71,34 +72,29 @@
     });
 
     function addToTimer() {
-      console.log(seconds < 28800 && @ViewBag.AllOptionsSelected === true)
-      console.log(typeof @ViewBag.AllOptionsSelected)
-      if (seconds < 28800 && @ViewBag.AllOptionsSelected === true){
-        seconds += @ViewBag.ModifyCount
+      if (@ViewBag.AllOptionsSelected === true){
         if (!timerOn){
+          seconds += @ViewBag.ModifyCount;
           seconds--
           timer()
         }
         else{
+          seconds += @ViewBag.ModifyCount;
           secondsAddSubtracted += @ViewBag.ModifyCount
-          console.log(secondsAddSubtracted)
           UpdateTimerSecondsDisplay();
         }
       }
     }
     function subtractFromTimer(){
-      console.log(startSeconds)
       if (seconds >= @ViewBag.ModifyCount && @ViewBag.AllOptionsSelected === true){
-        seconds -= @ViewBag.ModifyCount;
-        console.log(seconds - @ViewBag.ModifyCount)
-        console.log(startSeconds)
         if (!timerOn){
+          seconds -= @ViewBag.ModifyCount;
           seconds--
           timer()
         }
         else if (seconds - @ViewBag.ModifyCount >= startSeconds){
+          seconds -= @ViewBag.ModifyCount;
           secondsAddSubtracted -= @ViewBag.ModifyCount
-          console.log(secondsAddSubtracted)
           UpdateTimerSecondsDisplay();
         }
       }
@@ -138,19 +134,21 @@
       if (interval) {
         return;
       }
-      
       timerOn = true
-      console.log(typeof @ViewBag.RunningTimer);
-      interval = setInterval(timer, 1000);
-        startSeconds = seconds;
+      
+      if (timerIsRunningAlready === false){
         $.ajax({
-          type: "POST",
-          url: "/TimeLog/AddRunningTimer",
+            type: "POST",
+            url: "/TimeLog/AddRunningTimer/",
             data: { time: seconds },
             success: function (result) {
-              console.log("Added timer with code " + result)
+                console.log("Added timer with code " + result)
             }
         })
+      }
+      
+      interval = setInterval(timer, 1000);
+      startSeconds = seconds;
         
       
       startButton.style.opacity = 0.3;
@@ -201,6 +199,8 @@
           }
       })
       
+      timerIsRunningAlready = false;
+      
       startButton.style.opacity = 1;
       startButton.style.cursor = "pointer";
       
@@ -225,7 +225,7 @@
     }
     
     
-    function closeNotifiction() {
+    function closeNotification() {
       document.getElementById("note").style.removeProperty("right");
       setTimeout(function(){ document.getElementById("note").style.removeProperty("display"); }, 1000);
       secondsOfNotification = 0
@@ -241,7 +241,7 @@
         watch.children[i].style.opacity = 0;
       }
       watch.style.pointerEvents = "none";
-      setTimeout(function(){ popup.classList.add("open-popup")}, 500);
+      setTimeout(function(){ popup.classList.add("open-popup")}, 250);
     }
 
     function closePopup() {
@@ -252,7 +252,7 @@
           watch.children[i].style.opacity = 1;
         }
         watch.style.pointerEvents = "auto";
-      }, 500);
+      }, 250);
     }
     
     function submitProjectId(){
@@ -437,7 +437,7 @@
 </div>
     
 <div id="note" class="notification">
-    <button onclick="closeNotifiction()"><img src="icons/Close%20Square%20Filled%20SVG%20File.svg"/></button>
+    <button onclick="closeNotification()"><img src="icons/Close%20Square%20Filled%20SVG%20File.svg"/></button>
     <div class="message">
         Hey there! Your timer has been running
         for quite a while now. Are you still here?

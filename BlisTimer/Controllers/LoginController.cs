@@ -35,13 +35,16 @@ namespace BlisTimer.Controllers
                 await HttpContext.SignOutAsync();
                 HttpContext.Session.Clear();
             }
-            
-            Console.WriteLine(error);
 
             if (error.HasValue)
             {
                 switch (error)
                 {
+                    case 501:
+                        ViewBag.ErrorMessage = "There is something wrong the the Simplicate API. Please try again later. " +
+                                                "If you have already logged in before, you can still use the site, but you will " +
+                                                "be working with old or outdated data.";
+                        break;
                     case 500:
                         ViewBag.ErrorMessage = "The website is currently down due to an error. Please try again later.";
                         break;
@@ -71,7 +74,6 @@ namespace BlisTimer.Controllers
             var loginResult = await _apiDatabaseHandler.SimplicateApiClient.Login.TryUnsafeLoginAsync(emp.Email, emp.Password);
             
             _logger.LogInformation("Simplicate login returned: " + loginResult.Status);
-            //The login via the api was succesful so we log them in, if the info is not yet in the database we add it.
             if (loginResult.IsSuccess)
             {
                 var query = await _context.Employees.Where(_ => _.Id == loginResult.User.EmployeeId).ToListAsync();
@@ -151,7 +153,7 @@ namespace BlisTimer.Controllers
             }
             
             //The login was not successful via the api, we check if the details are in the database if so, we log them in. Else we show an error. 
-            if (loginResult.Status == LoginResult.LoginStatus.Failed)
+            if (loginResult.Status is LoginResult.LoginStatus.Failed or LoginResult.LoginStatus.ServerError)
             {
                 var allHashedPasswords = await _context.Employees.Where(_ => _.Email == emp.Email).Select(_ => _.Password).ToListAsync();
             
@@ -166,6 +168,9 @@ namespace BlisTimer.Controllers
                     }
                 }
             }
+            
+            if (loginResult.Status is LoginResult.LoginStatus.ServerError)
+                return Redirect("Login?error=501");
             
             ViewBag.ErrorMessage = "The email or password you entered is incorrect.";
             return View(emp);

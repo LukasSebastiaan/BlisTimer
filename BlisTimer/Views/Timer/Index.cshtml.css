@@ -82,7 +82,7 @@
     box-shadow: 0px 0px 20px 0px rgba(240, 200, 0, 0.1);
     justify-content: center;
     align-items: center;
-    transition: all 0.5s ease;
+    transition: all 0.25s ease;
 }
 
 #clock #plus{
@@ -325,7 +325,7 @@ button:active {
 @media (max-width: 1350px) {
     
     .notification {
-        right: 0;
+        right: -50px;
         top: 0;
         border-radius: 10px 0 0 10px;
     }

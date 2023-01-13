@@ -41,6 +41,32 @@ html {
   min-height: 100%;
 }
 
+#bg-timer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  padding: 6px 30px;
+  top: 0;
+  z-index: 999;
+  background: var(--blis-purple-darker);
+  font-size: 60px;
+  color: whitesmoke;
+  width: 180px;
+  left: 0;
+  border-radius: 0 0 10px 10px;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (max-width: 850px) {
+  #bg-timer {
+    width: 130px;
+    font-size: 30px;
+  }
+}
+
 /*@media (min-width: 718px) {*/
 /*  main {*/
 /*    max-height: none;*/
