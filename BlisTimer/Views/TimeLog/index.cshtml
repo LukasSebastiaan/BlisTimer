@@ -6,8 +6,6 @@
 
 <script>
     function submitHours() {
-        alert("Your hours are being submitted, this may take a few minutes.");
-        
         $.ajax({
           type: "POST",
           url: "/TimeLog/PostHoursToSimplicate",
@@ -203,10 +201,9 @@
                                     <a class="editButton" asp-controller="TimeLog" asp-action="Edit" asp-route-id="@timelog.Id">
                                         <img src="~/icons/edit.svg"/>
                                     </a>
-                                    <a id="deleteButton" asp-controller="TimeLog" asp-action="Delete" asp-route-id="@timelog.Id">
+                                    <a id="deleteButton" onclick="toggleDeleteTimePopup('@timelog.Id')">
                                         <img src="~/icons/delete.svg"/>
                                     </a>
-                                    <button onclick="blurBackground()"></button>
                                 </div>
                             </td>
                         </tr>
@@ -215,27 +212,67 @@
                 </table>
             </div>
             <div id="submitHoursContainer">
-                <a id="submitButton" onclick="submitHours()">Submit hours</a>
+                <a id="submitButton" onclick="toggleSubmitHoursPopup()">Submit hours</a>
             </div>
             <div id="totalTimeContainer">
                 <p>Total time worked: @ViewBag.totalTime</p>
             </div>
         </div>
     }
-    <div class="popups">
-        
-        <div class="popup-delete">
-            test
+</div>
+
+<div id="popup-backdrop" style="display: none">
+    <div id="popup-delete" style="display: none">
+        <p>Are you sure you want to delete this hour?</p>
+        <div class="button-container">
+            <a onclick="toggleDeleteTimePopup('')">Cancel</a>
+            <a href="">Confirm</a>
+        </div>
+    </div>
+    <div id="popup-submit" style="display: none">
+        <p>Are you sure you want to submit your hours?</p>
+        <div class="button-container">
+            <a onclick="toggleSubmitHoursPopup()">Cancel</a>
+            <a onclick="submitHours()">Confirm</a>
         </div>
     </div>
 </div>
 
-
 <script>
     
-    const blurBackground = () => {
-        var blur = document.getElementsByClassName('main')[0]
-        blur.className = "main-blur"
+    const toggleBlurBackground = () => {
+        var popup_backdrop = document.getElementById("popup-backdrop");
+        if (popup_backdrop.style.display === "none") {
+            popup_backdrop.style.display = "flex";
+        } else {
+            popup_backdrop.style.display = "none";
+        }
+    }
+    
+    const toggleDeleteTimePopup = (id) => {
+        var popup_delete = document.getElementById("popup-delete");
+        
+        if (popup_delete.style.display === "none") {
+            toggleBlurBackground();
+            popup_delete.children[1].children[1].setAttribute("href", "/TimeLog/Delete/" + id);
+            popup_delete.style.display = "flex";
+        } else {
+            popup_delete.style.display = "none";
+            popup_delete.children[1].children[1].setAttribute("href", "");
+            toggleBlurBackground();
+        }
+    }
+    
+    const toggleSubmitHoursPopup = () => {
+        var popup_submit = document.getElementById("popup-submit");
+        
+        if (popup_submit.style.display === "none") {
+            toggleBlurBackground();
+            popup_submit.style.display = "flex";
+        } else {
+            popup_submit.style.display = "none";
+            toggleBlurBackground();
+        }
     }
 
     var $table = document.getElementById("logTable"),

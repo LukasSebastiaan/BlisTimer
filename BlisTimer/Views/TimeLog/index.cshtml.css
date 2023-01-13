@@ -14,30 +14,55 @@
     pointer-events: none;
 
 }
-.popups{
-    top: 0;
+
+#popup-backdrop {
+    backdrop-filter: blur(10px);
+    width: 100vw;
+    height: 100vh;
     margin: 0;
     padding: 0;
-    display: flex;
+    display: none;
     justify-content: center;
-    position: absolute;
     align-items: center;
+    position: absolute;
+    top: 0;
     font-family: "TT Commons", sans-serif;
 }
-popup-delete{
-    
-    /* make the time (format HH:MM:SS) look good with a nice border */
-    font-size: 4rem;
-    font-weight: 500;
-    margin-bottom: 100px;
-    min-width: 70%;
-    border: 2px solid var(--blis-white);
+
+#popup-backdrop #popup-delete,
+#popup-backdrop #popup-submit {
+    background: var(--blis-purple-lighter);
+    width: 900px;
+    position: absolute;
+    display: none;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    flex-direction: column;
+    font-size: 3rem;
+    font-weight: 400;
     border-radius: 10px;
     padding: 10px;
+    box-shadow: 0 0 10px 0 var(--blis-purple-darker);
 }
 
+.button-container {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+}
 
-
+#popup-backdrop #popup-delete .button-container a,
+#popup-backdrop #popup-submit .button-container a {
+    color: var(--blis-white);
+    background: var(--blis-purple);
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 20px;
+    width: 150px;
+    padding: 10px;
+}
 
 h1{
     font-weight: 600;
@@ -50,6 +75,11 @@ h1{
     align-items: center;
     height: 80vh;
 }
+
+#deleteButton {
+    cursor: pointer;
+}
+
 /* Div for table */
 #time-table{
     display: flex;
