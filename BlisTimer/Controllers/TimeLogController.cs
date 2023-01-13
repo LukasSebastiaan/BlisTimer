@@ -41,7 +41,7 @@ namespace BlisTimer.Controllers
         {
             var timelog = await _context.TimeLogs.Where(_ => _.Id == id).SingleOrDefaultAsync();
             timelog.Deleted = true;
-            _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
