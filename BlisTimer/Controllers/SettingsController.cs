@@ -20,6 +20,7 @@ namespace BlisTimer.Controllers
             _context = context;
             _databasehandler = databaseHandler;
         }
+        
         [Authorize]
         public async Task<IActionResult> Index()
         {
@@ -30,6 +31,7 @@ namespace BlisTimer.Controllers
             ViewBag.ModifyCount = preference.ChangeCountTimeSeconds;
             return View();
         }
+        
         [Authorize, HttpPost]
         public async Task<IActionResult> Index(PreferencesForm pForm)
         {

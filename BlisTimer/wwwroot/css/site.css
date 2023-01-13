@@ -39,3 +39,9 @@ html {
   position: relative;
   min-height: 100%;
 }
+
+/*@media (min-width: 718px) {*/
+/*  main {*/
+/*    max-height: none;*/
+/*  }*/
+/*}*/

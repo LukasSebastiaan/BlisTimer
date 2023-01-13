@@ -81,6 +81,21 @@
         width: 32px;
         filter: invert(24%) sepia(82%) saturate(4339%) brightness(86%) contrast(141%);
     }
+    
+    #table-container {
+        height: calc(100vh);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    @@media (max-width: 1265px)
+    {
+        #table-container {
+            height: calc(100vh - 50px);
+        }
+    }
 
     @@media (max-width: 1100px)
     {
@@ -95,6 +110,11 @@
     }
     @@media (max-width: 850px)
     {
+        #table-container {
+            height: calc(100vh - 50px);
+            display: block;
+        }
+    
         html{
             overflow: auto;
         }
@@ -143,8 +163,6 @@
 </style>
 
 <div class="main">
-    <h1>Time overview</h1>
-    <hr>
     @if (Model.Count == 0) {
         <div id="noRecordsContainer">
             <h2>Whoops, no existing records</h2>
@@ -152,6 +170,7 @@
     }
     else
     {
+        <div id="table-container">
         <div id="time-table">
             <table id="logTable">
                 <thead>
@@ -198,6 +217,7 @@
         </div>
         <div id="totalTimeContainer">
             <p>Total time worked: @ViewBag.totalTime</p>
+        </div>
         </div>
     }
 </div>

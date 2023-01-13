@@ -135,7 +135,7 @@ main {
 }
 
 
-@media (max-width: 900px) {
+@media (max-width: 1265px) {
     #nav-menu-wrapper.hide {
         translate: 0 0;
     }

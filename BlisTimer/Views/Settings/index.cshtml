@@ -1,15 +1,6 @@
 @using Microsoft.EntityFrameworkCore.Metadata.Internal
 @model PreferencesForm
 
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="index.cshtml">
-    <title>Title</title>
-</head>
-<body>
 <div id="screen">
     <div class="watch">
         <form method="post" asp-action="Index" id="settings-form">
@@ -32,10 +23,6 @@
     </div>
 </div>
 <script>
-
         console.log(@ViewBag.checkBoxEnabled)
     document.getElementById("notification-enabled").checked = @ViewBag.checkBoxEnabled
-
 </script>
-</body>
-</html>

@@ -31,7 +31,6 @@
 </style>
 
 <img src="icons/typo-bg-big-high-1.png" alt="decoration"/>
-<img id="dot" src="icons/blue-dots.png" alt="decoration"/>
 
 <div id="container">
     <div id="box">
@@ -41,10 +40,14 @@
                 <path d="m160.614,166.18v-58.889c0-6.903-5.597-12.5-12.5-12.5s-12.5,5.597-12.5,12.5v66.1c0,2.033 0.81,3.982 2.25,5.416l34.969,34.822c4.893,4.872 12.806,4.854 17.678-0.037 4.871-4.892 4.854-12.807-0.037-17.678l-29.86-29.734z"/>
             </g>
         </svg>
-        <h1>Sign In</h1>
-        <text>Please login with your simplicate credentials</text>
-        @if (@Model.Status == "BadCredentials") {
-            <p style="color: red;">Email or Password is wrong</p>
+    <h1>Sign In</h1>
+        @if (@ViewBag.ErrorMessage != null) {
+            <p id="failed-version">Please login with your simplicate credentials</p>
+            <p style="color: red;">@ViewBag.ErrorMessage</p>
+        }
+        else
+        {
+            <p id="normal-version">Please login with your simplicate credentials</p>
         }
         <form asp-action="Index" asp-controller="Login">
             <input type="email" asp-for="Email" placeholder="Enter Email">

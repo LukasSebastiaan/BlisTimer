@@ -1,7 +1,10 @@
+using System.ComponentModel.Design;
 using System.Net;
+using System.Reflection;
 using BlisTimer.Data;
 using Microsoft.EntityFrameworkCore;
 using BlisTimer.Controllers;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
@@ -13,6 +16,8 @@ builder.Services.AddDbContext<TimerDbContext>(
         x => x.UseNpgsql(builder.Configuration.GetConnectionString("TimerDb"))
         );
 builder.Services.AddScoped<ApiDatabaseHandler>();
+
+builder.WebHost.UseStaticWebAssets();
 
 builder.Services.AddControllersWithViews();
 
@@ -28,21 +33,36 @@ builder.Services.AddSession(options =>
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
     {
-        options.LoginPath = new PathString("/login");
+        options.LoginPath = new PathString("/Login");
         options.AccessDeniedPath = new PathString("/denied");
         options.SlidingExpiration = true;
         options.ExpireTimeSpan = TimeSpan.FromDays(3);
     });
+
+
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseExceptionHandler("/Error");
     app.UseHsts();
 }
+else
+{
+    app.UseDeveloperExceptionPage();
+}
+
+
+app.Use(async (context, next) =>
+{
+    Console.WriteLine(context.Request.Path.Value);
+    
+    await next.Invoke();
+});
+
+app.UseStatusCodePagesWithRedirects("/Login?error={0}");
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

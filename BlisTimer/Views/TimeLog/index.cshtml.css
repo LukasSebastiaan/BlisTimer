@@ -1,3 +1,4 @@
+
 .main{
     color: white;
     padding: 0;
@@ -20,6 +21,8 @@ h1{
     display: flex;
     justify-content: center;
     align-content: center;
+    width: 100vw;
+    max-width: 1100px;
 }
 table{
     background-color: var(--blis-purple-dark);

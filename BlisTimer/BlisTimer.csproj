@@ -33,13 +33,12 @@
     <_ContentIncludedByDefault Remove="Views\_old\TimeLog\index.cshtml" />
     <_ContentIncludedByDefault Remove="Views\_old\Projects\Add.cshtml" />
     <_ContentIncludedByDefault Remove="Views\_old\Projects\index.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Home\Index.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Employee\Add.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Employee\index.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
-    <AdditionalFiles Include="Views\Employee\Add.cshtml" />
-    <AdditionalFiles Include="Views\Employee\index.cshtml" />
-    <AdditionalFiles Include="Views\Projects\Add.cshtml" />
-    <AdditionalFiles Include="Views\Projects\index.cshtml" />
     <AdditionalFiles Include="Views\TimeLog\Add.cshtml" />
     <AdditionalFiles Include="Views\TimeLog\index.cshtml" />
   </ItemGroup>

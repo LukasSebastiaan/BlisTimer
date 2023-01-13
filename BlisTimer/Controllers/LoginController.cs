@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Net;
 using System.Security.Claims;
 using BlisTimer.Models;
 using Domain.Models;
@@ -7,12 +8,12 @@ using BlisTimer.Data;
 using ConsoleApp1;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using SimplicateAPI.ReturnTypes;
 
 namespace BlisTimer.Controllers
 {
-    
     public class LoginController : Controller
     {
         private readonly ILogger<LoginController> _logger;
@@ -27,7 +28,7 @@ namespace BlisTimer.Controllers
         }
         
         [AllowAnonymous]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? error)
         {
             if (User.Identity.IsAuthenticated)
             {
@@ -35,13 +36,33 @@ namespace BlisTimer.Controllers
                 HttpContext.Session.Clear();
             }
             
-            var updateDatabaseTask = _apiDatabaseHandler.SyncDbWithSimplicate();
+            Console.WriteLine(error);
+
+            if (error.HasValue)
+            {
+                switch (error)
+                {
+                    case 500:
+                        ViewBag.ErrorMessage = "The website is currently down due to an error. Please try again later.";
+                        break;
+                    case 404:
+                        ViewBag.ErrorMessage = "The page you are looking for does not exist.";
+                        break;
+                    default:
+                        ViewBag.ErrorMessage = "An unknown error has occurred.";
+                        break;
+                }
+            }
+            
             return View(new LoginForm());
         }
 
         [HttpPost]
         public async Task<IActionResult> Index(LoginForm emp)
         {
+            if (!await _context.Database.CanConnectAsync())
+              return Redirect("Login?error=500");
+            
             _logger.LogInformation("Getting hasher to hash password");
             var hasher = new PHasher(new OptionsHash(1000));
             
@@ -143,10 +164,9 @@ namespace BlisTimer.Controllers
                         return RedirectToAction("Index", "Timer");
                     }
                 }
-                
-                emp.Status = "BadCredentials";
-                return View(emp);
             }
+            
+            ViewBag.ErrorMessage = "The email or password you entered is incorrect.";
             return View(emp);
         }
         
@@ -154,7 +174,8 @@ namespace BlisTimer.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            Console.WriteLine("ERROR LOLOLOLADSHUIDHASIFDHSDUIFHSDUIFHSDUIFG");
+            return RedirectToAction("Index");
         }
     }
 }
