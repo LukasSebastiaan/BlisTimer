@@ -66,13 +66,14 @@ namespace BlisTimer.Controllers
             _logger.LogInformation("Getting hasher to hash password");
             var hasher = new PHasher(new OptionsHash(1000));
             
-            _logger.LogInformation("Trying to log user with in Simplicate");
+            
+            _logger.LogInformation("Trying to log user with in Simplicate with data:\n\t" + emp.Email + "\n\t" + emp.Password);
             var loginResult = await _apiDatabaseHandler.SimplicateApiClient.Login.TryUnsafeLoginAsync(emp.Email, emp.Password);
             
+            _logger.LogInformation("Simplicate login returned: " + loginResult.Status);
             //The login via the api was succesful so we log them in, if the info is not yet in the database we add it.
             if (loginResult.IsSuccess)
             {
-                
                 var query = await _context.Employees.Where(_ => _.Id == loginResult.User.EmployeeId).ToListAsync();
                 if (query.Count == 0)
                 {

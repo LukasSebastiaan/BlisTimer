@@ -136,12 +136,13 @@
     user-select: none;
     cursor: pointer;
     color: var(--blis-purple-dark);
-    font-size: 1.8rem;
     background: var(--blis-yellow) none;
-    margin: 0 0.8rem 1rem;
-    padding: 0 2.5rem;
-    border-radius: 10px;
+    margin: 0 0.2rem 0rem;
+    padding: 10px 60px;
     transition: 0.4s;
+    font-size: 22px;
+    font-weight: 500;
+    border-radius: 30px;
 }
 
 button:hover {
@@ -232,7 +233,7 @@ button:active {
 #project, #activity, #hourtype {
     font-size: 2rem;
     font-weight: 500;
-    margin: 0 0.8rem;
+    margin: 2px 0.8rem;
     min-width: 100%;
     border-radius: 10px;
     text-align: center;
@@ -314,7 +315,15 @@ button:active {
     position: relative;
 }
 
+
+@media (max-width: 1265px) {
+    #screen {
+        height: calc(100vh - 50px);
+    }
+}
+
 @media (max-width: 1350px) {
+    
     .notification {
         right: 0;
         top: 0;
@@ -330,11 +339,31 @@ button:active {
     }
     .popup, .watch {
         border-radius: 0;
+        min-height: calc(100vh - 50px);
         width: 100%;
     }
 }
 
-@media (max-width: 615px) { 
+@media (max-width: 615px) {
+    .task {
+        margin-bottom: 40px;
+    }
+    
+    #clock #plus{
+        position: relative;
+        right: -20%;
+        top: 60%;
+        font-size: 50px;
+        cursor: pointer;
+    }
+    
+    #clock #minus{
+        position: relative;
+        right: 20%;
+        top: 60%;
+        font-size: 50px;
+        cursor: pointer;
+    }
     
     .notification{
         width: 60%;
@@ -342,6 +371,7 @@ button:active {
         backdrop-filter: blur(5px);
         height: 100px;
     }
+
     .notification .message{
         margin: 40px;
         margin-left: 50px;
@@ -354,6 +384,12 @@ button:active {
     .notification {
         width: 100%;
         height: 100px;
+    }
+}
+
+@media (max-height: 667px) {
+    .controls-container {
+        translate: 0 20px;
     }
 }
 
