@@ -39,9 +39,21 @@ namespace BlisTimer.Controllers
 
         public async Task<RedirectToActionResult> Delete(string id)
         {
+            Console.WriteLine("UHSUIHSUIHIUSHUIHSUIHSUIHBUHISBJKBXJHBSIUHIUHUIHSUIHSUIHIUSHUS");
+            Console.WriteLine("UHSUIHSUIHIUSHUIHSUIHSUIHBUHISBJKBXJHBSIUHIUHUIHSUIHSUIHIUSHUS");
+            Console.WriteLine("UHSUIHSUIHIUSHUIHSUIHSUIHBUHISBJKBXJHBSIUHIUHUIHSUIHSUIHIUSHUS");
+            Console.WriteLine("UHSUIHSUIHIUSHUIHSUIHSUIHBUHISBJKBXJHBSIUHIUHUIHSUIHSUIHIUSHUS");
+            Console.WriteLine("UHSUIHSUIHIUSHUIHSUIHSUIHBUHISBJKBXJHBSIUHIUHUIHSUIHSUIHIUSHUS");
+            Console.WriteLine("UHSUIHSUIHIUSHUIHSUIHSUIHBUHISBJKBXJHBSIUHIUHUIHSUIHSUIHIUSHUS");
+            Console.WriteLine("UHSUIHSUIHIUSHUIHSUIHSUIHBUHISBJKBXJHBSIUHIUHUIHSUIHSUIHIUSHUS");
+            Console.WriteLine("UHSUIHSUIHIUSHUIHSUIHSUIHBUHISBJKBXJHBSIUHIUHUIHSUIHSUIHIUSHUS");
+            Console.WriteLine("UHSUIHSUIHIUSHUIHSUIHSUIHBUHISBJKBXJHBSIUHIUHUIHSUIHSUIHIUSHUS");
+            Console.WriteLine("UHSUIHSUIHIUSHUIHSUIHSUIHBUHISBJKBXJHBSIUHIUHUIHSUIHSUIHIUSHUS");
+            Console.WriteLine("UHSUIHSUIHIUSHUIHSUIHSUIHBUHISBJKBXJHBSIUHIUHUIHSUIHSUIHIUSHUS");
+            Console.WriteLine("UHSUIHSUIHIUSHUIHSUIHSUIHBUHISBJKBXJHBSIUHIUHUIHSUIHSUIHIUSHUS");
             var timelog = await _context.TimeLogs.Where(_ => _.Id == id).SingleOrDefaultAsync();
             timelog.Deleted = true;
-            _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
@@ -59,7 +71,7 @@ namespace BlisTimer.Controllers
             var log = await _context.TimeLogs.Where(_ => _.Id == id).SingleAsync();
             log.StartTime = DateTime.SpecifyKind(timeForm.StartTime, DateTimeKind.Utc);
             log.EndTime = DateTime.SpecifyKind(timeForm.EndTime, DateTimeKind.Utc);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
         

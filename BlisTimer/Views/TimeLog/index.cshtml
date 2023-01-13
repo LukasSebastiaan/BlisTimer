@@ -163,7 +163,8 @@
 </style>
 
 <div class="main">
-    @if (Model.Count == 0) {
+    @if (Model.Count == 0)
+    {
         <div id="noRecordsContainer">
             <h2>Whoops, no existing records</h2>
         </div>
@@ -171,9 +172,9 @@
     else
     {
         <div id="table-container">
-        <div id="time-table">
-            <table id="logTable">
-                <thead>
+            <div id="time-table">
+                <table id="logTable">
+                    <thead>
                     <tr id="header">
                         <th>Project</th>
                         <th>Activity</th>
@@ -183,8 +184,8 @@
                         <th>HourType</th>
                         <th>Handle</th>
                     </tr>
-                </thead>
-                <tbody>
+                    </thead>
+                    <tbody>
                     @foreach (var timelog in Model)
                     {
                         <tr>
@@ -200,29 +201,43 @@
                             <td>
                                 <div id="handleButtons">
                                     <a class="editButton" asp-controller="TimeLog" asp-action="Edit" asp-route-id="@timelog.Id">
-                                        <img src="~/icons/edit.svg" />
+                                        <img src="~/icons/edit.svg"/>
                                     </a>
                                     <a id="deleteButton" asp-controller="TimeLog" asp-action="Delete" asp-route-id="@timelog.Id">
-                                        <img src="~/icons/delete.svg" />
+                                        <img src="~/icons/delete.svg"/>
                                     </a>
+                                    <button onclick="blurBackground()"></button>
                                 </div>
                             </td>
                         </tr>
                     }
-                </tbody>
-            </table>
-        </div>
-        <div id="submitHoursContainer">
-            <a id="submitButton" onclick="submitHours()">Submit hours</a>
-        </div>
-        <div id="totalTimeContainer">
-            <p>Total time worked: @ViewBag.totalTime</p>
-        </div>
+                    </tbody>
+                </table>
+            </div>
+            <div id="submitHoursContainer">
+                <a id="submitButton" onclick="submitHours()">Submit hours</a>
+            </div>
+            <div id="totalTimeContainer">
+                <p>Total time worked: @ViewBag.totalTime</p>
+            </div>
         </div>
     }
+    <div class="popups">
+        
+        <div class="popup-delete">
+            test
+        </div>
+    </div>
 </div>
 
+
 <script>
+    
+    const blurBackground = () => {
+        var blur = document.getElementsByClassName('main')[0]
+        blur.className = "main-blur"
+    }
+
     var $table = document.getElementById("logTable"),
         $div = document.getElementById("totalTimeContainer"),
         $rowsPerPage = 4,

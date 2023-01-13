@@ -5,6 +5,40 @@
     margin: 0;
     font-family: "TT Commons", sans-serif;
 }
+.main-blur{
+    color: white;
+    padding: 0;
+    margin: 0;
+    font-family: "TT Commons", sans-serif;
+    filter: blur(20px);
+    pointer-events: none;
+
+}
+.popups{
+    top: 0;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    align-items: center;
+    font-family: "TT Commons", sans-serif;
+}
+popup-delete{
+    
+    /* make the time (format HH:MM:SS) look good with a nice border */
+    font-size: 4rem;
+    font-weight: 500;
+    margin-bottom: 100px;
+    min-width: 70%;
+    border: 2px solid var(--blis-white);
+    border-radius: 10px;
+    padding: 10px;
+}
+
+
+
+
 h1{
     font-weight: 600;
     text-align: center;
