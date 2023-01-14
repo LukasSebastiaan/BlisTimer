@@ -24,7 +24,7 @@
     display: none;
     justify-content: center;
     align-items: center;
-    position: absolute;
+    position: fixed;
     top: 0;
     font-family: "TT Commons", sans-serif;
 }
