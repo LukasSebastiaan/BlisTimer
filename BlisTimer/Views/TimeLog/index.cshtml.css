@@ -73,7 +73,7 @@ h1{
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 80vh;
+    height: 100vh;
 }
 
 #deleteButton {
@@ -117,4 +117,11 @@ tr:hover{
     padding-top: 1px;
     padding-bottom: 1px;
     color: black;
+}
+
+
+@media (max-width: 1265px) {
+    #noRecordsContainer {
+        height: calc(100vh - 50px);
+    }
 }

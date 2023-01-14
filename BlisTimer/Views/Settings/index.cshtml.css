@@ -23,6 +23,12 @@
     padding-top: 3%;
     align-items: center;
     justify-content: center;
+    position: relative;
+}
+
+.watch h1 {
+    position: absolute;
+    top: 50px;
 }
 
 .formBox {

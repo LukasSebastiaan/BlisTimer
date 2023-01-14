@@ -1,4 +1,5 @@
 using System.ComponentModel.Design;
+using System.Globalization;
 using System.Net;
 using System.Reflection;
 using BlisTimer.Data;
@@ -7,6 +8,7 @@ using BlisTimer.Controllers;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -73,6 +75,10 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseSession();
+
+var nlCulture = new CultureInfo("nl-NL");
+Thread.CurrentThread.CurrentCulture = nlCulture;
+Thread.CurrentThread.CurrentUICulture = nlCulture;
 
 app.MapControllerRoute(
     name: "default",

@@ -39,18 +39,6 @@ namespace BlisTimer.Controllers
 
         public async Task<RedirectToActionResult> Delete(string id)
         {
-            Console.WriteLine("UHSUIHSUIHIUSHUIHSUIHSUIHBUHISBJKBXJHBSIUHIUHUIHSUIHSUIHIUSHUS");
-            Console.WriteLine("UHSUIHSUIHIUSHUIHSUIHSUIHBUHISBJKBXJHBSIUHIUHUIHSUIHSUIHIUSHUS");
-            Console.WriteLine("UHSUIHSUIHIUSHUIHSUIHSUIHBUHISBJKBXJHBSIUHIUHUIHSUIHSUIHIUSHUS");
-            Console.WriteLine("UHSUIHSUIHIUSHUIHSUIHSUIHBUHISBJKBXJHBSIUHIUHUIHSUIHSUIHIUSHUS");
-            Console.WriteLine("UHSUIHSUIHIUSHUIHSUIHSUIHBUHISBJKBXJHBSIUHIUHUIHSUIHSUIHIUSHUS");
-            Console.WriteLine("UHSUIHSUIHIUSHUIHSUIHSUIHBUHISBJKBXJHBSIUHIUHUIHSUIHSUIHIUSHUS");
-            Console.WriteLine("UHSUIHSUIHIUSHUIHSUIHSUIHBUHISBJKBXJHBSIUHIUHUIHSUIHSUIHIUSHUS");
-            Console.WriteLine("UHSUIHSUIHIUSHUIHSUIHSUIHBUHISBJKBXJHBSIUHIUHUIHSUIHSUIHIUSHUS");
-            Console.WriteLine("UHSUIHSUIHIUSHUIHSUIHSUIHBUHISBJKBXJHBSIUHIUHUIHSUIHSUIHIUSHUS");
-            Console.WriteLine("UHSUIHSUIHIUSHUIHSUIHSUIHBUHISBJKBXJHBSIUHIUHUIHSUIHSUIHIUSHUS");
-            Console.WriteLine("UHSUIHSUIHIUSHUIHSUIHSUIHBUHISBJKBXJHBSIUHIUHUIHSUIHSUIHIUSHUS");
-            Console.WriteLine("UHSUIHSUIHIUSHUIHSUIHSUIHBUHISBJKBXJHBSIUHIUHUIHSUIHSUIHIUSHUS");
             var timelog = await _context.TimeLogs.Where(_ => _.Id == id).SingleOrDefaultAsync();
             timelog.Deleted = true;
             await _context.SaveChangesAsync();
@@ -86,8 +74,8 @@ namespace BlisTimer.Controllers
             var runningTimer = _context.RunningTimers.FirstOrDefault(_ => _.EmployeeId == employeeId);
 
             var Id = Guid.NewGuid().ToString();
-            var StartTime = runningTimer.StartTime.AddHours(1).AddSeconds(timeModified * -1);
-            var EndTime = DateTime.Now.ToUniversalTime().AddHours(1);
+            var StartTime = runningTimer.StartTime.ToLocalTime().AddSeconds(timeModified * -1);
+            var EndTime = DateTime.Now.ToLocalTime();
             var ActivityId = HttpContext.Session.GetString("ActivityId");
             var HourTypeId = HttpContext.Session.GetString("HourTypeId");
             var EmployeeId = employeeId;

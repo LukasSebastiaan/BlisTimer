@@ -1,3 +1,4 @@
+@using System.Globalization
 @model List<Domain.Models.TimeLog>
 
 @{
@@ -186,11 +187,12 @@
                     <tbody>
                     @foreach (var timelog in Model)
                     {
+                        var nlCulture = new CultureInfo("nl-NL");
                         <tr>
                             <td>@timelog.Activity.Project.Name</td>
                             <td>@timelog.Activity.Name</td>
-                            <td>@timelog.StartTime</td>
-                            <td>@timelog.EndTime</td>
+                            <td>@timelog.StartTime.ToLocalTime()</td>
+                            <td>@timelog.EndTime.ToLocalTime()</td>
                             <td>
                                 @{var workedHours = timelog.EndTime - timelog.StartTime;}
                                 @workedHours.Hours.ToString("0#"):@workedHours.Minutes.ToString("0#")
