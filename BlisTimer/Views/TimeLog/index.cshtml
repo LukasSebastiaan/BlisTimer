@@ -26,8 +26,8 @@
         display: flex;
         justify-content: right;
         width: 550px;
-        margin: 5vh auto 0 50vw;
-        transform: translate(0, -315%);
+        margin: 2vh auto 0 50vw;
+        transform: translate(0, -317%);
     }
 
     #submitButton, input[type="button"]{
@@ -69,19 +69,19 @@
     }
 
     /* div for edit and delete button */
-    #handleButtons {
+    #handleButtons{
         display: flex;
     }
     a.editButton img{
         width: 32px;
         filter: invert(75%) sepia(19%) saturate(2426%) hue-rotate(360deg) brightness(120%) contrast(105%);
     }
-    #deleteButton img {
+    #deleteButton img{
         width: 32px;
         filter: invert(24%) sepia(82%) saturate(4339%) brightness(86%) contrast(141%);
     }
     
-    #table-container {
+    #table-container{
         height: calc(100vh);
         display: flex;
         flex-direction: column;
@@ -92,11 +92,10 @@
     
     @@media (max-width: 1265px)
     {
-        #table-container {
+        #table-container{
             height: calc(100vh - 50px);
             margin-top: 0;
         }
-        
     }
 
     @@media (max-width: 1100px)
@@ -110,9 +109,10 @@
             justify-content: right;
         }
     }
+
     @@media (max-width: 850px)
     {
-        #table-container {
+        #table-container{
             height: calc(100vh - 50px);
             display: block;
         }
@@ -144,7 +144,7 @@
         td:nth-child(5)::before{
             content: "Hours Worked: ";
         }
-        td:nth-child(6)::before {
+        td:nth-child(6)::before{
             content: "Hourtype: ";
         }
 
@@ -153,13 +153,20 @@
             justify-content: center;
         }
         #buttons{
-            transform: translate(0, -324%);
+            transform: translate(0, -328%);
         }
         #submitButton{
             transform: translate(-22%, -10%);
         }
         input.pageButtons, input.active{
             display: none;
+        }
+    }
+
+    @@media (max-width: 770px)
+    {
+        #buttons{
+            transform: translate(0, -303%);
         }
     }
 </style>
