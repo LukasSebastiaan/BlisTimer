@@ -111,6 +111,9 @@ Nav bar container that floats above the main page content container.
 		// adding styling with javascript.
 		let timerDiv = document.createElement("div");
 		timerDiv.id = "bg-timer";
+		timerDiv.onclick = function() {
+			window.location.href = "/Timer";
+		};
 		document.body.appendChild(timerDiv)
 		updateTimer();
 		
