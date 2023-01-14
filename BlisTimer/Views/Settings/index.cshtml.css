@@ -20,15 +20,18 @@
     max-width: 720px;
     border-radius: 2rem;
     display: flex;
-    padding-top: 3%;
     align-items: center;
     justify-content: center;
     position: relative;
 }
 
+.watch #form-container {
+    margin-top: 23px;
+}
+
 .watch h1 {
     position: absolute;
-    top: 50px;
+    top: 38px;
 }
 
 .formBox {
@@ -52,7 +55,8 @@ label {
     border: 2px solid white;
     background-color: transparent;
     border-radius: 1vh;
-    padding: 1%;
+    padding: 2px;
+    margin-top: 10px;
     color: rgba(255,255,255,1);
     font-weight: 500;
     transition: 1s ease-out;
