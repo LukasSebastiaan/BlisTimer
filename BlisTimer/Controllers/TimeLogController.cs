@@ -80,7 +80,7 @@ namespace BlisTimer.Controllers
             var ActivityId = HttpContext.Session.GetString("ActivityId");
             var HourTypeId = HttpContext.Session.GetString("HourTypeId");
             var EmployeeId = employeeId;
-            
+
             await _context.TimeLogs.AddAsync(new TimeLog()
             {
                 Id = Guid.NewGuid().ToString(),
