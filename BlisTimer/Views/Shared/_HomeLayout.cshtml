@@ -9,6 +9,23 @@
 	@RenderSection("head", required: false)
 </head>
 <style>@RenderSection("style", required: false)</style>
+<style>
+	nav ul li a img {
+		width: 37px;
+		height: 37px;
+	}
+
+	#hide-button:not(:is(#hide-button.hide)):hover img,
+	nav:hover ~ #hide-button:not(:is(#hide-button.hide)) img {
+		translate: 0 -19px;
+	}
+	#hide-button img {
+		transition: all 0.5s ease;
+		filter: invert(100%);
+		width: 30px;
+		left: 10px;
+	}
+</style>
 <body>
 
 <!-- 
@@ -19,32 +36,32 @@ Nav bar container that floats above the main page content container.
 		<ul>
 			<li>
 				<a href="@Url.Action("Index", "Timer")">
-					<img src="icons/timer-icon.svg"/>
+					<img src="~/icons/timer-icon.svg"/>
 					<span>Timer</span>
 				</a>
 			</li>
 			<li>
 				<a href="@Url.Action("Index", "TimeLog")">
-					<img src="icons/overview-icon.svg"/>
+					<img src="~/icons/overview-icon.svg"/>
 					<span>Overview</span>
 				</a>
 			</li>
 			<li>
 				<a href="@Url.Action("Index", "Settings")">
-					<img src="icons/settings-icon.svg"/>
+					<img src="~/icons/settings-icon.svg"/>
 					<span>Settings</span>
 				</a>
 			</li>
 			<li>
 				<a href="@Url.Action("Index", "Login")" style="color: red">
-					<img src="icons/logout-icon.svg"/>
+					<img src="~/icons/logout-icon.svg"/>
 					<span>Logout</span>
 				</a>
 			</li>
 		</ul>
 	</nav>
 	<div id="hide-button">
-		<img src="icons/hide-icon.svg"/>
+		<img src="~/icons/hide-icon.svg"/>
 	</div>
 </div>
 

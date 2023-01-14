@@ -48,7 +48,8 @@ namespace BlisTimer.Controllers
         [Authorize]
         public IActionResult Edit(string id)
         {
-            ViewBag.log = _context.TimeLogs.Where(_ => _.Id == id).Single();
+            Console.WriteLine("allah");
+            ViewBag.log = _context.TimeLogs.Single(_ => _.Id == id);
             ViewBag.max = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
             return View();
         }
@@ -173,13 +174,14 @@ namespace BlisTimer.Controllers
             var successfullySubmittedHours = hoursToSubmit.Where(_ => !failedSubmissions.Contains(_)).ToList();
             
             foreach (var hour in successfullySubmittedHours)
-            {
                 hour.Submitted = true;
-            }
             
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             
             HttpContext.Session.SetString("hoursBeingSubmitted", "false");
+            
+            if (failedSubmissions.Any())
+                return BadRequest(300);
 
             return Ok();
         }

@@ -46,3 +46,7 @@ label {
     position: relative;
     bottom: -25px;
 }
+
+#submitBox button {
+    background: var(--blis-purple);
+}

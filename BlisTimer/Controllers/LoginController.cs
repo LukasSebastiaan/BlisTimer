@@ -35,6 +35,8 @@ namespace BlisTimer.Controllers
                 await HttpContext.SignOutAsync();
                 HttpContext.Session.Clear();
             }
+            
+            Console.WriteLine(error);
 
             if (error.HasValue)
             {
