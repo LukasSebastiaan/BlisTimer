@@ -48,5 +48,16 @@ label {
 }
 
 #submitBox button {
-    background: var(--blis-purple);
+    width: 20rem;
+    border: 2px solid white;
+    background-color: transparent;
+    border-radius: 1vh;
+    padding: 1%;
+    color: rgba(255,255,255,1);
+    font-weight: 500;
+    transition: 1s ease-out;
+}
+
+#submitBox button:hover {
+    background-color: var(--blis-cyan);
 }

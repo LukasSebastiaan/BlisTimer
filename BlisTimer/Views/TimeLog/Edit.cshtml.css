@@ -41,6 +41,7 @@ h1{
 input[type=time]:active, input[type=time]:focus{
     outline: 3px solid var(--blis-cyan);
 }
+
 input[type=submit]{
     width: 20rem;
     border: 2px solid white;
@@ -51,6 +52,7 @@ input[type=submit]{
     font-weight: 500;
     transition: 1s ease-out;
 }
+
 input[type=submit]:hover{
     background-color: var(--blis-cyan);
 }

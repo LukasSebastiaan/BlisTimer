@@ -16,15 +16,6 @@
         width: 100%;
     }
     
-    input#RememberMe {
-        margin-bottom: 40px;
-        margin-left: 30px;
-    }
-    
-    label#rememberme {
-        color: white;
-    }
-    
     input::placeholder {
         color: black; 
     }
@@ -52,8 +43,6 @@
         <form asp-action="Index" asp-controller="Login">
             <input type="email" asp-for="Email" placeholder="Enter Email">
             <input type="password" asp-for="Password" placeholder="Enter Password">
-            <input type="checkbox" asp-for="RememberMe">
-            <label id="rememberme" asp-for="RememberMe">Remember me</label>
             <input id="login-submit" type="submit" value="LOGIN">
         </form>
     </div>

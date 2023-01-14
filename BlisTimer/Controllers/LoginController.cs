@@ -48,9 +48,12 @@ namespace BlisTimer.Controllers
                                                 "be working with old or outdated data.";
                         break;
                     case 500:
-                        ViewBag.ErrorMessage = "The website is currently down due to an error. Please try again later.";
+                        ViewBag.ErrorMessage = "The website is currently down. Please try again later.";
                         break;
                     case 404:
+                        if (!await _context.Database.CanConnectAsync())
+                          return Redirect("Login?error=500");
+                        
                         ViewBag.ErrorMessage = "The page you are looking for does not exist.";
                         break;
                     default:

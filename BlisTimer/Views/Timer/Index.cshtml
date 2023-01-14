@@ -178,43 +178,45 @@
 
     //confirm button
     function confirm() {
-      timerOn = false
-     
-      document.getElementById("note").style.display = "None";
-      notificationIsShown = false;
-      secondsOfNotification = 0;
-      closePopup();
-      seconds = 0;
-      clearInterval(interval);
-      interval = null;
-      time_el.innerText = "00:00:00";
-      console.log(secondsAddSubtracted)
       $.ajax({
         type: "POST",
         url: "/TimeLog/SumbitTimelog",
           data: { timeModified: secondsAddSubtracted },
-          success: function (result) {
-            console.log("Saved time to database with response: " + result)
+          success: function (result, status, xhr) {
+            console.log("Added timer with code " + result)
+            if (xhr.getResponseHeader("Content-Type")?.toLowerCase().indexOf("text/html") >= 0) {
+              window.location.href = "/Login?error=500";
+            }
+            
+            timerOn = false
+            document.getElementById("note").style.display = "None";
+            notificationIsShown = false;
+            secondsOfNotification = 0;
+            closePopup();
+            seconds = 0;
+            clearInterval(interval);
+            interval = null;
+            time_el.innerText = "00:00:00";
+            timerIsRunningAlready = false;
+            startButton.style.opacity = 1;
+            startButton.style.cursor = "pointer";
+              
+            projectDropdown.style.opacity = 1;
+            projectDropdown.disabled = false;
+            
+            activityDropdown.style.opacity = 1;
+            activityDropdown.disabled = false;
+            
+            hourtypeDropdown.style.opacity = 1;
+            hourtypeDropdown.disabled = false;
+            
+            stopButton.style.opacity = 0.3;
+            stopButton.style.cursor = "not-allowed";
+          },
+          error: function (result) {
+            alert("Something went wrong, please try again later")
           }
       })
-      
-      timerIsRunningAlready = false;
-      
-      startButton.style.opacity = 1;
-      startButton.style.cursor = "pointer";
-      
-      projectDropdown.style.opacity = 1;
-      projectDropdown.disabled = false;
-      
-      activityDropdown.style.opacity = 1;
-      activityDropdown.disabled = false;
-      
-      hourtypeDropdown.style.opacity = 1;
-      hourtypeDropdown.disabled = false;
-      
-      stopButton.style.opacity = 0.3;
-      stopButton.style.cursor = "not-allowed";
-      
     }
 
     //cancel button
