@@ -50,6 +50,8 @@ namespace BlisTimer.Controllers
         {
             Console.WriteLine("allah");
             ViewBag.log = _context.TimeLogs.Single(_ => _.Id == id);
+            ViewBag.min = ViewBag.log.StartTime.ToString("yyyy-MM-dd HH:mm");
+            ViewBag.cet = ViewBag.log.EndTime.ToString("yyyy-MM-dd HH:mm");
             ViewBag.max = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
             return View();
         }

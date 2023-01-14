@@ -11,7 +11,7 @@ h1{
 }
 
 #container{
-    height: calc(100vh - 50px);
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -20,13 +20,12 @@ h1{
     border-radius: 7px;
     background-color: var(--blis-purple-lighter);
     padding: 4%;
-    transform: translate(0, -30%);
 }
 #labelBox{
     display: flex;
     justify-content: space-between;
     margin: 2vh auto 0 auto;
-    width: 83%;
+    width: 70%;
 }
 #inputBox{
     display: flex;
@@ -54,4 +53,10 @@ input[type=submit]{
 }
 input[type=submit]:hover{
     background-color: var(--blis-cyan);
+}
+
+@media (max-width: 1265px) {
+    #container {
+        height: calc(100vh - 50px);
+    }
 }

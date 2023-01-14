@@ -6,10 +6,11 @@
 
 <style>
     #inputBox input {
-        width: 8rem;
+        width: 170px;
         padding-left: 20px;
         border: none;
         border-radius: 1em;
+        margin: 0 2%;
     }
 </style>
 
@@ -22,8 +23,8 @@
                     <label>End time:</label>
                 </div>
                 <div id="inputBox">
-                    <input id="st" type="datetime-local" asp-for="StartTime" max="@ViewBag.max" value="@ViewBag.log.StartTime.ToString("yyyy-MM-dd HH:mm")" required/>
-                    <input type="datetime-local" asp-for="EndTime" max="@ViewBag.max" value="@ViewBag.log.EndTime.ToString("yyyy-MM-dd HH:mm")" required/>
+                    <input id="st" type="datetime-local" asp-for="StartTime" max="@ViewBag.cet" value="@ViewBag.log.StartTime.ToString("yyyy-MM-dd HH:mm")" required />
+                    <input id="et" type="datetime-local" asp-for="EndTime" min="@ViewBag.min" max="@ViewBag.max" value="@ViewBag.log.EndTime.ToString("yyyy-MM-dd HH:mm")" required />
                 </div>
                 <div id="submitBox">
                     <input type="submit" value="Save changes">
@@ -32,3 +33,15 @@
         </div>
     </div>
 </div>
+
+<script>
+    //start date/time changes -> end Date/time change aswell
+    document.getElementById("st").addEventListener("change", function(){
+        document.getElementById("et").min = document.getElementById("st").value;
+    });
+
+    //end date/time changes -> start Date/time change aswell
+    document.getElementById("et").addEventListener("change", function () {
+        document.getElementById("st").max = document.getElementById("et").value;
+    });
+</script>
