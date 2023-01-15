@@ -28,7 +28,7 @@ namespace BlisTimer.Controllers
                 .Include(_ => _.HourType)
                 .Where(_ => _.EmployeeId == HttpContext.User.Claims.ToList()[0].Value)
                 .ToList()
-                .Where(_ => (!_.Deleted && !_.Submitted)).ToList();
+                .Where(_ => (!_.Deleted && !_.Submitted)).OrderByDescending(_ => _.EndTime).ToList();
 
             var totalWorkedHours = timeLogs.Select(_ => _.EndTime - _.StartTime).Sum(_ => _.TotalHours);
             var time = TimeSpan.FromHours(totalWorkedHours);
