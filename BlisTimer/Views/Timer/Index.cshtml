@@ -3,13 +3,8 @@
 
 @{
     ViewData["Title"] = "Stopwatch Page";
-    Layout = "_HomeLayout";
 }
 
-@section head{
-    <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
-    <script src="https://kit.fontawesome.com/c6d7f2cfd9.js" crossorigin="anonymous"></script>
-}
 @section scripts {
     <script type="text/javascript">
     // Globals
@@ -390,8 +385,12 @@
 
 
     <div id="clock">
-        <i onclick="subtractFromTimer()" id="minus" class="fa-solid fa-minus"></i>
-        <i onclick="addToTimer()" id="plus" class="fa-solid fa-plus"></i>
+        <i onclick="subtractFromTimer()" id="minus">
+            <img src="~/icons/minus.svg"/>
+        </i>
+        <i onclick="addToTimer()" id="plus">
+            <img src="~/icons/plus.svg"/>
+        </i>
 
         <div class="time">
             @if (ViewBag.RunningTimer == "true")

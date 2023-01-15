@@ -62,6 +62,13 @@ html {
   margin-right: auto;
 }
 
+#clock #plus img,
+#clock #minus img{
+  width: 75px;
+  height: 75px;
+  filter: invert(100%);
+}
+
 @media (max-width: 850px) {
   #bg-timer {
     width: 130px;
