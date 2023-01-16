@@ -92,6 +92,7 @@ nav ul li a span {
     font-size: 15px;
     visibility: hidden;
     opacity: 0;
+    transform: translate(0, 7px);
     transition: 0.2s all ease;
 }
 
