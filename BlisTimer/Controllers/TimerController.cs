@@ -21,10 +21,8 @@ namespace BlisTimer.Controllers
         [Authorize]
         public async Task<IActionResult> Index()
         {
-            await _api.SyncDbWithSimplicate();
             var projectDict = new Dictionary<Tuple<Domain.Models.Project, bool>, List<WorkActivity>>();
             
-            var running = _context.RunningTimers.FirstOrDefault(_ => _.EmployeeId == HttpContext.User.Claims.ToList()[0].Value);
             ViewBag.RunningTimer = "false";
             ViewBag.AllOptionsSelected = "false";
             ViewBag.Time = 0;
@@ -45,6 +43,8 @@ namespace BlisTimer.Controllers
             }
 
             
+            var running = _context.RunningTimers.FirstOrDefault(_ => _.EmployeeId == HttpContext.User.Claims.ToList()[0].Value);
+            
             //When there is already a timer running it should select all the details from this timer. 
             if (running is not null)
             {
@@ -61,6 +61,10 @@ namespace BlisTimer.Controllers
                 ViewBag.RunningTimer = "true";
                 var time = ((int)(DateTime.Now - running.StartTime).TotalSeconds) - 3600;
                 ViewBag.Time = time;
+            }
+            else
+            {
+                await _api.SyncDbWithSimplicate();
             }
 
             var projectId = HttpContext.Session.GetString("ProjectId");

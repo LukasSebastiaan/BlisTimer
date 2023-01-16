@@ -57,15 +57,28 @@ namespace BlisTimer.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Edit(TimeLogAdd timeForm, string id)
         {
             if (timeForm.StartTime > timeForm.EndTime)
                 return Redirect("/Login?error=999");
             
-            var log = await _context.TimeLogs.Where(_ => _.Id == id).SingleAsync();
+            var employeeId = HttpContext.User.Claims.ToList()[0].Value;
+            
+            TimeLog log;
+            try {
+                log = await _context.TimeLogs.Where(_ => _.Id == id && _.EmployeeId == employeeId).SingleAsync();
+            }
+            catch (Exception e) {
+                _logger.LogError("User tried to edit a time-log that does not belong to them or that does not exist");
+                return Redirect("/TimeLog");
+            }
+            
             log.StartTime = DateTime.SpecifyKind(timeForm.StartTime, DateTimeKind.Utc);
             log.EndTime = DateTime.SpecifyKind(timeForm.EndTime, DateTimeKind.Utc);
+            
             await _context.SaveChangesAsync();
+            
             return RedirectToAction("Index");
         }
         
@@ -107,6 +120,9 @@ namespace BlisTimer.Controllers
         [HttpPost]
         public async Task<IActionResult> AddRunningTimer(int time)
         {
+            if (time < 0)
+                return BadRequest("Timer cannot start with a negative number");
+                
             if (_context.RunningTimers.Any(_ => _.EmployeeId == HttpContext.User.Claims.ToList()[0].Value))
             {
                 Console.WriteLine("There is already a running timer");
@@ -141,8 +157,14 @@ namespace BlisTimer.Controllers
                 var employeeId = HttpContext.User.Claims.ToList()[0].Value;
 
                 var timer = _context.RunningTimers.FirstOrDefault(_ => _.EmployeeId == employeeId);
-                var startTime = timer.StartTime.ToUniversalTime().AddHours(1);
-                timer.StartTime = timer.StartTime.AddSeconds(time * -1);
+                
+                var startTime = timer.StartTime.ToUniversalTime();
+                
+                if (startTime.AddSeconds(time * -1) > DateTime.Now.ToUniversalTime())
+                    return BadRequest("Timer cannot go to a negative number");
+                
+                // Time has to be converted to negative, because we want to subtract the added minutes from the start date
+                timer.StartTime = startTime.AddSeconds(time * -1);
                 
 
                 await _context.SaveChangesAsync();
