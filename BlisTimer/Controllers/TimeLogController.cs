@@ -37,22 +37,45 @@ namespace BlisTimer.Controllers
             return View(timeLogs);
         }
 
+        
+        [Authorize]
         public async Task<RedirectToActionResult> Delete(string id)
         {
-            var timelog = await _context.TimeLogs.Where(_ => _.Id == id).SingleOrDefaultAsync();
+            var employeeId = HttpContext.User.Claims.ToList()[0].Value;
+
+            TimeLog timelog;
+            try {
+                timelog = await _context.TimeLogs.Where(_ => _.Id == id && _.EmployeeId == employeeId).SingleAsync();
+            }
+            catch (Exception e) {
+                _logger.LogError(e, "Error while deleting timelog");
+                return RedirectToAction("Index");
+            }
+            
             timelog.Deleted = true;
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
         [Authorize]
-        public IActionResult Edit(string id)
+        public async Task<IActionResult> Edit(string id)
         {
-            Console.WriteLine("In edit function with id: " + id);
-            ViewBag.log = _context.TimeLogs.Single(_ => _.Id == id);
+            var employeeId = HttpContext.User.Claims.ToList()[0].Value;
+
+            try
+            {
+                ViewBag.log = await _context.TimeLogs.SingleAsync(_ => _.Id == id && _.EmployeeId == employeeId);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error while editing timelog");
+                return RedirectToAction("Index");
+            }
+            
             ViewBag.min = ViewBag.log.StartTime.ToString("yyyy-MM-dd HH:mm");
             ViewBag.cet = ViewBag.log.EndTime.ToString("yyyy-MM-dd HH:mm");
             ViewBag.max = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
+            
             return View();
         }
 
