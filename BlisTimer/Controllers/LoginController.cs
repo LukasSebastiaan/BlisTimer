@@ -42,6 +42,9 @@ namespace BlisTimer.Controllers
             {
                 switch (error)
                 {
+                    case 999:
+                        ViewBag.ErrorMessage = "You did an illegal action.";
+                        break;
                     case 501:
                         ViewBag.ErrorMessage = "There is something wrong the the Simplicate API. Please try again later. " +
                                                 "If you have already logged in before, you can still use the site, but you will " +
@@ -81,7 +84,7 @@ namespace BlisTimer.Controllers
             _logger.LogInformation("Simplicate login returned: " + loginResult.Status);
             if (loginResult.IsSuccess)
             {
-                var query = await _context.Employees.Where(_ => _.Id == loginResult.User.EmployeeId).ToListAsync();
+                var query = await _context.Employees.Where(_ => _.Id == loginResult.User!.EmployeeId).ToListAsync();
                 if (query.Count == 0)
                 {
                     await _context.AddAsync(
@@ -124,7 +127,7 @@ namespace BlisTimer.Controllers
                     if (!isUpdated)
                     {
                         _logger.LogInformation("Password was not up-to-date");
-                        var employee = _context.Employees.Where(_ => _.Id == loginResult.User.EmployeeId).FirstOrDefault();
+                        var employee = _context.Employees.FirstOrDefault(_ => _.Id == loginResult.User!.EmployeeId);
                         if (employee != null)
                         {
                             employee.Password = hasher.Hash(emp.Password);

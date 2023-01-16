@@ -37,7 +37,7 @@ public sealed class LoginResult
     public static readonly LoginResult Failed = new LoginResult { Status = LoginStatus.Failed };
     
     /// <summary>
-    /// Returns a reusable instance of <see cref="LoginResult"/> with <see cref="Status"/> set to <see cref="LoginStatus.ServerDown"/>.
+    /// Returns a reusable instance of <see cref="LoginResult"/> with <see cref="Status"/> set to <see cref="LoginStatus.ServerError"/>.
     /// </summary>
     public static readonly LoginResult ServerError = new LoginResult { Status = LoginStatus.ServerError };
 }

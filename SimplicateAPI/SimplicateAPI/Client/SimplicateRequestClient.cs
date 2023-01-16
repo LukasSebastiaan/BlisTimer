@@ -11,7 +11,12 @@ public class SimplicateRequestClient
     public SimplicateRequestClient(HttpClient httpClient) =>
         HttpClient = httpClient;
 
-
+    /// <summary>
+    /// Makes a request to the Simplicate API and does all the necessary error handling.
+    /// </summary>
+    /// <param name="relativeUrl">The relative url to the API endpoint</param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns>A generic type containing the response of the request</returns>
     public async Task<T?> GetRequestAsync<T>(string relativeUrl) where T : class
     {
         var httpResponse = await HttpClient.GetAsync(relativeUrl);
@@ -31,6 +36,12 @@ public class SimplicateRequestClient
         return JsonSerializer.Deserialize<T>(responseJson["data"]!.ToJsonString())!;
     }
 
+    /// <summary>
+    /// Posts a request to the Simplicate API and does all the necessary error handling.
+    /// </summary>
+    /// <param name="relativeUrl">The relative url to the API endpoint</param>
+    /// <param name="content">The HttpContent to post the the endpoint</param>
+    /// <returns>A Http Status code that is returned from the request</returns>
     public async Task<HttpStatusCode> PostRequestAsync(string relativeUrl, HttpContent content)
     {
         var httpResponse = await HttpClient.PostAsync(relativeUrl, content);

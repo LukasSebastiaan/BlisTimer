@@ -33,8 +33,8 @@ public class ApiDatabaseHandler
     public async Task<IEnumerable<TimeLog>> SubmitHoursToSimplicate(List<TimeLog> hoursToSumbit)
     {
         var submitTasks = new List<Tuple<Task<HttpStatusCode>, TimeLog>>();
-        
-        for (int tries = 10; tries > 0; tries--)
+
+        for (int tries = 5; tries > 0; tries--)
         {
             foreach (var timeLog in hoursToSumbit)
             {

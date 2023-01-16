@@ -35,7 +35,15 @@ namespace BlisTimer.Controllers
         [Authorize, HttpPost]
         public async Task<IActionResult> Index(PreferencesForm pForm)
         {
+            if (pForm.NotificationTimeHours is > 8 or < 1)
+                return Redirect("/Login?error=999");
+            
+            if (pForm.ChangeCountTimeSeconds is > 600 or < 1)
+                return Redirect("/Login?error=999");
+            
+            
             var preference = _context.Preferences.FirstOrDefault(_ => _.EmployeeId == HttpContext.User.Claims.ToList()[0].Value);
+            
             preference.NotificationEnabled = pForm.NotificationEnabled ? 1 : 0;
             preference.NotificationTimeSeconds = pForm.NotificationTimeHours * 60 * 60;
             preference.ChangeCountTimeSeconds = pForm.ChangeCountTimeSeconds;

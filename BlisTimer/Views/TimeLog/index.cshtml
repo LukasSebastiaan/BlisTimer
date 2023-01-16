@@ -15,7 +15,10 @@
               location.reload();
             },
             error: function (result) {
-              alert(result.responseText);
+              alert("An error occured while sending the hours");
+              setTimeout(function () {
+                location.reload();
+              }, 3000);
             }
         })
     }

@@ -59,6 +59,9 @@ namespace BlisTimer.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(TimeLogAdd timeForm, string id)
         {
+            if (timeForm.StartTime > timeForm.EndTime)
+                return Redirect("/Login?error=999");
+            
             var log = await _context.TimeLogs.Where(_ => _.Id == id).SingleAsync();
             log.StartTime = DateTime.SpecifyKind(timeForm.StartTime, DateTimeKind.Utc);
             log.EndTime = DateTime.SpecifyKind(timeForm.EndTime, DateTimeKind.Utc);

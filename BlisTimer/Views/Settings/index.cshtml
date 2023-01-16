@@ -15,11 +15,11 @@
                     <input id="notification-enabled" type="checkbox" asp-for="NotificationEnabled"/>
                 </div>
                 <div class="notification-time formBox">
-                    <label>Notification Time</label>
+                    <label>Notification Time (hours)</label>
                     <input type="number" min="1" max="8" asp-for="NotificationTimeHours" value="@ViewBag.timeInHours">
                 </div>
                 <div class="formBox">
-                    <label>Add/Subtract time from timer</label>
+                    <label title="The seconds added/subtracted from the timer with the + and - buttons">Add/Subtract Time (seconds)</label>
                     <input type="number" min="1" max="600" asp-for="ChangeCountTimeSeconds" value="@ViewBag.ModifyCount"> <br>
                 </div>
                 <div id="submitBox">
