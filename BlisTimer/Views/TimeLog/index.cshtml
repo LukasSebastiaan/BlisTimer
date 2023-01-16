@@ -218,7 +218,7 @@
                             <td>@timelog.EndTime.ToLocalTime()</td>
                             <td>
                                 @{var workedHours = timelog.EndTime - timelog.StartTime;}
-                                @workedHours.Hours.ToString("0#"):@workedHours.Minutes.ToString("0#")
+                                @workedHours.TotalHours.ToString("0#"):@workedHours.Minutes.ToString("0#")
                             </td>
                             <td>@timelog.HourType.Label</td>
                             <td>
