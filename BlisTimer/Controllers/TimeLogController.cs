@@ -207,7 +207,7 @@ namespace BlisTimer.Controllers
                 return BadRequest("There are already hours being submitted");
             
             var hoursToSubmit = _context.TimeLogs
-                .Where(_ => _.Submitted == false)
+                .Where(_ => !_.Submitted && !_.Deleted)
                 .Include(_ => _.Activity)
                 .Include(_ => _.HourType)
                 .Include(_ => _.Employee)
@@ -218,20 +218,32 @@ namespace BlisTimer.Controllers
                 return BadRequest("There are no hours to submit");
             
             HttpContext.Session.SetString("hoursBeingSubmitted", "true");
-            
-            var failedSubmissions = await _databasehandler.SubmitHoursToSimplicate(hoursToSubmit);
-            
-            var successfullySubmittedHours = hoursToSubmit.Where(_ => !failedSubmissions.Contains(_)).ToList();
-            
-            foreach (var hour in successfullySubmittedHours)
-                hour.Submitted = true;
-            
-            await _context.SaveChangesAsync();
+
+            try
+            {
+                var failedSubmissions = await _databasehandler.SubmitHoursToSimplicate(hoursToSubmit);
+                
+                var successfullySubmittedHours = hoursToSubmit.Where(_ => !failedSubmissions.Contains(_)).ToList();
+                
+                foreach (var hour in successfullySubmittedHours)
+                    hour.Submitted = true;
+                
+                await _context.SaveChangesAsync();
+
+                if (failedSubmissions.Any())
+                {
+                    HttpContext.Session.SetString("hoursBeingSubmitted", "false");
+                    return BadRequest(300);
+                }
+            }
+            catch (Exception e)
+            {
+                HttpContext.Session.SetString("hoursBeingSubmitted", "false");
+                _logger.LogError("Error while submitting hours to simplicate: " + e.Message);
+                return BadRequest("There was an error while submitting the hours to simplicate");
+            }
             
             HttpContext.Session.SetString("hoursBeingSubmitted", "false");
-            
-            if (failedSubmissions.Any())
-                return BadRequest(300);
 
             return Ok();
         }

@@ -165,7 +165,7 @@
 
     //stop button
     function stop() {
-      if(seconds > 0){
+      if(timerOn){
         clock.classList.remove("clock-fase")
         openPopup();
       }
@@ -386,10 +386,10 @@
 
     <div id="clock">
         <i onclick="subtractFromTimer()" id="minus">
-            <img src="~/icons/minus.svg"/>
+            <img src="~/icons/minus.svg" alt="Icon of a minus symbol"/>
         </i>
         <i onclick="addToTimer()" id="plus">
-            <img src="~/icons/plus.svg"/>
+            <img src="~/icons/plus.svg" alt="Icon of a plus symbol"/>
         </i>
 
         <div class="time">
