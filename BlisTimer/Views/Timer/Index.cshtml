@@ -192,6 +192,9 @@
             clearInterval(interval);
             interval = null;
             time_el.innerText = "00:00:00";
+            setTimeout(function(){ 
+                workedTime.innerText = "00:00:00";
+            }, 300);
             timerIsRunningAlready = false;
             startButton.style.opacity = 1;
             startButton.style.cursor = "pointer";

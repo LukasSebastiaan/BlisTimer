@@ -1,15 +1,7 @@
-using System.ComponentModel.Design;
 using System.Globalization;
-using System.Net;
-using System.Reflection;
 using BlisTimer.Data;
 using Microsoft.EntityFrameworkCore;
-using BlisTimer.Controllers;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Localization;
-using Microsoft.AspNetCore.Mvc.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,7 +28,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
     {
         options.LoginPath = new PathString("/Login");
-        options.AccessDeniedPath = new PathString("/denied");
+        options.AccessDeniedPath = new PathString("/Login?error=999");
         options.SlidingExpiration = true;
         options.ExpireTimeSpan = TimeSpan.FromDays(3);
     });
@@ -59,7 +51,7 @@ else
 
 app.Use(async (context, next) =>
 {
-    Console.WriteLine(context.Request.Path.Value);
+    // Console.WriteLine(context.Request.Path.Value);
     
     await next.Invoke();
 });

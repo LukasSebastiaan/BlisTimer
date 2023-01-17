@@ -110,6 +110,7 @@ namespace BlisTimer.Controllers
         }
         
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> SumbitTimelog(int timeModified)
         {
             var employeeId = HttpContext.User.Claims.ToList()[0].Value;
@@ -119,12 +120,8 @@ namespace BlisTimer.Controllers
 
             var runningTimer = _context.RunningTimers.FirstOrDefault(_ => _.EmployeeId == employeeId);
 
-            var Id = Guid.NewGuid().ToString();
-            var StartTime = runningTimer.StartTime.ToLocalTime().AddSeconds(timeModified * -1);
-            var EndTime = DateTime.Now.ToLocalTime();
-            var ActivityId = HttpContext.Session.GetString("ActivityId");
-            var HourTypeId = HttpContext.Session.GetString("HourTypeId");
-            var EmployeeId = employeeId;
+            if (runningTimer!.StartTime.AddSeconds(timeModified * -1) > DateTime.Now.ToUniversalTime())
+                return BadRequest("Timer cannot be modified to a negative number");
 
             await _context.TimeLogs.AddAsync(new TimeLog()
             {
@@ -145,6 +142,7 @@ namespace BlisTimer.Controllers
         }
         
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> AddRunningTimer(int time)
         {
             if (time < 0)
@@ -205,6 +203,7 @@ namespace BlisTimer.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> PostHoursToSimplicate()
         {
             if (HttpContext.Session.GetString("hoursBeingSubmitted") == "true")
@@ -244,7 +243,7 @@ namespace BlisTimer.Controllers
             {
                 HttpContext.Session.SetString("hoursBeingSubmitted", "false");
                 _logger.LogError("Error while submitting hours to simplicate: " + e.Message);
-                return BadRequest("There was an error while submitting the hours to simplicate");
+                return BadRequest("Something went wrong while connecting to the simplicate API");
             }
             
             HttpContext.Session.SetString("hoursBeingSubmitted", "false");

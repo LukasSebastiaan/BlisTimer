@@ -12,6 +12,7 @@ public sealed class PHasher
     {
         this.options = new OptionsHash(options.Iterations);
     }
+    
     public string Hash(string password)
     {
         var algorithm = new Rfc2898DeriveBytes(password, saltSize, options.Iterations, HashAlgorithmName.SHA256);

@@ -157,7 +157,6 @@ public class ApiDatabaseHandler
                         {
                             HourTypeId = activityHourType.HourstypeInfo.Id,
                             Label = activityHourType.HourstypeInfo.Label,
-                            Type = activityHourType.HourstypeInfo.Type,
                         });
                     }
                 }
@@ -167,7 +166,6 @@ public class ApiDatabaseHandler
                         _dbContext.HourTypes.FirstOrDefault(x => x.HourTypeId == activityHourType.HourstypeInfo.Id);
 
                     dbHourTypeRecord!.Label = activityHourType.HourstypeInfo.Label;
-                    dbHourTypeRecord!.Type = activityHourType.HourstypeInfo.Type;
                 }
                 
                 // Add record to WorkActivityHourTypes to link the HoursType to the work activity if it doesn't
@@ -252,14 +250,5 @@ public class ApiDatabaseHandler
         
         _dbContext.WorkActivities.RemoveRange(
             _dbContext.WorkActivities.Where(x => notExistingInSimplicateServices.Contains(x.Id)));
-    }
-
-    public bool IsLoggedIn(HttpContext httpContext)
-    {
-        if (string.IsNullOrEmpty(httpContext.Session.GetString("Id")))
-        {
-            return false;
-        }
-        return true;
     }
 }

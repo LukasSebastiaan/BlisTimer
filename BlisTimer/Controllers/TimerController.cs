@@ -158,6 +158,7 @@ namespace BlisTimer.Controllers
         }
         
         [HttpPost]
+        [Authorize]
         public IActionResult Index(string Id)
         {
             HttpContext.Session.SetString("ProjectId", Id);
@@ -166,7 +167,9 @@ namespace BlisTimer.Controllers
             
             return RedirectToAction("Index");
         }
+        
         [HttpPost]
+        [Authorize]
         public IActionResult Index2(string Id)
         {
             
@@ -178,6 +181,9 @@ namespace BlisTimer.Controllers
             
             return RedirectToAction("Index");
         }
+        
+        [HttpPost]
+        [Authorize]
         public IActionResult Index3(string Id)
         {
             

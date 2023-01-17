@@ -25,10 +25,7 @@ namespace BlisTimer.Data
             modelBuilder.UseSerialColumns();
 
             modelBuilder.Entity<RunningTimer>()
-                .HasOne(_ => _.Employee)
-                .WithOne(_ => _.RunningTimer)
-                .HasForeignKey<RunningTimer>(_ => _.EmployeeId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .HasOne(_ => _.Employee);
 
             modelBuilder.Entity<EmployeeProject>()
                 .HasKey(ep => new { ep.EmployeeId, ep.ProjectId });

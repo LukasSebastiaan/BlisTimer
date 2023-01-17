@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-using System.Net;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using BlisTimer.Models;
 using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +6,6 @@ using BlisTimer.Data;
 using ConsoleApp1;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using SimplicateAPI.ReturnTypes;
 
@@ -35,8 +32,6 @@ namespace BlisTimer.Controllers
                 await HttpContext.SignOutAsync();
                 HttpContext.Session.Clear();
             }
-            
-            Console.WriteLine(error);
 
             if (error.HasValue)
             {
@@ -104,7 +99,6 @@ namespace BlisTimer.Controllers
                         Password = hasher.Hash(emp.Password),
                         Name = loginResult.User.FirstName,
                         LastName = loginResult.User.FamilyName,
-                        Role = loginResult.User.IsAccountOwner ? 2 : 1,
                     });
                     await _context.SaveChangesAsync();
                 }
@@ -188,7 +182,6 @@ namespace BlisTimer.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            Console.WriteLine("ERROR LOLOLOLADSHUIDHASIFDHSDUIFHSDUIFHSDUIFG");
             return RedirectToAction("Index");
         }
     }
