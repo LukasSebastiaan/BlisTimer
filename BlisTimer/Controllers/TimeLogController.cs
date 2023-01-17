@@ -61,10 +61,11 @@ namespace BlisTimer.Controllers
         public async Task<IActionResult> Edit(string id)
         {
             var employeeId = HttpContext.User.Claims.ToList()[0].Value;
+            var log = await _context.TimeLogs.SingleAsync(_ => _.Id == id && _.EmployeeId == employeeId);
 
             try
             {
-                ViewBag.log = await _context.TimeLogs.SingleAsync(_ => _.Id == id && _.EmployeeId == employeeId);
+                ViewBag.log = log;
             }
             catch (Exception e)
             {
@@ -72,9 +73,12 @@ namespace BlisTimer.Controllers
                 return RedirectToAction("Index");
             }
             
-            ViewBag.min = ViewBag.log.StartTime.ToString("yyyy-MM-dd HH:mm");
-            ViewBag.cet = ViewBag.log.EndTime.ToString("yyyy-MM-dd HH:mm");
-            ViewBag.max = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
+            ViewBag.min = log.StartTime.ToLocalTime().ToString("yyyy-MM-dd HH:mm");
+            ViewBag.start = log.StartTime.ToLocalTime().ToString("yyyy-MM-dd HH:mm");
+            ViewBag.end = log.EndTime.ToLocalTime().ToString("yyyy-MM-dd HH:mm");
+            ViewBag.cet = log.EndTime.ToLocalTime().ToString("yyyy-MM-dd HH:mm");
+            ViewBag.max = log.EndTime.ToLocalTime().ToString("yyyy-MM-dd HH:mm");
+            
             
             return View();
         }
@@ -96,9 +100,9 @@ namespace BlisTimer.Controllers
                 _logger.LogError("User tried to edit a time-log that does not belong to them or that does not exist");
                 return Redirect("/TimeLog");
             }
-            
-            log.StartTime = DateTime.SpecifyKind(timeForm.StartTime, DateTimeKind.Utc);
-            log.EndTime = DateTime.SpecifyKind(timeForm.EndTime, DateTimeKind.Utc);
+
+            log.StartTime = timeForm.StartTime.ToUniversalTime();
+            log.EndTime = timeForm.EndTime.ToUniversalTime();
             
             await _context.SaveChangesAsync();
             

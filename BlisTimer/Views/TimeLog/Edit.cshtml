@@ -23,8 +23,8 @@
                     <label>End time:</label>
                 </div>
                 <div id="inputBox">
-                    <input id="st" type="datetime-local" asp-for="StartTime" max="@ViewBag.cet" value="@ViewBag.log.StartTime.ToString("yyyy-MM-dd HH:mm")" required />
-                    <input id="et" type="datetime-local" asp-for="EndTime" min="@ViewBag.min" max="@ViewBag.max" value="@ViewBag.log.EndTime.ToString("yyyy-MM-dd HH:mm")" required />
+                    <input id="st" type="datetime-local" asp-for="StartTime" max="@ViewBag.cet" value="@ViewBag.start" required />
+                    <input id="et" type="datetime-local" asp-for="EndTime" min="@ViewBag.min" max="@ViewBag.max" value="@ViewBag.end" required />
                 </div>
                 <div id="submitBox">
                     <input type="submit" value="Save changes">
