@@ -1,8 +1,67 @@
+
 .main{
     color: white;
     padding: 0;
     margin: 0;
     font-family: "TT Commons", sans-serif;
+}
+.main-blur{
+    color: white;
+    padding: 0;
+    margin: 0;
+    font-family: "TT Commons", sans-serif;
+    filter: blur(20px);
+    pointer-events: none;
+
+}
+
+#popup-backdrop {
+    backdrop-filter: blur(10px);
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    font-family: "TT Commons", sans-serif;
+}
+
+#popup-backdrop #popup-delete,
+#popup-backdrop #popup-submit {
+    background: var(--blis-purple-lighter);
+    width: 900px;
+    position: absolute;
+    display: none;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    flex-direction: column;
+    font-size: 3rem;
+    font-weight: 400;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 0 10px 0 var(--blis-purple-darker);
+}
+
+.button-container {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+#popup-backdrop #popup-delete .button-container a,
+#popup-backdrop #popup-submit .button-container a {
+    color: var(--blis-white);
+    background: var(--blis-purple);
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 20px;
+    min-width: 150px;
+    padding: 10px;
 }
 
 h1{
@@ -10,21 +69,38 @@ h1{
     text-align: center;
     padding: 10px 0;
 }
+#noRecordsContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+#deleteButton {
+    cursor: pointer;
+}
 
 /* Div for table */
 #time-table{
     display: flex;
     justify-content: center;
     align-content: center;
+    width: 100vw;
+    max-width: 1100px;
 }
 table{
     background-color: var(--blis-purple-dark);
     border-collapse: collapse;
-    width: 800px;
+    width: 1100px;
     height: 350px;
     border: 1px solid #bdc3c7;
     *box-shadow: 2px 2px 12px rgba(0,0,0,0.2), -1px -1px 8px rgba(0,0,0, 0.2);
     margin-top: 4rem;
+}
+#header{
+    color: black;
+    background-color: var(--blis-cyan);
+    height: 50px;
 }
 tr{
     transition: all .2s ease-in;
@@ -35,15 +111,17 @@ td{
     padding: 12px;
     text-align: left;
 }
-#header {
-    color: black;
-    background-color: var(--blis-cyan);
-    height: 50px;
-}
 tr:hover{
     background-color: white;
     opacity: 1;
     padding-top: 1px;
     padding-bottom: 1px;
     color: black;
+}
+
+
+@media (max-width: 1265px) {
+    #noRecordsContainer {
+        height: calc(100vh - 50px);
+    }
 }

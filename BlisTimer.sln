@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlisTimer", "BlisTimer\Blis
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimplicateAPI", "SimplicateAPI\SimplicateAPI.csproj", "{D81A1809-5F7A-4EA3-931D-68AA44C6E1C2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{941C326D-05E5-468B-9CC8-1168DAE547A7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{D81A1809-5F7A-4EA3-931D-68AA44C6E1C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D81A1809-5F7A-4EA3-931D-68AA44C6E1C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D81A1809-5F7A-4EA3-931D-68AA44C6E1C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{941C326D-05E5-468B-9CC8-1168DAE547A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{941C326D-05E5-468B-9CC8-1168DAE547A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{941C326D-05E5-468B-9CC8-1168DAE547A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{941C326D-05E5-468B-9CC8-1168DAE547A7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,35 +1,30 @@
-﻿@model BlisTimer.Models.TimeLog
+﻿@model Domain.Models.TimeLog
 
 @{
-    Layout = "_HomeLayout";
+    ViewData["Title"] = "Edit Timelog Page";
 }
 
 <style>
-    #box form {
-        width: 100%;
-    }
-
-    input[type=time] {
-        width: 8rem;
+    #inputBox input {
+        width: 170px;
         padding-left: 20px;
         border: none;
         border-radius: 1em;
+        margin: 0 2%;
     }
 </style>
 
 <div class="main">
-    <h1>Change Timelog</h1>
-    <hr />
     <div id="container">
-        <div id="box">
+        <div id="formBox">
             <form asp-controller="TimeLog" method="post">
                 <div id="labelBox">
                     <label>Start time:</label>
                     <label>End time:</label>
                 </div>
                 <div id="inputBox">
-                    <input type="time" asp-for="StartTime" value="@ViewBag.log.StartTime.ToString("HH:mm")" />
-                    <input type="time" asp-for="EndTime" value="@ViewBag.log.EndTime.ToString("HH:mm")" />
+                    <input id="st" type="datetime-local" asp-for="StartTime" max="@ViewBag.cet" value="@ViewBag.start" required />
+                    <input id="et" type="datetime-local" asp-for="EndTime" min="@ViewBag.min" max="@ViewBag.max" value="@ViewBag.end" required />
                 </div>
                 <div id="submitBox">
                     <input type="submit" value="Save changes">
@@ -38,3 +33,15 @@
         </div>
     </div>
 </div>
+
+<script>
+    //start date/time changes -> end Date/time change aswell
+    document.getElementById("st").addEventListener("change", function(){
+        document.getElementById("et").min = document.getElementById("st").value;
+    });
+
+    //end date/time changes -> start Date/time change aswell
+    document.getElementById("et").addEventListener("change", function () {
+        document.getElementById("st").max = document.getElementById("et").value;
+    });
+</script>

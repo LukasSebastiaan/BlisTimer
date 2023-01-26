@@ -43,6 +43,9 @@ public sealed class Login
         // If the response is not successful, we return the proper LoginResult.
         if (!response.IsSuccessStatusCode)
         {
+            if ((int)response.StatusCode >= 500 && (int)response.StatusCode < 600)
+                return LoginResult.ServerError;
+            
             switch (response.StatusCode)
             {
                 case HttpStatusCode.Unauthorized:

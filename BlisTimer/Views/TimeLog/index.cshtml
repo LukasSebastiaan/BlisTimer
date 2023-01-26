@@ -1,43 +1,57 @@
-@model List<BlisTimer.Models.TimeLog>
+@using System.Globalization
+@model List<Domain.Models.TimeLog>
 
 @{
-    Layout = "_HomeLayout";
+    ViewData["Title"] = "Overview Page";
 }
 
+<script>
+    function submitHours() {
+        $.ajax({
+          type: "POST",
+          url: "/TimeLog/PostHoursToSimplicate",
+            data: "{}",
+            success: function (result) {
+              location.reload();
+            },
+            error: function (result) {
+              alert("An error occured while sending the hours");
+              setTimeout(function () {
+                location.reload();
+              }, 3000);
+            }
+        })
+    }
+</script>
+
 <style>
-    a.editButton{
-        color: white;
-        border: 2px solid white;
-        border-radius: 15%;
-        text-decoration: none;
-        padding: 8% 17%;
-    }
-    tr:hover a.editButton{
-        color: black;
-        border: 2px solid black;
-    }
-
     #buttons{
-        display: flex;
-        justify-content: right;
-        width: 400px;
-        margin: 3vh auto 0 50vw;
+        display: inline-flex;
     }
 
-    input[type="button"]{
+    #submitButton, input[type="button"] {
         color: #ffffff;
         border: 1px solid #ddd;
         border-radius: 5px;
+        margin: 0 2px;
+        height: 40px;
+    }
+    #submitButton{
+        display: flex;
+        margin: 0 2px;
+        width: 130px;
+        justify-content: center;
+        align-items: center;
+    }
+    input[type="button"]{
         padding: 8px 16px;
         text-decoration: none;
-        margin: 0 2px;
     }
-
     input[type="button"]:not(.active){
         background-color: transparent;
     }
 
-    .active {
+    .active{
         background-color: var(--blis-cyan);
         color: #fff;
     }
@@ -46,107 +60,250 @@
         background-color: #ddd;
     }
 
-    #submitHoursContainer{
-        display: flex;
-        justify-content: left;
-        width: 400px;
-        margin: 3vh 50vw 0 auto;
-        transform: translate(0, -153%);
+    #controlsContainer, #totalTimeContainer {
+        display: inline-flex;
     }
-    #submitButton{
-        color: white;
-        border: 1px solid white;
-        border-radius: 5px;
-        text-decoration: none;
-        padding: 8px 16px;
+    #controlsContainer{
+        margin-top: 2vh;
+        width: 1100px;
+        justify-content: space-between;
+    }
+    #totalTimeContainer{
+        /*transform: translate(0, -43px);
+        width: 100%;
+        justify-content: center;*/
     }
     #submitButton:hover{
         background-color: #ddd;
+        cursor: pointer;
+    }
+
+    /* div for edit and delete button */
+    #submitContainer {
+        display: inline-flex;
+    }
+
+    #handleButtons{
+        display: flex;
+    }
+    a.editButton img{
+        width: 32px;
+        filter: invert(75%) sepia(19%) saturate(2426%) hue-rotate(360deg) brightness(120%) contrast(105%);
+    }
+    #deleteButton img{
+        width: 32px;
+        filter: invert(24%) sepia(82%) saturate(4339%) brightness(86%) contrast(141%);
+    }
+    
+    #table-container{
+        height: calc(100vh);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    @@media (max-width: 1265px)
+    {
+        #table-container{
+            height: calc(100vh - 50px);
+            margin-top: 0;
+        }
+    }
+
+    @@media (max-width: 1100px)
+    {
+        #controlsContainer {
+            width: 95%;
+        }
     }
 
     @@media (max-width: 850px)
     {
-        html {
-            overflow: auto;
-        }
-        tr#header {
-            display: none;
-        }
-        td {
+        #table-container{
+            height: calc(100vh - 50px);
             display: block;
         }
-        td:first-child {
+    
+        html{
+            overflow: auto;
+        }
+        tr#header{
+            display: none;
+        }
+        td{
+            display: block;
+        }
+        td:first-child{
             background-color: var(--blis-cyan);
             text-align: center;
             color: black;
             font-weight: 600;
         }
-        td:nth-child(2)::before {
+        td:nth-child(2)::before{
             content: "Activity: ";
         }
-        td:nth-child(3)::before {
+        td:nth-child(3)::before{
              content: "Start time: ";
         }
-        td:nth-child(4)::before {
+        td:nth-child(4)::before{
             content: "End time: ";
         }
-        td:nth-child(5)::before {
+        td:nth-child(5)::before{
+            content: "Hours Worked: ";
+        }
+        td:nth-child(6)::before{
             content: "Hourtype: ";
         }
-        a.editButton {
-            padding: 1% 3%;
+
+        #controlsContainer {
+            width: 96%;
+            justify-content: space-between;
+            margin: 2vh 2vw 0 2vw;
+        }
+        input.pageButtons, input.active{
+            display: none;
         }
 
-        #buttons {
-            width: unset;
-            justify-content: center;
+        #totalTimeContainer {
+            transform: translate(0, -5px);
         }
-        input.pageButtons, input.active {
-            display: none;
+    }
+    @@media (max-width: 515px)
+    {
+        #controlsContainer {
+            margin: 6vh 2vw 2vh 2vw;
+        }
+        #totalTimeContainer {
+            position: absolute;
+            transform: translate(-8px, -45px);
+            justify-content: center;
+            display: flex;
+            width: 100%;
         }
     }
 </style>
 
 <div class="main">
-    <h1>Time overview</h1>
-    <hr>
-    <div id="time-table">
-        <table id="logTable">
-            <thead>
-                <tr id="header">
-                    <th>Project</th>
-                    <th>Activity</th>
-                    <th>StartTime</th>
-                    <th>EndTime</th>
-                    <th>HourType</th>
-                    <th>Handle</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var timelog in Model)
-                {
-                    <tr>
-                        <td>@timelog.Activity.Project.Name</td>
-                        <td>@timelog.Activity.Name</td>
-                        <td>@timelog.StartTime</td>
-                        <td>@timelog.EndTime</td>
-                        <td>@timelog.HourType.Label</td>
-                        <td>
-                            <a class="editButton" asp-controller="TimeLog" asp-action="Edit" asp-route-id="@timelog.Id">Edit</a>
-                        </td>
+    @if (Model.Count == 0)
+    {
+        <div id="noRecordsContainer">
+            <h2>Whoops, no existing records</h2>
+        </div>
+    }
+    else
+    {
+        <div id="table-container">
+            <div id="time-table">
+                <table id="logTable">
+                    <thead>
+                    <tr id="header">
+                        <th>Project</th>
+                        <th>Activity</th>
+                        <th>StartTime</th>
+                        <th>EndTime</th>
+                        <th>Hours Worked</th>
+                        <th>HourType</th>
+                        <th>Handle</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                    </thead>
+                    <tbody>
+                    @foreach (var timelog in Model)
+                    {
+                        var nlCulture = new CultureInfo("nl-NL");
+                        <tr>
+                            <td>@timelog.Activity.Project.Name</td>
+                            <td>@timelog.Activity.Name</td>
+                            <td>@timelog.StartTime.ToLocalTime()</td>
+                            <td>@timelog.EndTime.ToLocalTime()</td>
+                            <td>
+                                @{var workedHours = timelog.EndTime - timelog.StartTime;}
+                                @workedHours.TotalHours.ToString("0#"):@workedHours.Minutes.ToString("0#")
+                            </td>
+                            <td>@timelog.HourType.Label</td>
+                            <td>
+                                <div id="handleButtons">
+                                    <a class="editButton" asp-controller="TimeLog" asp-action="Edit" asp-route-id="@timelog.Id">
+                                        <img src="~/icons/edit.svg" alt="Icon resembling editing something"/>
+                                    </a>
+                                    <a id="deleteButton" onclick="toggleDeleteTimePopup('@timelog.Id')">
+                                        <img src="~/icons/delete.svg" alt="A red cross resembling deleting"/>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+            <div id="controlsContainer">
+                <div id="submitContainer">
+                    <a id="submitButton" onclick="toggleSubmitHoursPopup()">Submit hours</a>
+                </div>
+                <div id="totalTimeContainer">
+                    <p>Total time worked: @ViewBag.totalTime</p>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div id="popup-backdrop" style="display: none">
+    <div id="popup-delete" style="display: none">
+        <p>Are you sure you want to delete this hour?</p>
+        <div class="button-container">
+            <a onclick="toggleDeleteTimePopup('')">Cancel</a>
+            <a href="">Confirm</a>
+        </div>
     </div>
-    <div id="submitHoursContainer">
-        <a id="submitButton" asp-controller="Timelog">Submit hours</a>
+    <div id="popup-submit" style="display: none">
+        <p>Are you sure you want to submit your hours?</p>
+        <div class="button-container">
+            <a onclick="toggleSubmitHoursPopup()">Cancel</a>
+            <a onclick="submitHours()">Confirm</a>
+        </div>
     </div>
 </div>
 
 <script>
+    
+    const toggleBlurBackground = () => {
+        var popup_backdrop = document.getElementById("popup-backdrop");
+        if (popup_backdrop.style.display === "none") {
+            popup_backdrop.style.display = "flex";
+        } else {
+            popup_backdrop.style.display = "none";
+        }
+    }
+    
+    const toggleDeleteTimePopup = (id) => {
+        var popup_delete = document.getElementById("popup-delete");
+        
+        if (popup_delete.style.display === "none") {
+            toggleBlurBackground();
+            popup_delete.children[1].children[1].setAttribute("href", "/TimeLog/Delete/" + id);
+            popup_delete.style.display = "flex";
+        } else {
+            popup_delete.style.display = "none";
+            popup_delete.children[1].children[1].setAttribute("href", "");
+            toggleBlurBackground();
+        }
+    }
+    
+    const toggleSubmitHoursPopup = () => {
+        var popup_submit = document.getElementById("popup-submit");
+        
+        if (popup_submit.style.display === "none") {
+            toggleBlurBackground();
+            popup_submit.style.display = "flex";
+        } else {
+            popup_submit.style.display = "none";
+            toggleBlurBackground();
+        }
+    }
+
     var $table = document.getElementById("logTable"),
-        $div = document.getElementById("time-table"),
+        $div = document.getElementById("totalTimeContainer"),
         $rowsPerPage = 4,
         $rowCount = $table.rows.length,
         $firstRow = $table.rows[0].firstElementChild.tagName,

@@ -4,10 +4,11 @@
     align-items: center;
     transition: 0.5s all ease;
     height: 100vh;
+    z-index: 100;
 }
 
 #nav-menu-wrapper.hide {
-    translate: -70px 0;
+    translate: -75px 0;
 }
 
 nav {
@@ -16,11 +17,14 @@ nav {
     left: 20px;
     top: 0;
     bottom: 0;
+    display: block;
+    box-sizing: border-box;
     margin: auto 0;
-    background-color: #fefefe;
+    background: var(--blis-purple-lighter);
     padding: 20px 10px;
     border-radius: 30px;
-    z-index: 10;
+    z-index: 100;
+    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.2);
 }
 
 #hide-button {
@@ -28,10 +32,10 @@ nav {
     display: flex;
     align-items: center;
     justify-content: center;
-    left: -30px;
+    left: -36px;
     height: 50px;
-    width: 50px;
-    translate: 0 -150px;
+    width: 55px;
+    translate: 0 -148px;
     border-radius: 100%;
     z-index: 9;
     cursor: pointer;
@@ -39,21 +43,23 @@ nav {
     background-color: var(--blis-purple-dark);
 }
 
-#hide-button svg {
+#hide-button img {
     transition: all 0.5s ease;
     filter: invert(100%);
-    width: 100px;
+    width: 30px;
     left: 10px;
 }
 
 nav ul {
     list-style: none;
     display: flex;
+    gap: 10px;
     justify-content: space-between;
     align-items: center;
     flex-flow: column;
     height: 100%;
     padding: 0;
+    margin: 0;
 }
 
 nav ul li {
@@ -69,13 +75,14 @@ nav ul li a {
     width: 100%;
 }
 
-nav ul li a svg {
-    width: 30px;
-    height: 30px;
+nav ul li a img {
+    width: 37px;
+    height: 37px;
 }
 
 nav ul li a span {
     position: absolute;
+    font-family: "TT Commons", sans-serif;
     background-color: var(--blis-white);
     padding: 2px 15px;
     left: 35px;
@@ -85,6 +92,7 @@ nav ul li a span {
     font-size: 15px;
     visibility: hidden;
     opacity: 0;
+    transform: translate(0, 7px);
     transition: 0.2s all ease;
 }
 
@@ -95,7 +103,7 @@ nav ul li a:hover {
 nav ul li a:hover span:not(:hover) {
     visibility: visible;
     opacity: 1;
-    left: 45px;
+    left: 50px;
 }
 
 #hide-button:not(:is(#hide-button.hide)):hover,
@@ -105,8 +113,8 @@ nav:hover ~ #hide-button:not(:is(#hide-button.hide)) {
     translate: 0 -170px;
 }
 
-#hide-button:not(:is(#hide-button.hide)):hover svg,
-nav:hover ~ #hide-button:not(:is(#hide-button.hide)) svg {
+#hide-button:not(:is(#hide-button.hide)):hover img,
+nav:hover ~ #hide-button:not(:is(#hide-button.hide)) img {
     translate: 0 -19px;
 }
 
@@ -128,7 +136,7 @@ main {
 }
 
 
-@media (max-width: 800px) {
+@media (max-width: 1265px) {
     #nav-menu-wrapper.hide {
         translate: 0 0;
     }
@@ -145,15 +153,15 @@ main {
         align-items: center;
         justify-content: center;
         flex-flow: column;
+        bottom: 0;
     }
     
     nav {
         margin: 0;
         left: 0;
-        top: calc(100vh - 50px);
         bottom: 0;
         border-radius: 0;
-        border-top: var(--blis-purple-dark) 2px solid;
+        border: none;
         height: 50px;
         width: 100vw;
     }

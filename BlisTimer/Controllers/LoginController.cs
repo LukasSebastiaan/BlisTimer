@@ -1,7 +1,6 @@
-﻿using System.Diagnostics;
-using System.Security.Claims;
-using System.Net;
+﻿using System.Security.Claims;
 using BlisTimer.Models;
+using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using BlisTimer.Data;
 using ConsoleApp1;
@@ -12,7 +11,6 @@ using SimplicateAPI.ReturnTypes;
 
 namespace BlisTimer.Controllers
 {
-    
     public class LoginController : Controller
     {
         private readonly ILogger<LoginController> _logger;
@@ -27,32 +25,61 @@ namespace BlisTimer.Controllers
         }
         
         [AllowAnonymous]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? error)
         {
             if (User.Identity.IsAuthenticated)
             {
                 await HttpContext.SignOutAsync();
                 HttpContext.Session.Clear();
             }
+
+            if (error.HasValue)
+            {
+                switch (error)
+                {
+                    case 999:
+                        ViewBag.ErrorMessage = "You did an illegal action.";
+                        break;
+                    case 501:
+                        ViewBag.ErrorMessage = "There is something wrong the the Simplicate API. Please try again later. " +
+                                                "If you have already logged in before, you can still use the site, but you will " +
+                                                "be working with old or outdated data.";
+                        break;
+                    case 500:
+                        ViewBag.ErrorMessage = "The website is currently down. Please try again later.";
+                        break;
+                    case 404:
+                        if (!await _context.Database.CanConnectAsync())
+                          return Redirect("Login?error=500");
+                        
+                        ViewBag.ErrorMessage = "The page you are looking for does not exist.";
+                        break;
+                    default:
+                        ViewBag.ErrorMessage = "An unknown error has occurred.";
+                        break;
+                }
+            }
             
-            var updateDatabaseTask = _apiDatabaseHandler.SyncDbWithSimplicate();
             return View(new LoginForm());
         }
 
         [HttpPost]
         public async Task<IActionResult> Index(LoginForm emp)
         {
+            if (!await _context.Database.CanConnectAsync())
+              return Redirect("Login?error=500");
+            
             _logger.LogInformation("Getting hasher to hash password");
             var hasher = new PHasher(new OptionsHash(1000));
             
-            _logger.LogInformation("Trying to log user with in Simplicate");
+            
+            _logger.LogInformation("Trying to log user with in Simplicate with data:\n\t" + emp.Email + "\n\t" + emp.Password);
             var loginResult = await _apiDatabaseHandler.SimplicateApiClient.Login.TryUnsafeLoginAsync(emp.Email, emp.Password);
             
-            //The login via the api was succesful so we log them in, if the info is not yet in the database we add it.
+            _logger.LogInformation("Simplicate login returned: " + loginResult.Status);
             if (loginResult.IsSuccess)
             {
-                
-                var query = await _context.Employees.Where(_ => _.Id == loginResult.User.EmployeeId).ToListAsync();
+                var query = await _context.Employees.Where(_ => _.Id == loginResult.User!.EmployeeId).ToListAsync();
                 if (query.Count == 0)
                 {
                     await _context.AddAsync(
@@ -60,7 +87,8 @@ namespace BlisTimer.Controllers
                         {
                             Id = Guid.NewGuid().ToString(),
                             EmployeeId = loginResult.User!.EmployeeId,
-                            NotificationEnabled = true,
+                            NotificationEnabled = 1, //1 == true, 0 == false
+                            ChangeCountTimeSeconds = 15,
                             NotificationTimeSeconds = 3600,
                         }
                     );
@@ -71,7 +99,6 @@ namespace BlisTimer.Controllers
                         Password = hasher.Hash(emp.Password),
                         Name = loginResult.User.FirstName,
                         LastName = loginResult.User.FamilyName,
-                        Role = loginResult.User.IsAccountOwner ? 2 : 1,
                     });
                     await _context.SaveChangesAsync();
                 }
@@ -94,7 +121,7 @@ namespace BlisTimer.Controllers
                     if (!isUpdated)
                     {
                         _logger.LogInformation("Password was not up-to-date");
-                        var employee = _context.Employees.Where(_ => _.Id == loginResult.User.EmployeeId).FirstOrDefault();
+                        var employee = _context.Employees.FirstOrDefault(_ => _.Id == loginResult.User!.EmployeeId);
                         if (employee != null)
                         {
                             employee.Password = hasher.Hash(emp.Password);
@@ -128,7 +155,7 @@ namespace BlisTimer.Controllers
             }
             
             //The login was not successful via the api, we check if the details are in the database if so, we log them in. Else we show an error. 
-            if (loginResult.Status == LoginResult.LoginStatus.Failed)
+            if (loginResult.Status is LoginResult.LoginStatus.Failed or LoginResult.LoginStatus.ServerError)
             {
                 var allHashedPasswords = await _context.Employees.Where(_ => _.Email == emp.Email).Select(_ => _.Password).ToListAsync();
             
@@ -142,10 +169,12 @@ namespace BlisTimer.Controllers
                         return RedirectToAction("Index", "Timer");
                     }
                 }
-                
-                emp.Status = "BadCredentials";
-                return View(emp);
             }
+            
+            if (loginResult.Status is LoginResult.LoginStatus.ServerError)
+                return Redirect("Login?error=501");
+            
+            ViewBag.ErrorMessage = "The email or password you entered is incorrect.";
             return View(emp);
         }
         
@@ -153,7 +182,7 @@ namespace BlisTimer.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return RedirectToAction("Index");
         }
     }
 }

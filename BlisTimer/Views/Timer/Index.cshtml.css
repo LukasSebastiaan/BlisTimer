@@ -1,5 +1,5 @@
 ﻿* {
-    font-family: 'Fira sans', sans-serif;
+    font-family: 'TT Commons', sans-serif;
     box-sizing: border-box;
     margin: 0;
 }
@@ -13,7 +13,7 @@
     justify-content: center;
 }
 
-
+.popup,
 .watch {
     text-align: center;
     background: linear-gradient(-90deg, var(--blis-purple-lighter), var(--blis-purple));
@@ -27,6 +27,27 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
+    transition: all 0.5s ease;
+}
+
+.popup {
+    opacity: 0;
+    top: 0;
+    display: flex;
+    position: absolute;
+    align-items: center;
+    gap: 50px;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.popup #button-container {
+    display: flex;
+    gap: 20px;
+}
+
+.watch {
+    opacity: 1;
 }
 
 .task {
@@ -61,7 +82,21 @@
     box-shadow: 0px 0px 20px 0px rgba(240, 200, 0, 0.1);
     justify-content: center;
     align-items: center;
-    transition: all 2s ease;
+    transition: all 0.25s ease;
+}
+
+#clock #plus{
+    position: relative;
+    right: -70%;
+    font-size: 50px;
+    cursor: pointer;
+}
+
+#clock #minus{
+    position: relative;
+    right: 70%;
+    font-size: 50px;
+    cursor: pointer;
 }
 
 #clock.clock-fase {
@@ -76,6 +111,11 @@
     font-size: 5rem;
     font-weight: 700;
     margin-bottom: 1rem;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#time-display {
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .controls-container
@@ -97,12 +137,13 @@
     user-select: none;
     cursor: pointer;
     color: var(--blis-purple-dark);
-    font-size: 1.8rem;
     background: var(--blis-yellow) none;
-    margin: 0 0.8rem 1rem;
-    padding: 0 2.5rem;
-    border-radius: 10px;
+    margin: 0 0.2rem 0rem;
+    padding: 10px 60px;
     transition: 0.4s;
+    font-size: 22px;
+    font-weight: 500;
+    border-radius: 30px;
 }
 
 button:hover {
@@ -119,29 +160,28 @@ button:active {
     justify-content: center;
 }
 
-.popup {
-    width: 100%;
-    max-width: 720px;
-    margin: 4rem auto;
-    background: var(--blis-purple-darker);
-    border-radius: 2rem;
-    position: absolute;
-    top: 0;
-    left: 0;
-    transform: translateY(50%) scale(0.1);
-    text-align: center;
-    padding: 4rem 8rem;
-    color: var(--blis-white);
-    outline-style: solid;
-    outline-color: var(--blis-yellow);
-    visibility: hidden;
-    transition: transform 0.4s, top 0.4s;
+.open-popup {
+    opacity: 1;
+    pointer-events: auto;
 }
 
-.open-popup {
-    visibility: visible;
-    top: 0;
-    transform: scale(1);
+.popup #worked-time {
+    /* make the time (format HH:MM:SS) look good with a nice border */
+    font-size: 4rem;
+    font-weight: 500;
+    margin-bottom: 100px;
+    min-width: 70%;
+    border: 2px solid var(--blis-white);
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.popup #worked-activity {
+    /* The worked activity that shows above the time to indicate what task was worked on
+     put in in a box like a header*/
+    font-size: 2rem;
+    font-weight: 500;
+    
 }
 
 .popup h2 {
@@ -156,6 +196,7 @@ button:active {
     font-size: 30px;
     font-weight: 400;
     margin: 10px 0 30px;
+    font-family: "TT Commons", sans-serif;
 }
 
 .btn{
@@ -168,6 +209,10 @@ button:active {
     font-size: 22px;
     font-weight: 500;
     border-radius: 30px;
+}
+
+.popup .btn {
+    margin-top: auto;
 }
 
 #stop {
@@ -189,7 +234,7 @@ button:active {
 #project, #activity, #hourtype {
     font-size: 2rem;
     font-weight: 500;
-    margin: 0 0.8rem;
+    margin: 2px 0.8rem;
     min-width: 100%;
     border-radius: 10px;
     text-align: center;
@@ -197,3 +242,156 @@ button:active {
     outline: black;
     background: rgba(255, 255, 255, 0.9);
 }
+
+@keyframes notification-move {
+    0% {
+        right: 230px;
+        top: 10px;
+    }
+    10% {
+        right: 0;
+        top: 0px;
+    }
+    20% {
+        right: 1000px;
+        top: 400px;
+    }
+    30% {
+        right: 1000px;
+        top: 0px;
+    }
+    40% {
+        right: 0;
+        top: 0px;
+    }
+    50% {
+        right: 1000px;
+        top: 100px;
+    }
+    80% {
+        right: 500px;
+        top: 440px;
+    }
+    100% {
+        right: 230px;
+        top: 10px;
+    }
+}
+
+.notification{
+    display: none;
+    right: -500px;
+    bottom: 0;
+    position: fixed;
+    width: 300px;
+    height: 100px;
+    background-color: #202020;
+    box-shadow: black 0px 0px 10px 0px;
+    color: white;
+    margin: 0 auto;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem 0px 0px 0rem;
+    transition: all 1s ease-out;
+}
+
+.notification button {
+    position: absolute;
+    background: transparent;
+    border: none;
+    left: 5px;
+    top: 5px;
+}
+
+.notification button img {
+    width: 21px;
+    height: 21px;
+    filter: invert(1);
+}
+
+.notification .message{
+    margin: 40px;
+    margin-left: 50px;
+    font-size: 14px;
+    position: relative;
+}
+
+
+@media (max-width: 1265px) {
+    #screen {
+        height: calc(100vh - 50px);
+    }
+}
+
+@media (max-width: 1350px) {
+    
+    .notification {
+        right: -50px;
+        top: 0;
+        border-radius: 10px 0 0 10px;
+    }
+}
+
+
+@media (max-width: 718px) { 
+    #screen {
+        min-height: calc(100vh - 50px);
+        height: auto;
+    }
+    .popup, .watch {
+        border-radius: 0;
+        min-height: calc(100vh - 50px);
+        width: 100%;
+    }
+}
+
+@media (max-width: 615px) {
+    .task {
+        margin-bottom: 40px;
+    }
+    
+    #clock #plus{
+        position: relative;
+        right: -20%;
+        top: 60%;
+        font-size: 50px;
+        cursor: pointer;
+    }
+    
+    #clock #minus{
+        position: relative;
+        right: 20%;
+        top: 60%;
+        font-size: 50px;
+        cursor: pointer;
+    }
+    
+    .notification{
+        width: 60%;
+        background: rgba(0, 0, 0, 0.65);
+        backdrop-filter: blur(5px);
+        height: 100px;
+    }
+
+    .notification .message{
+        margin: 40px;
+        margin-left: 50px;
+        font-size: 14px;
+        position: relative;
+    }
+}
+
+@media (max-width: 450px) {
+    .notification {
+        width: 100%;
+        height: 100px;
+    }
+}
+
+@media (max-height: 667px) {
+    .controls-container {
+        translate: 0 20px;
+    }
+}
+
+
